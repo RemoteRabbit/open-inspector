@@ -1,0 +1,8 @@
+# Tool versions for asdf (https://asdf-vm.com) and mise (https://mise.jdx.dev).
+# Both read this file natively. Run `asdf install` or `mise install` to fetch.
+#
+# Go is pinned to the latest patch of the line declared in go.mod (`go 1.23`).
+# Bump deliberately and update go.mod in the same change.
+golang 1.23.12
+golangci-lint 2.11.4
+pre-commit 4.6.0
