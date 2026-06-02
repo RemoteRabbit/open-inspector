@@ -10,10 +10,3 @@ package model
 // SchemaVersion identifies the JSON output schema. Bump on any
 // backwards-incompatible change to exported fields.
 const SchemaVersion = 1
-
-// Module is the root inspection result for a single Terraform/OpenTofu
-// module directory. Fields will grow as loaders are implemented.
-type Module struct {
-	// Path is the absolute filesystem path of the inspected module.
-	Path string `json:"path"`
-}
