@@ -8,9 +8,7 @@
 package inspector
 
 import (
-	"fmt"
-	"path/filepath"
-
+	"github.com/remoterabbit/open-inspector/pkg/config"
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
@@ -22,9 +20,5 @@ const Version = "0.0.1"
 // module rooted at dir and returns the resulting model. Future steps will
 // add HCL parsing, child module resolution, and optional schema enrichment.
 func Inspect(dir string) (*model.Module, error) {
-	abs, err := filepath.Abs(dir)
-	if err != nil {
-		return nil, fmt.Errorf("resolve module path: %w", err)
-	}
-	return &model.Module{Path: abs}, nil
+	return config.Load(dir)
 }

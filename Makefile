@@ -22,7 +22,7 @@ lint:
 	golangci-lint run
 
 fmt:
-	gofmt -s -w .
+	gofmt -s -w $(LICENSE_PATHS)
 	go vet $(PKG)
 
 tidy:

@@ -1,0 +1,63 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+package model
+
+import "github.com/hashicorp/hcl/v2"
+
+// Severity classifies a Diagnostic as an error or warning.
+type Severity string
+
+// Severity values reported by loaders.
+const (
+	SeverityError   Severity = "error"
+	SeverityWarning Severity = "warning"
+)
+
+// Diagnostic is a single problem reported by a loader, with optional
+// source location information.
+type Diagnostic struct {
+	Severity Severity `json:"severity"`
+	Summary  string   `json:"summary"`
+	Detail   string   `json:"detail,omitempty"`
+	Subject  *Range   `json:"subject,omitempty"`
+	Context  *Range   `json:"context,omitempty"`
+}
+
+// Diagnostics is a collection of Diagnostic values.
+type Diagnostics []Diagnostic
+
+// HasErrors reports whether any diagnostic in the collection has
+// SeverityError.
+func (diag Diagnostics) HasErrors() bool {
+	for _, error := range diag {
+		if error.Severity == SeverityError {
+			return true
+		}
+	}
+	return false
+}
+
+// DiagnosticsFromHCL translates a slice of hcl.Diagnostic into the
+// model's wire-friendly Diagnostics type.
+func DiagnosticsFromHCL(hcld hcl.Diagnostics) Diagnostics {
+	output := make(Diagnostics, 0, len(hcld))
+	for _, diag := range hcld {
+		sev := SeverityError
+		if diag.Severity == hcl.DiagWarning {
+			sev = SeverityWarning
+		}
+		newDiag := Diagnostic{Severity: sev, Summary: diag.Summary, Detail: diag.Detail}
+		if diag.Subject != nil {
+			rang := RangeFromHcl(*diag.Subject)
+			newDiag.Subject = &rang
+		}
+		if diag.Context != nil {
+			rang := RangeFromHcl(*diag.Context)
+			newDiag.Context = &rang
+		}
+		output = append(output, newDiag)
+	}
+	return output
+}
