@@ -1,0 +1,13 @@
+{
+  "variable": {
+    "from_json": {
+      "type": "string",
+      "default": "hello from .tofu.json"
+    }
+  },
+  "output": {
+    "from_json": {
+      "value": "${var.from_json}"
+    }
+  }
+}
