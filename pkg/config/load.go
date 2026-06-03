@@ -9,6 +9,7 @@ package config
 import (
 	"fmt"
 	"path/filepath"
+	"sort"
 
 	"github.com/hashicorp/hcl/v2"
 
@@ -32,6 +33,13 @@ func Load(dir string) (*model.Module, error) {
 	module.Diagnostics = append(module.Diagnostics, parseDiags...)
 
 	decodeFiles(parsed.files, module)
+
+	// Locals are decoded from a map (JustAttributes), so their order is
+	// non-deterministic across runs. Sort by name once at the end so that
+	// snapshots, JSON output, and downstream consumers see a stable order.
+	sort.Slice(module.Locals, func(i, j int) bool {
+		return module.Locals[i].Name < module.Locals[j].Name
+	})
 
 	return module, nil
 }

@@ -1,0 +1,108 @@
+{
+  "path": "\u003cfixture\u003e/module-sources",
+  "module_calls": [
+    {
+      "name": "local_relative",
+      "source": "../multi-module/modules/network",
+      "range": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 6,
+          "column": 1,
+          "byte": 182
+        },
+        "end": {
+          "line": 6,
+          "column": 24,
+          "byte": 205
+        }
+      }
+    },
+    {
+      "name": "registry",
+      "source": "terraform-aws-modules/vpc/aws",
+      "version": "~\u003e 5.0",
+      "range": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 11,
+          "column": 1,
+          "byte": 280
+        },
+        "end": {
+          "line": 11,
+          "column": 18,
+          "byte": 297
+        }
+      }
+    },
+    {
+      "name": "git_https",
+      "source": "git::https://example.com/example/network.git//modules/vpc?ref=v1.2.3",
+      "range": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 19,
+          "column": 1,
+          "byte": 426
+        },
+        "end": {
+          "line": 19,
+          "column": 19,
+          "byte": 444
+        }
+      }
+    },
+    {
+      "name": "git_ssh",
+      "source": "git::ssh://git@example.com/example/network.git?ref=main",
+      "range": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 23,
+          "column": 1,
+          "byte": 532
+        },
+        "end": {
+          "line": 23,
+          "column": 17,
+          "byte": 548
+        }
+      }
+    },
+    {
+      "name": "github_shorthand",
+      "source": "github.com/example/network//modules/vpc?ref=v1.2.3",
+      "range": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 27,
+          "column": 1,
+          "byte": 623
+        },
+        "end": {
+          "line": 27,
+          "column": 26,
+          "byte": 648
+        }
+      }
+    },
+    {
+      "name": "http_archive",
+      "source": "https://example.com/modules/network-1.0.0.zip",
+      "range": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 31,
+          "column": 1,
+          "byte": 718
+        },
+        "end": {
+          "line": 31,
+          "column": 22,
+          "byte": 739
+        }
+      }
+    }
+  ]
+}

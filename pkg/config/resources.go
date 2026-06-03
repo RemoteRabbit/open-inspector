@@ -116,15 +116,19 @@ func decodeLifecycle(block *hcl.Block, source []byte) (*model.Lifecycle, model.D
 	}
 
 	for _, preBlock := range inner.Blocks.OfType("precondition") {
-		value, vdiag := decodeConditionBlock(preBlock, source)
+		value, ok, vdiag := decodeConditionBlock(preBlock, source)
 		diags = append(diags, vdiag...)
-		lifeCycle.Preconditions = append(lifeCycle.Preconditions, value)
+		if ok {
+			lifeCycle.Preconditions = append(lifeCycle.Preconditions, value)
+		}
 	}
 
 	for _, postBlock := range inner.Blocks.OfType("postcondition") {
-		value, vdiag := decodeConditionBlock(postBlock, source)
+		value, ok, vdiag := decodeConditionBlock(postBlock, source)
 		diags = append(diags, vdiag...)
-		lifeCycle.Postconditions = append(lifeCycle.Postconditions, value)
+		if ok {
+			lifeCycle.Postconditions = append(lifeCycle.Postconditions, value)
+		}
 	}
 
 	return lifeCycle, diags
@@ -132,13 +136,22 @@ func decodeLifecycle(block *hcl.Block, source []byte) (*model.Lifecycle, model.D
 
 // decodeConditionBlock is the same shape as the variable validation block.
 // Pull it out so variables.go and resources.go share one implementation.
-func decodeConditionBlock(block *hcl.Block, source []byte) (model.Validation, model.Diagnostics) {
+// Returns ok=false when the block is missing one of its required
+// attributes, so the caller can skip it; the diagnostic from
+// PartialContent already explains the failure to the user.
+func decodeConditionBlock(block *hcl.Block, source []byte) (model.Validation, bool, model.Diagnostics) {
 	inner, _, hdiag := block.Body.PartialContent(validationSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
+	condition, hasCondition := inner.Attributes["condition"]
+	errorMessage, hasErrorMessage := inner.Attributes["error_message"]
+	if !hasCondition || !hasErrorMessage {
+		return model.Validation{}, false, diags
+	}
+
 	return model.Validation{
-		Condition:    capture(inner.Attributes["condition"].Expr, source),
-		ErrorMessage: capture(inner.Attributes["error_message"].Expr, source),
+		Condition:    capture(condition.Expr, source),
+		ErrorMessage: capture(errorMessage.Expr, source),
 		Range:        model.RangeFromHcl(block.DefRange),
-	}, diags
+	}, true, diags
 }

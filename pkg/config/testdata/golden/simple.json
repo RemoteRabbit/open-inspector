@@ -1,0 +1,102 @@
+{
+  "path": "\u003cfixture\u003e/simple",
+  "required_core": [
+    "\u003e= 1.5.0"
+  ],
+  "required_providers": {
+    "null": {
+      "source": "hashicorp/null",
+      "version_constraints": [
+        "~\u003e 3.2"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/simple/main.tf",
+        "start": {
+          "line": 7,
+          "column": 5,
+          "byte": 168
+        },
+        "end": {
+          "line": 10,
+          "column": 6,
+          "byte": 240
+        }
+      }
+    }
+  },
+  "variables": [
+    {
+      "name": "name",
+      "type": "string",
+      "description": "Name applied as a trigger to the null resource.",
+      "range": {
+        "filename": "\u003cfixture\u003e/simple/main.tf",
+        "start": {
+          "line": 14,
+          "column": 1,
+          "byte": 248
+        },
+        "end": {
+          "line": 14,
+          "column": 16,
+          "byte": 263
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "id",
+      "value": {
+        "source": "null_resource.example.id",
+        "range": {
+          "filename": "\u003cfixture\u003e/simple/main.tf",
+          "start": {
+            "line": 27,
+            "column": 17,
+            "byte": 523
+          },
+          "end": {
+            "line": 27,
+            "column": 41,
+            "byte": 547
+          }
+        }
+      },
+      "description": "The id assigned to the null_resource.",
+      "range": {
+        "filename": "\u003cfixture\u003e/simple/main.tf",
+        "start": {
+          "line": 25,
+          "column": 1,
+          "byte": 437
+        },
+        "end": {
+          "line": 25,
+          "column": 12,
+          "byte": 448
+        }
+      }
+    }
+  ],
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "null_resource",
+      "name": "example",
+      "range": {
+        "filename": "\u003cfixture\u003e/simple/main.tf",
+        "start": {
+          "line": 19,
+          "column": 1,
+          "byte": 358
+        },
+        "end": {
+          "line": 19,
+          "column": 35,
+          "byte": 392
+        }
+      }
+    }
+  ]
+}
