@@ -22,6 +22,10 @@ type Module struct {
 	ModuleCalls []ModuleCall     `json:"module_calls,omitempty"`
 	Providers   []ProviderConfig `json:"providers,omitempty"`
 
+	Moved   []MovedBlock   `json:"moved,omitempty"`
+	Imports []ImportBlock  `json:"imports,omitempty"`
+	Removed []RemovedBlock `json:"removed,omitempty"`
+
 	Diagnostics Diagnostics `json:"diagnostics,omitempty"`
 }
 

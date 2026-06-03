@@ -877,3 +877,26 @@ func findResource(t *testing.T, rs []model.Resource, typ, name string) model.Res
 	t.Fatalf("resource %s.%s not found", typ, name)
 	return model.Resource{}
 }
+
+func TestLoad_RefactorBlocks(t *testing.T) {
+	t.Parallel()
+	mod, err := Load(fixturePath(t, "modern-blocks"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if mod.Diagnostics.HasErrors() {
+		t.Fatalf("unexpected diagnostics: %#v", mod.Diagnostics)
+	}
+	if len(mod.Moved) != 1 || mod.Moved[0].From != "null_resource.old" {
+		t.Errorf("Moved = %#v", mod.Moved)
+	}
+	if len(mod.Imports) != 1 || mod.Imports[0].To != "null_resource.imported" {
+		t.Errorf("Imports = %#v", mod.Imports)
+	}
+	if len(mod.Removed) != 1 || mod.Removed[0].From != "null_resource.gone" {
+		t.Errorf("Removed = %#v", mod.Removed)
+	}
+	if mod.Removed[0].DestroyOnDrop == nil || *mod.Removed[0].DestroyOnDrop != false {
+		t.Errorf("Removed[0].DestroyOnDrop = %v, want *false", mod.Removed[0].DestroyOnDrop)
+	}
+}
