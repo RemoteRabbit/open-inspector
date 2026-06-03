@@ -73,6 +73,12 @@ func decodeFiles(files []*hcl.File, module *model.Module) {
 				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.DataResourceMode, module)...)
 			case "module":
 				module.Diagnostics = append(module.Diagnostics, decodeModuleCallBlock(block, file.Bytes, module)...)
+			case "moved":
+				module.Diagnostics = append(module.Diagnostics, decodeMovedBlock(block, module)...)
+			case "import":
+				module.Diagnostics = append(module.Diagnostics, decodeImportBlock(block, file.Bytes, module)...)
+			case "removed":
+				module.Diagnostics = append(module.Diagnostics, decodeRemovedBlock(block, module)...)
 			}
 		}
 	}

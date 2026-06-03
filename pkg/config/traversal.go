@@ -14,20 +14,20 @@ import (
 
 // traversalString renders an hcl.Traversal back into its source-like
 // string form, e.g. {TraverseRoot{aws}, TraverseAttr{east}} -> "aws.east".
-func traversalString(trav hcl.Traversal) string {
-	var b strings.Builder
-	for i, step := range trav {
-		switch s := step.(type) {
+func traversalString(traversal hcl.Traversal) string {
+	var builder strings.Builder
+	for index, step := range traversal {
+		switch step := step.(type) {
 		case hcl.TraverseRoot:
-			b.WriteString(s.Name)
+			builder.WriteString(step.Name)
 		case hcl.TraverseAttr:
-			if i > 0 {
-				b.WriteByte('.')
+			if index > 0 {
+				builder.WriteByte('.')
 			}
-			b.WriteString(s.Name)
+			builder.WriteString(step.Name)
 		}
 	}
-	return b.String()
+	return builder.String()
 }
 
 func decodeTraversalList(expressions hcl.Expression) ([]string, model.Diagnostics) {
@@ -44,4 +44,17 @@ func decodeTraversalList(expressions hcl.Expression) ([]string, model.Diagnostic
 		output = append(output, traversalString(traverse))
 	}
 	return output, diags
+}
+
+func traversalStringFromAttr(attribute *hcl.Attribute) (string, model.Diagnostics) {
+	if attribute == nil {
+		return "", nil
+	}
+
+	traversal, tdiag := hcl.AbsTraversalForExpr(attribute.Expr)
+	if tdiag.HasErrors() {
+		return "", model.DiagnosticsFromHCL(tdiag)
+	}
+
+	return traversalString(traversal), nil
 }
