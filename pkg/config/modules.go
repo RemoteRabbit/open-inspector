@@ -29,13 +29,17 @@ func decodeModuleCallBlock(block *hcl.Block, source []byte, module *model.Module
 	diags := model.DiagnosticsFromHCL(hdiag)
 
 	if attribute, ok := inner.Attributes["source"]; ok {
-		if str, ok := literalString(attribute.Expr); ok {
+		str, ok, sdiag := literalString(attribute.Expr)
+		diags = append(diags, model.DiagnosticsFromHCL(sdiag)...)
+		if ok {
 			moduleCall.Source = str
 		}
 	}
 
 	if attribute, ok := inner.Attributes["version"]; ok {
-		if str, ok := literalString(attribute.Expr); ok {
+		str, ok, sdiag := literalString(attribute.Expr)
+		diags = append(diags, model.DiagnosticsFromHCL(sdiag)...)
+		if ok {
 			moduleCall.Version = str
 		}
 	}

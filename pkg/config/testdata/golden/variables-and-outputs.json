@@ -1,0 +1,374 @@
+{
+  "path": "\u003cfixture\u003e/variables-and-outputs",
+  "variables": [
+    {
+      "name": "region",
+      "type": "string",
+      "default": {
+        "source": "\"us-east-1\"",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 8,
+            "column": 17,
+            "byte": 269
+          },
+          "end": {
+            "line": 8,
+            "column": 28,
+            "byte": 280
+          }
+        }
+      },
+      "description": "AWS region.",
+      "nullable": false,
+      "validations": [
+        {
+          "condition": {
+            "source": "can(regex(\"^[a-z]{2}-[a-z]+-[0-9]+$\", var.region))",
+            "range": {
+              "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+              "start": {
+                "line": 12,
+                "column": 21,
+                "byte": 339
+              },
+              "end": {
+                "line": 12,
+                "column": 71,
+                "byte": 389
+              }
+            }
+          },
+          "error_message": {
+            "source": "\"Region must look like us-east-1.\"",
+            "range": {
+              "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+              "start": {
+                "line": 13,
+                "column": 21,
+                "byte": 410
+              },
+              "end": {
+                "line": 13,
+                "column": 55,
+                "byte": 444
+              }
+            }
+          },
+          "range": {
+            "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+            "start": {
+              "line": 11,
+              "column": 3,
+              "byte": 306
+            },
+            "end": {
+              "line": 11,
+              "column": 13,
+              "byte": 316
+            }
+          }
+        }
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 5,
+          "column": 1,
+          "byte": 180
+        },
+        "end": {
+          "line": 5,
+          "column": 18,
+          "byte": 197
+        }
+      }
+    },
+    {
+      "name": "tags",
+      "type": "map(string)",
+      "default": {
+        "source": "{}",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 20,
+            "column": 17,
+            "byte": 564
+          },
+          "end": {
+            "line": 20,
+            "column": 19,
+            "byte": 566
+          }
+        }
+      },
+      "description": "Tags applied to every resource.",
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 17,
+          "column": 1,
+          "byte": 452
+        },
+        "end": {
+          "line": 17,
+          "column": 16,
+          "byte": 467
+        }
+      }
+    },
+    {
+      "name": "instance_sizes",
+      "type": "list(object({\n    name = string\n    cpu  = number\n    mem  = number\n  }))",
+      "default": {
+        "source": "[]",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 29,
+            "column": 13,
+            "byte": 693
+          },
+          "end": {
+            "line": 29,
+            "column": 15,
+            "byte": 695
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 23,
+          "column": 1,
+          "byte": 570
+        },
+        "end": {
+          "line": 23,
+          "column": 26,
+          "byte": 595
+        }
+      }
+    },
+    {
+      "name": "db_password",
+      "type": "string",
+      "sensitive": true,
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 32,
+          "column": 1,
+          "byte": 699
+        },
+        "end": {
+          "line": 32,
+          "column": 23,
+          "byte": 721
+        }
+      }
+    },
+    {
+      "name": "feature_flags",
+      "type": "object({\n    enable_logging = optional(bool, true)\n    enable_metrics = optional(bool, false)\n  })",
+      "default": {
+        "source": "{}",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 42,
+            "column": 13,
+            "byte": 914
+          },
+          "end": {
+            "line": 42,
+            "column": 15,
+            "byte": 916
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 37,
+          "column": 1,
+          "byte": 767
+        },
+        "end": {
+          "line": 37,
+          "column": 25,
+          "byte": 791
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "region",
+      "value": {
+        "source": "var.region",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 55,
+            "column": 17,
+            "byte": 1123
+          },
+          "end": {
+            "line": 55,
+            "column": 27,
+            "byte": 1133
+          }
+        }
+      },
+      "description": "Echoed region.",
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 53,
+          "column": 1,
+          "byte": 1056
+        },
+        "end": {
+          "line": 53,
+          "column": 16,
+          "byte": 1071
+        }
+      }
+    },
+    {
+      "name": "db_password",
+      "value": {
+        "source": "var.db_password",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 60,
+            "column": 17,
+            "byte": 1227
+          },
+          "end": {
+            "line": 60,
+            "column": 32,
+            "byte": 1242
+          }
+        }
+      },
+      "description": "Re-emitted password (sensitive).",
+      "sensitive": true,
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 58,
+          "column": 1,
+          "byte": 1137
+        },
+        "end": {
+          "line": 58,
+          "column": 21,
+          "byte": 1157
+        }
+      }
+    },
+    {
+      "name": "tag_count",
+      "value": {
+        "source": "length(local.common_tags)",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 65,
+            "column": 11,
+            "byte": 1298
+          },
+          "end": {
+            "line": 65,
+            "column": 36,
+            "byte": 1323
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 64,
+          "column": 1,
+          "byte": 1267
+        },
+        "end": {
+          "line": 64,
+          "column": 19,
+          "byte": 1285
+        }
+      }
+    }
+  ],
+  "locals": [
+    {
+      "name": "common_tags",
+      "value": {
+        "source": "merge(var.tags, {\n    managed_by = \"open-inspector-fixture\"\n  })",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 46,
+            "column": 17,
+            "byte": 945
+          },
+          "end": {
+            "line": 48,
+            "column": 5,
+            "byte": 1009
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 46,
+          "column": 3,
+          "byte": 931
+        },
+        "end": {
+          "line": 48,
+          "column": 5,
+          "byte": 1009
+        }
+      }
+    },
+    {
+      "name": "region_short",
+      "value": {
+        "source": "substr(var.region, 0, 2)",
+        "range": {
+          "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+          "start": {
+            "line": 50,
+            "column": 18,
+            "byte": 1028
+          },
+          "end": {
+            "line": 50,
+            "column": 42,
+            "byte": 1052
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+        "start": {
+          "line": 50,
+          "column": 3,
+          "byte": 1013
+        },
+        "end": {
+          "line": 50,
+          "column": 42,
+          "byte": 1052
+        }
+      }
+    }
+  ]
+}

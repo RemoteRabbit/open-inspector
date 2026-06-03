@@ -1,0 +1,161 @@
+{
+  "path": "\u003cfixture\u003e/providers",
+  "required_core": [
+    "\u003e= 1.5.0"
+  ],
+  "required_providers": {
+    "aws": {
+      "source": "hashicorp/aws",
+      "version_constraints": [
+        "~\u003e 5.0"
+      ],
+      "configuration_aliases": [
+        "aws.east",
+        "aws.west"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 9,
+          "column": 5,
+          "byte": 267
+        },
+        "end": {
+          "line": 13,
+          "column": 6,
+          "byte": 416
+        }
+      }
+    },
+    "http": {
+      "source": "hashicorp/http",
+      "version_constraints": [
+        "~\u003e 3.4"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 18,
+          "column": 5,
+          "byte": 509
+        },
+        "end": {
+          "line": 21,
+          "column": 6,
+          "byte": 581
+        }
+      }
+    },
+    "random": {
+      "source": "hashicorp/random",
+      "version_constraints": [
+        "\u003e= 3.0, \u003c 4.0"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 14,
+          "column": 5,
+          "byte": 421
+        },
+        "end": {
+          "line": 17,
+          "column": 6,
+          "byte": 504
+        }
+      }
+    }
+  },
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "random_id",
+      "name": "example",
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 41,
+          "column": 1,
+          "byte": 790
+        },
+        "end": {
+          "line": 41,
+          "column": 31,
+          "byte": 820
+        }
+      }
+    }
+  ],
+  "data_resources": [
+    {
+      "mode": "data",
+      "type": "http",
+      "name": "example",
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 37,
+          "column": 1,
+          "byte": 733
+        },
+        "end": {
+          "line": 37,
+          "column": 22,
+          "byte": 754
+        }
+      }
+    }
+  ],
+  "providers": [
+    {
+      "name": "aws",
+      "alias": "east",
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 25,
+          "column": 1,
+          "byte": 589
+        },
+        "end": {
+          "line": 25,
+          "column": 15,
+          "byte": 603
+        }
+      }
+    },
+    {
+      "name": "aws",
+      "alias": "west",
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 30,
+          "column": 1,
+          "byte": 650
+        },
+        "end": {
+          "line": 30,
+          "column": 15,
+          "byte": 664
+        }
+      }
+    },
+    {
+      "name": "random",
+      "range": {
+        "filename": "\u003cfixture\u003e/providers/main.tf",
+        "start": {
+          "line": 35,
+          "column": 1,
+          "byte": 711
+        },
+        "end": {
+          "line": 35,
+          "column": 18,
+          "byte": 728
+        }
+      }
+    }
+  ]
+}

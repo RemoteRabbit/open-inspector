@@ -1,0 +1,113 @@
+{
+  "path": "\u003cfixture\u003e/json-config",
+  "required_providers": {
+    "null": {
+      "source": "hashicorp/null",
+      "version_constraints": [
+        "~\u003e 3.2"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/json-config/main.tf.json",
+        "start": {
+          "line": 4,
+          "column": 7,
+          "byte": 53
+        },
+        "end": {
+          "line": 7,
+          "column": 8,
+          "byte": 134
+        }
+      }
+    }
+  },
+  "variables": [
+    {
+      "name": "name",
+      "type": "\"string\"",
+      "default": {
+        "source": "\"json-fixture\"",
+        "range": {
+          "filename": "\u003cfixture\u003e/json-config/main.tf.json",
+          "start": {
+            "line": 13,
+            "column": 18,
+            "byte": 217
+          },
+          "end": {
+            "line": 13,
+            "column": 32,
+            "byte": 231
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/json-config/main.tf.json",
+        "start": {
+          "line": 11,
+          "column": 13,
+          "byte": 174
+        },
+        "end": {
+          "line": 11,
+          "column": 14,
+          "byte": 175
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "id",
+      "value": {
+        "source": "\"${null_resource.example.id}\"",
+        "range": {
+          "filename": "\u003cfixture\u003e/json-config/main.tf.json",
+          "start": {
+            "line": 27,
+            "column": 16,
+            "byte": 425
+          },
+          "end": {
+            "line": 27,
+            "column": 45,
+            "byte": 454
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/json-config/main.tf.json",
+        "start": {
+          "line": 26,
+          "column": 11,
+          "byte": 408
+        },
+        "end": {
+          "line": 26,
+          "column": 12,
+          "byte": 409
+        }
+      }
+    }
+  ],
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "null_resource",
+      "name": "example",
+      "range": {
+        "filename": "\u003cfixture\u003e/json-config/main.tf.json",
+        "start": {
+          "line": 18,
+          "column": 18,
+          "byte": 299
+        },
+        "end": {
+          "line": 18,
+          "column": 19,
+          "byte": 300
+        }
+      }
+    }
+  ]
+}

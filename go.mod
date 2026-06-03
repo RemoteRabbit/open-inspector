@@ -3,6 +3,7 @@ module github.com/remoterabbit/open-inspector
 go 1.25
 
 require (
+	github.com/google/go-cmp v0.7.0
 	github.com/hashicorp/hcl/v2 v2.24.0
 	github.com/zclconf/go-cty v1.18.1
 )

@@ -1,0 +1,108 @@
+{
+  "path": "\u003cfixture\u003e/multi-module",
+  "variables": [
+    {
+      "name": "name_prefix",
+      "type": "string",
+      "default": {
+        "source": "\"fixture\"",
+        "range": {
+          "filename": "\u003cfixture\u003e/multi-module/main.tf",
+          "start": {
+            "line": 7,
+            "column": 13,
+            "byte": 185
+          },
+          "end": {
+            "line": 7,
+            "column": 22,
+            "byte": 194
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/multi-module/main.tf",
+        "start": {
+          "line": 5,
+          "column": 1,
+          "byte": 129
+        },
+        "end": {
+          "line": 5,
+          "column": 23,
+          "byte": 151
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "compute_id",
+      "value": {
+        "source": "module.compute.id",
+        "range": {
+          "filename": "\u003cfixture\u003e/multi-module/main.tf",
+          "start": {
+            "line": 23,
+            "column": 11,
+            "byte": 492
+          },
+          "end": {
+            "line": 23,
+            "column": 28,
+            "byte": 509
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/multi-module/main.tf",
+        "start": {
+          "line": 22,
+          "column": 1,
+          "byte": 460
+        },
+        "end": {
+          "line": 22,
+          "column": 20,
+          "byte": 479
+        }
+      }
+    }
+  ],
+  "module_calls": [
+    {
+      "name": "network",
+      "source": "./modules/network",
+      "range": {
+        "filename": "\u003cfixture\u003e/multi-module/main.tf",
+        "start": {
+          "line": 10,
+          "column": 1,
+          "byte": 198
+        },
+        "end": {
+          "line": 10,
+          "column": 17,
+          "byte": 214
+        }
+      }
+    },
+    {
+      "name": "compute",
+      "source": "./modules/compute",
+      "range": {
+        "filename": "\u003cfixture\u003e/multi-module/main.tf",
+        "start": {
+          "line": 15,
+          "column": 1,
+          "byte": 287
+        },
+        "end": {
+          "line": 15,
+          "column": 17,
+          "byte": 303
+        }
+      }
+    }
+  ]
+}

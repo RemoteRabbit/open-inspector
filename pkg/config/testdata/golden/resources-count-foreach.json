@@ -1,0 +1,245 @@
+{
+  "path": "\u003cfixture\u003e/resources-count-foreach",
+  "variables": [
+    {
+      "name": "names",
+      "type": "set(string)",
+      "default": {
+        "source": "[\"alpha\", \"beta\", \"gamma\"]",
+        "range": {
+          "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+          "start": {
+            "line": 8,
+            "column": 13,
+            "byte": 274
+          },
+          "end": {
+            "line": 8,
+            "column": 39,
+            "byte": 300
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+        "start": {
+          "line": 6,
+          "column": 1,
+          "byte": 219
+        },
+        "end": {
+          "line": 6,
+          "column": 17,
+          "byte": 235
+        }
+      }
+    },
+    {
+      "name": "replica_count",
+      "type": "number",
+      "default": {
+        "source": "3",
+        "range": {
+          "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+          "start": {
+            "line": 13,
+            "column": 13,
+            "byte": 362
+          },
+          "end": {
+            "line": 13,
+            "column": 14,
+            "byte": 363
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+        "start": {
+          "line": 11,
+          "column": 1,
+          "byte": 304
+        },
+        "end": {
+          "line": 11,
+          "column": 25,
+          "byte": 328
+        }
+      }
+    }
+  ],
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "null_resource",
+      "name": "by_count",
+      "count": {
+        "source": "var.replica_count",
+        "range": {
+          "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+          "start": {
+            "line": 17,
+            "column": 11,
+            "byte": 415
+          },
+          "end": {
+            "line": 17,
+            "column": 28,
+            "byte": 432
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+        "start": {
+          "line": 16,
+          "column": 1,
+          "byte": 367
+        },
+        "end": {
+          "line": 16,
+          "column": 36,
+          "byte": 402
+        }
+      }
+    },
+    {
+      "mode": "managed",
+      "type": "null_resource",
+      "name": "by_for_each",
+      "for_each": {
+        "source": "var.names",
+        "range": {
+          "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+          "start": {
+            "line": 25,
+            "column": 14,
+            "byte": 544
+          },
+          "end": {
+            "line": 25,
+            "column": 23,
+            "byte": 553
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+        "start": {
+          "line": 24,
+          "column": 1,
+          "byte": 490
+        },
+        "end": {
+          "line": 24,
+          "column": 39,
+          "byte": 528
+        }
+      }
+    }
+  ],
+  "data_resources": [
+    {
+      "mode": "data",
+      "type": "null_data_source",
+      "name": "by_for_each",
+      "for_each": {
+        "source": "toset([\"one\", \"two\"])",
+        "range": {
+          "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+          "start": {
+            "line": 33,
+            "column": 14,
+            "byte": 652
+          },
+          "end": {
+            "line": 33,
+            "column": 35,
+            "byte": 673
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+        "start": {
+          "line": 32,
+          "column": 1,
+          "byte": 599
+        },
+        "end": {
+          "line": 32,
+          "column": 38,
+          "byte": 636
+        }
+      }
+    }
+  ],
+  "module_calls": [
+    {
+      "name": "fanout",
+      "source": "./child",
+      "for_each": {
+        "source": "var.names",
+        "range": {
+          "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+          "start": {
+            "line": 42,
+            "column": 14,
+            "byte": 768
+          },
+          "end": {
+            "line": 42,
+            "column": 23,
+            "byte": 777
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+        "start": {
+          "line": 40,
+          "column": 1,
+          "byte": 714
+        },
+        "end": {
+          "line": 40,
+          "column": 16,
+          "byte": 729
+        }
+      }
+    },
+    {
+      "name": "replicas",
+      "source": "./child",
+      "count": {
+        "source": "var.replica_count",
+        "range": {
+          "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+          "start": {
+            "line": 48,
+            "column": 12,
+            "byte": 857
+          },
+          "end": {
+            "line": 48,
+            "column": 29,
+            "byte": 874
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+        "start": {
+          "line": 46,
+          "column": 1,
+          "byte": 805
+        },
+        "end": {
+          "line": 46,
+          "column": 18,
+          "byte": 822
+        }
+      }
+    }
+  ]
+}

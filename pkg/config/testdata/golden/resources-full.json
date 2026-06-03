@@ -1,0 +1,228 @@
+{
+  "path": "\u003cfixture\u003e/resources-full",
+  "required_providers": {
+    "aws": {
+      "source": "hashicorp/aws",
+      "version_constraints": [
+        "~\u003e 5.0"
+      ],
+      "configuration_aliases": [
+        "aws.east",
+        "aws.west"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-full/main.tf",
+        "start": {
+          "line": 18,
+          "column": 5,
+          "byte": 821
+        },
+        "end": {
+          "line": 22,
+          "column": 6,
+          "byte": 970
+        }
+      }
+    }
+  },
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "primary",
+      "provider": "aws.east",
+      "depends_on": [
+        "aws_security_group.web"
+      ],
+      "lifecycle": {
+        "create_before_destroy": true,
+        "prevent_destroy": false,
+        "ignore_changes": [
+          "tags",
+          "ami"
+        ],
+        "replace_triggered_by": [
+          "aws_security_group.web"
+        ],
+        "preconditions": [
+          {
+            "condition": {
+              "source": "length(\"ami-12345\") \u003e 0",
+              "range": {
+                "filename": "\u003cfixture\u003e/resources-full/main.tf",
+                "start": {
+                  "line": 43,
+                  "column": 23,
+                  "byte": 1355
+                },
+                "end": {
+                  "line": 43,
+                  "column": 46,
+                  "byte": 1378
+                }
+              }
+            },
+            "error_message": {
+              "source": "\"ami must be set\"",
+              "range": {
+                "filename": "\u003cfixture\u003e/resources-full/main.tf",
+                "start": {
+                  "line": 44,
+                  "column": 23,
+                  "byte": 1401
+                },
+                "end": {
+                  "line": 44,
+                  "column": 40,
+                  "byte": 1418
+                }
+              }
+            },
+            "range": {
+              "filename": "\u003cfixture\u003e/resources-full/main.tf",
+              "start": {
+                "line": 42,
+                "column": 5,
+                "byte": 1318
+              },
+              "end": {
+                "line": 42,
+                "column": 17,
+                "byte": 1330
+              }
+            }
+          }
+        ],
+        "postconditions": [
+          {
+            "condition": {
+              "source": "self.id != \"\"",
+              "range": {
+                "filename": "\u003cfixture\u003e/resources-full/main.tf",
+                "start": {
+                  "line": 48,
+                  "column": 23,
+                  "byte": 1468
+                },
+                "end": {
+                  "line": 48,
+                  "column": 36,
+                  "byte": 1481
+                }
+              }
+            },
+            "error_message": {
+              "source": "\"instance must have an id\"",
+              "range": {
+                "filename": "\u003cfixture\u003e/resources-full/main.tf",
+                "start": {
+                  "line": 49,
+                  "column": 23,
+                  "byte": 1504
+                },
+                "end": {
+                  "line": 49,
+                  "column": 49,
+                  "byte": 1530
+                }
+              }
+            },
+            "range": {
+              "filename": "\u003cfixture\u003e/resources-full/main.tf",
+              "start": {
+                "line": 47,
+                "column": 5,
+                "byte": 1430
+              },
+              "end": {
+                "line": 47,
+                "column": 18,
+                "byte": 1443
+              }
+            }
+          }
+        ]
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-full/main.tf",
+        "start": {
+          "line": 31,
+          "column": 1,
+          "byte": 1039
+        },
+        "end": {
+          "line": 31,
+          "column": 34,
+          "byte": 1072
+        }
+      }
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "web",
+      "lifecycle": {
+        "ignore_changes": [
+          "all"
+        ]
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-full/main.tf",
+        "start": {
+          "line": 54,
+          "column": 1,
+          "byte": 1544
+        },
+        "end": {
+          "line": 54,
+          "column": 36,
+          "byte": 1579
+        }
+      }
+    }
+  ],
+  "module_calls": [
+    {
+      "name": "infra",
+      "source": "./child",
+      "depends_on": [
+        "aws_security_group.web"
+      ],
+      "providers": {
+        "aws": "aws.east"
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-full/main.tf",
+        "start": {
+          "line": 60,
+          "column": 1,
+          "byte": 1628
+        },
+        "end": {
+          "line": 60,
+          "column": 15,
+          "byte": 1642
+        }
+      }
+    }
+  ],
+  "providers": [
+    {
+      "name": "aws",
+      "alias": "east",
+      "range": {
+        "filename": "\u003cfixture\u003e/resources-full/main.tf",
+        "start": {
+          "line": 26,
+          "column": 1,
+          "byte": 978
+        },
+        "end": {
+          "line": 26,
+          "column": 15,
+          "byte": 992
+        }
+      }
+    }
+  ]
+}

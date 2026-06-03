@@ -34,17 +34,27 @@ func decodeOuputsBlock(block *hcl.Block, source []byte, module *model.Module) mo
 	}
 
 	if attribute, ok := content.Attributes["description"]; ok {
-		if str, ok := literalString(attribute.Expr); ok {
+		str, ok, sdiag := literalString(attribute.Expr)
+		diags = append(diags, model.DiagnosticsFromHCL(sdiag)...)
+		if ok {
 			output.Description = str
 		}
 	}
 
-	if value, set, _ := decodeBool(content.Attributes["sensitive"]); set {
-		output.Sensitive = value
+	{
+		value, set, bdiag := decodeBool(content.Attributes["sensitive"])
+		diags = append(diags, model.DiagnosticsFromHCL(bdiag)...)
+		if set {
+			output.Sensitive = value
+		}
 	}
 
-	if value, set, _ := decodeBool(content.Attributes["ephemeral"]); set {
-		output.Ephemeral = value
+	{
+		value, set, bdiag := decodeBool(content.Attributes["ephemeral"])
+		diags = append(diags, model.DiagnosticsFromHCL(bdiag)...)
+		if set {
+			output.Ephemeral = value
+		}
 	}
 
 	if attribute, ok := content.Attributes["depends_on"]; ok {

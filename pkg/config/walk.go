@@ -9,7 +9,6 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/hashicorp/hcl/v2"
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
@@ -80,6 +79,3 @@ func isOverride(name, ext string) bool {
 	base := strings.TrimSuffix(name, ext)
 	return base == "override" || strings.HasSuffix(base, "_override")
 }
-
-// silence unused-import warning until parse.go uses hcl directly.
-var _ = hcl.DiagError

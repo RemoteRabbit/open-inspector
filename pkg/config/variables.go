@@ -40,11 +40,14 @@ func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) 
 	diags := model.DiagnosticsFromHCL(hdiag)
 
 	if attribute, ok := content.Attributes["type"]; ok {
-		typeConstraint, _, tdiag := typeexpr.TypeConstraintWithDefaults(attribute.Expr)
+		// Parse with typeexpr purely for diagnostics (invalid types still
+		// surface as errors). The serialized value is the verbatim source
+		// of the type expression so that `optional(T, default)` markers
+		// and any other user-authored detail survive a round-trip — see
+		// Decision 1 in docs/step-2-config-loader.md.
+		_, _, tdiag := typeexpr.TypeConstraintWithDefaults(attribute.Expr)
 		diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)
-		if typeConstraint != cty.NilType {
-			variable.Type = typeexpr.TypeString(typeConstraint)
-		}
+		variable.Type = string(attribute.Expr.Range().SliceBytes(source))
 	}
 
 	if attribute, ok := content.Attributes["default"]; ok {
@@ -53,33 +56,54 @@ func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) 
 	}
 
 	if attribute, ok := content.Attributes["description"]; ok {
-		if str, ok := literalString(attribute.Expr); ok {
+		str, ok, sdiag := literalString(attribute.Expr)
+		diags = append(diags, model.DiagnosticsFromHCL(sdiag)...)
+		if ok {
 			variable.Description = str
 		}
 	}
 
-	if value, set, bdiag := decodeBool(content.Attributes["sensitive"]); set {
-		variable.Sensitive = value
+	{
+		value, set, bdiag := decodeBool(content.Attributes["sensitive"])
 		diags = append(diags, model.DiagnosticsFromHCL(bdiag)...)
+		if set {
+			variable.Sensitive = value
+		}
 	}
 
-	if value, set, bdiag := decodeBool(content.Attributes["nullable"]); set {
-		variable.Nullable = &value
+	{
+		value, set, bdiag := decodeBool(content.Attributes["nullable"])
 		diags = append(diags, model.DiagnosticsFromHCL(bdiag)...)
+		if set {
+			variable.Nullable = &value
+		}
 	}
 
-	if value, set, bdiag := decodeBool(content.Attributes["ephemeral"]); set {
-		variable.Ephemeral = value
+	{
+		value, set, bdiag := decodeBool(content.Attributes["ephemeral"])
 		diags = append(diags, model.DiagnosticsFromHCL(bdiag)...)
+		if set {
+			variable.Ephemeral = value
+		}
 	}
 
 	for _, variableBlock := range content.Blocks.OfType("validation") {
 		inner, _, vdiag := variableBlock.Body.PartialContent(validationSchema)
 		diags = append(diags, model.DiagnosticsFromHCL(vdiag)...)
 
+		// PartialContent records a diagnostic for missing Required
+		// attributes but still returns; the entries are simply absent
+		// from the map. Skip the block to avoid a nil dereference;
+		// the diagnostic already tells the user what's wrong.
+		condition, hasCondition := inner.Attributes["condition"]
+		errorMessage, hasErrorMessage := inner.Attributes["error_message"]
+		if !hasCondition || !hasErrorMessage {
+			continue
+		}
+
 		variable.Validations = append(variable.Validations, model.Validation{
-			Condition:    capture(inner.Attributes["condition"].Expr, source),
-			ErrorMessage: capture(inner.Attributes["error_message"].Expr, source),
+			Condition:    capture(condition.Expr, source),
+			ErrorMessage: capture(errorMessage.Expr, source),
 			Range:        model.RangeFromHcl(variableBlock.DefRange),
 		})
 	}
@@ -101,10 +125,15 @@ func decodeBool(attribute *hcl.Attribute) (bool, bool, hcl.Diagnostics) {
 	return value.True(), true, diag
 }
 
-func literalString(expression hcl.Expression) (string, bool) {
+// literalString evaluates expression as a constant string. It returns
+// the value and ok=true on success; on failure the third return carries
+// any diagnostics produced by .Value(nil) so the caller can surface
+// them (e.g. "Variables not allowed" when the user wrote an
+// interpolation where a literal is required).
+func literalString(expression hcl.Expression) (string, bool, hcl.Diagnostics) {
 	value, diag := expression.Value(nil)
 	if diag.HasErrors() || value.IsNull() || value.Type() != cty.String {
-		return "", false
+		return "", false, diag
 	}
-	return value.AsString(), true
+	return value.AsString(), true, diag
 }
