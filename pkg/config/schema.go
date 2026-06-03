@@ -10,5 +10,8 @@ var rootSchema = &hcl.BodySchema{
 	Blocks: []hcl.BlockHeaderSchema{
 		{Type: "terraform"},
 		{Type: "provider", LabelNames: []string{"name"}},
+		{Type: "variable", LabelNames: []string{"name"}},
+		{Type: "output", LabelNames: []string{"name"}},
+		{Type: "locals"},
 	},
 }
