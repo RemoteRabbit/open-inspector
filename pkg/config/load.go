@@ -10,6 +10,8 @@ import (
 	"fmt"
 	"path/filepath"
 
+	"github.com/hashicorp/hcl/v2"
+
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
@@ -23,11 +25,35 @@ func Load(dir string) (*model.Module, error) {
 	}
 
 	fs, walkDiags := walk(abs)
-	_, parseDiags := parse(fs)
+	parsed, parseDiags := parse(fs)
 
 	module := &model.Module{Path: abs}
 	module.Diagnostics = append(module.Diagnostics, walkDiags...)
 	module.Diagnostics = append(module.Diagnostics, parseDiags...)
 
+	decodeFiles(parsed.files, module)
+
 	return module, nil
+}
+
+// decodeFiles walks every parsed file, applies the root schema, and
+// dispatches each recognised top-level block to its decoder. Blocks
+// not listed in rootSchema are left in the file's leftover body.
+func decodeFiles(files []*hcl.File, mod *model.Module) {
+	for _, file := range files {
+		if file == nil {
+			continue
+		}
+		content, _, hd := file.Body.PartialContent(rootSchema)
+		mod.Diagnostics = append(mod.Diagnostics, model.DiagnosticsFromHCL(hd)...)
+
+		for _, block := range content.Blocks {
+			switch block.Type {
+			case "terraform":
+				mod.Diagnostics = append(mod.Diagnostics, decodeTerraformBlock(block, mod)...)
+			case "provider":
+				mod.Diagnostics = append(mod.Diagnostics, decodeProviderBlock(block, mod)...)
+			}
+		}
+	}
 }
