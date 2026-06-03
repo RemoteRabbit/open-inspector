@@ -13,5 +13,8 @@ var rootSchema = &hcl.BodySchema{
 		{Type: "variable", LabelNames: []string{"name"}},
 		{Type: "output", LabelNames: []string{"name"}},
 		{Type: "locals"},
+		{Type: "resource", LabelNames: []string{"type", "name"}},
+		{Type: "data", LabelNames: []string{"type", "name"}},
+		{Type: "module", LabelNames: []string{"name"}},
 	},
 }

@@ -59,6 +59,12 @@ func decodeFiles(files []*hcl.File, module *model.Module) {
 				module.Diagnostics = append(module.Diagnostics, decodeOuputsBlock(block, file.Bytes, module)...)
 			case "locals":
 				module.Diagnostics = append(module.Diagnostics, decodeLocalsBlock(block, file.Bytes, module)...)
+			case "resource":
+				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.ManagedResourceMode, module)...)
+			case "data":
+				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.DataResourceMode, module)...)
+			case "module":
+				module.Diagnostics = append(module.Diagnostics, decodeModuleCallBlock(block, file.Bytes, module)...)
 			}
 		}
 	}

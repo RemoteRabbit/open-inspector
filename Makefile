@@ -1,4 +1,4 @@
-.PHONY: all build test lint fmt tidy clean run license license-check pre-commit-install pre-commit
+.PHONY: all build test lint fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
 
 BIN            := bin/open-inspector
 PKG            := ./...
@@ -9,7 +9,7 @@ LICENSE_HEADER := .licenseheader.tmpl
 # Extend this list as new top-level source dirs are added.
 LICENSE_PATHS  := cmd pkg
 
-all: fmt lint license-check test build
+all: fmt lint license-fix test build
 
 build:
 	@mkdir -p bin
@@ -42,6 +42,15 @@ license:
 # Used by CI.
 license-check:
 	$(ADDLICENSE) -check -f $(LICENSE_HEADER) $(LICENSE_PATHS)
+
+# Run license-check; if it fails, auto-apply headers and re-check so a
+# locally-missing header doesn't abort `make all`.
+license-fix:
+	@$(ADDLICENSE) -check -f $(LICENSE_HEADER) $(LICENSE_PATHS) || { \
+		echo "license-check failed; applying headers and retrying..."; \
+		$(ADDLICENSE) -f $(LICENSE_HEADER) $(LICENSE_PATHS) && \
+		$(ADDLICENSE) -check -f $(LICENSE_HEADER) $(LICENSE_PATHS); \
+	}
 
 # Install pre-commit + pre-push hooks defined in .pre-commit-config.yaml.
 pre-commit-install:
