@@ -8,6 +8,8 @@ import (
 	"strings"
 
 	"github.com/hashicorp/hcl/v2"
+
+	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
 // traversalString renders an hcl.Traversal back into its source-like
@@ -26,4 +28,20 @@ func traversalString(trav hcl.Traversal) string {
 		}
 	}
 	return b.String()
+}
+
+func decodeTraversalList(expressions hcl.Expression) ([]string, model.Diagnostics) {
+	list, hdiag := hcl.ExprList(expressions)
+	diags := model.DiagnosticsFromHCL(hdiag)
+	output := make([]string, 0, len(list))
+
+	for _, expression := range list {
+		traverse, tdiag := hcl.AbsTraversalForExpr(expression)
+		if tdiag.HasErrors() {
+			diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)
+			continue
+		}
+		output = append(output, traversalString(traverse))
+	}
+	return output, diags
 }

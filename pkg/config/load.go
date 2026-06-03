@@ -39,20 +39,26 @@ func Load(dir string) (*model.Module, error) {
 // decodeFiles walks every parsed file, applies the root schema, and
 // dispatches each recognised top-level block to its decoder. Blocks
 // not listed in rootSchema are left in the file's leftover body.
-func decodeFiles(files []*hcl.File, mod *model.Module) {
+func decodeFiles(files []*hcl.File, module *model.Module) {
 	for _, file := range files {
 		if file == nil {
 			continue
 		}
-		content, _, hd := file.Body.PartialContent(rootSchema)
-		mod.Diagnostics = append(mod.Diagnostics, model.DiagnosticsFromHCL(hd)...)
+		content, _, hdiag := file.Body.PartialContent(rootSchema)
+		module.Diagnostics = append(module.Diagnostics, model.DiagnosticsFromHCL(hdiag)...)
 
 		for _, block := range content.Blocks {
 			switch block.Type {
 			case "terraform":
-				mod.Diagnostics = append(mod.Diagnostics, decodeTerraformBlock(block, mod)...)
+				module.Diagnostics = append(module.Diagnostics, decodeTerraformBlock(block, module)...)
 			case "provider":
-				mod.Diagnostics = append(mod.Diagnostics, decodeProviderBlock(block, mod)...)
+				module.Diagnostics = append(module.Diagnostics, decodeProviderBlock(block, module)...)
+			case "variable":
+				module.Diagnostics = append(module.Diagnostics, decodeVariableBlock(block, file.Bytes, module)...)
+			case "output":
+				module.Diagnostics = append(module.Diagnostics, decodeOuputsBlock(block, file.Bytes, module)...)
+			case "locals":
+				module.Diagnostics = append(module.Diagnostics, decodeLocalsBlock(block, file.Bytes, module)...)
 			}
 		}
 	}

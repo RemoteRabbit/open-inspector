@@ -1,0 +1,21 @@
+// This Source Code Form is subject to the terms of the Mozilla Public
+// License, v. 2.0. If a copy of the MPL was not distributed with this
+// file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+package config
+
+import (
+	"github.com/hashicorp/hcl/v2"
+	"github.com/remoterabbit/open-inspector/pkg/model"
+)
+
+// capture turns an hcl.Expression into a model.Expression by slicing the verbatim
+// source bytes covered by the expression's range. The expression is never evaluated;
+// downstream consumers can do that.
+func capture(expression hcl.Expression, source []byte) model.Expression {
+	rang := expression.Range()
+	return model.Expression{
+		Source: string(rang.SliceBytes(source)),
+		Range:  model.RangeFromHcl(rang),
+	}
+}
