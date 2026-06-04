@@ -48,26 +48,10 @@ The legacy pre-0.13 shorthand `required_providers { aws = "~> 4.0" }`
 is still accepted. Pre-0.12 HCL (the untyped-attribute syntax) is not
 supported.
 
-### Recognized but not yet decoded
-
-The following constructs parse cleanly (no diagnostics, no panics) but
-their model fields are unpopulated for now:
-
-- `moved {}` (TF 1.1+), `import {}` (TF 1.5+), `removed {}` (TF 1.7+),
-  `check {}` (TF 1.5+)
-- `ephemeral "type" "name" {}` resource blocks (TF 1.10+ / OpenTofu 1.10+)
-- OpenTofu `terraform { encryption {} }` (OpenTofu 1.7+)
-- OpenTofu provider `for_each` and multi-instance providers (OpenTofu 1.9+)
-- Override files (`_override.tf`, `override.tf`): collected by the
-  walker but not yet merged into the base files
-
 ## Coming next
 
 Near-term:
 
-- **modern block coverage:** decode every construct listed
-  above, plus override file merging per Terraform's documented
-  last-wins semantics.
 - **CLI:** replace the flag scaffold with cobra; add
   `open-inspector config <dir>` with a human table renderer and
   versioned JSON output; configurable exit codes via
