@@ -9,13 +9,25 @@
     ":prConcurrentLimit10",
     "helpers:pinGitHubActionDigests"
   ],
-  "timezone": "Etc/UTC",
+  "timezone": "Ctc/UTC",
+  "ignorePaths": [
+    "**/examples/**",
+    "**/__tests__/**",
+    "**/test/**",
+    "**/tests/**",
+    "**/__fixtures__/**",
+    "**/testdata/**"
+  ],
   "schedule": [
     "before 06:00 on Monday"
   ],
   "minimumReleaseAge": "14 days",
-  "labels": ["dependencies"],
-  "reviewers": ["remoterabbit"],
+  "labels": [
+    "dependencies"
+  ],
+  "reviewers": [
+    "remoterabbit"
+  ],
   "rangeStrategy": "bump",
   "rebaseWhen": "behind-base-branch",
   "postUpdateOptions": [
@@ -24,33 +36,49 @@
   ],
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["before 06:00 on the first day of the month"]
+    "schedule": [
+      "before 06:00 on the first day of the month"
+    ]
   },
   "vulnerabilityAlerts": {
     "enabled": true,
-    "labels": ["security"],
-    "schedule": ["at any time"],
+    "labels": [
+      "security"
+    ],
+    "schedule": [
+      "at any time"
+    ],
     "minimumReleaseAge": "0 days"
   },
   "packageRules": [
     {
       "description": "Runtime Go dependencies bump the patch version via fix(deps) so they appear in the changelog and trigger a release.",
-      "matchManagers": ["gomod"],
-      "matchDepTypes": ["require"],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepTypes": [
+        "require"
+      ],
       "semanticCommitType": "fix",
       "semanticCommitScope": "deps"
     },
     {
       "description": "Indirect Go deps are noise; group them and keep as chore.",
-      "matchManagers": ["gomod"],
-      "matchDepTypes": ["indirect"],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepTypes": [
+        "indirect"
+      ],
       "groupName": "go indirect dependencies",
       "semanticCommitType": "chore",
       "semanticCommitScope": "deps"
     },
     {
       "description": "Group golang.org/x/* together - they version-lockstep.",
-      "matchManagers": ["gomod"],
+      "matchManagers": [
+        "gomod"
+      ],
       "groupName": "golang.org/x",
       "matchPackageNames": [
         "golang.org/x/{/,}**"
@@ -58,7 +86,9 @@
     },
     {
       "description": "Group hashicorp/hcl + zclconf/go-cty - they release in lockstep.",
-      "matchManagers": ["gomod"],
+      "matchManagers": [
+        "gomod"
+      ],
       "matchPackageNames": [
         "github.com/hashicorp/hcl/v2",
         "github.com/zclconf/go-cty"
@@ -67,7 +97,9 @@
     },
     {
       "description": "GitHub Actions: pin to commit SHA, group all together, ship as ci(deps).",
-      "matchManagers": ["github-actions"],
+      "matchManagers": [
+        "github-actions"
+      ],
       "groupName": "github actions",
       "semanticCommitType": "ci",
       "semanticCommitScope": "deps",
@@ -75,44 +107,71 @@
     },
     {
       "description": "pre-commit hooks - grouped, chore.",
-      "matchManagers": ["pre-commit"],
+      "matchManagers": [
+        "pre-commit"
+      ],
       "groupName": "pre-commit hooks",
       "semanticCommitType": "chore",
       "semanticCommitScope": "deps"
     },
     {
       "description": "asdf / .tool-versions - grouped, chore (build env, not shipped).",
-      "matchManagers": ["asdf"],
+      "matchManagers": [
+        "asdf"
+      ],
       "groupName": "asdf tool-versions",
       "semanticCommitType": "chore",
       "semanticCommitScope": "deps"
     },
     {
       "description": "Auto-merge patch + digest + pin updates for dev tooling once CI is green.",
-      "matchUpdateTypes": ["patch", "digest", "pin"],
-      "matchManagers": ["github-actions", "pre-commit", "asdf"],
+      "matchUpdateTypes": [
+        "patch",
+        "digest",
+        "pin"
+      ],
+      "matchManagers": [
+        "github-actions",
+        "pre-commit",
+        "asdf"
+      ],
       "automerge": true,
       "platformAutomerge": true
     },
     {
       "description": "Auto-merge indirect Go bumps and patch-level gomod updates.",
-      "matchManagers": ["gomod"],
-      "matchUpdateTypes": ["patch", "digest"],
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "digest"
+      ],
       "automerge": true,
       "platformAutomerge": true
     },
     {
       "description": "Auto-merge non-major vulnerability fixes ASAP; majors still require review.",
-      "matchUpdateTypes": ["patch", "minor", "digest", "pin"],
+      "matchUpdateTypes": [
+        "patch",
+        "minor",
+        "digest",
+        "pin"
+      ],
       "isVulnerabilityAlert": true,
       "automerge": true,
       "platformAutomerge": true
     },
     {
       "description": "Major bumps deserve a deliberate review.",
-      "matchUpdateTypes": ["major"],
+      "matchUpdateTypes": [
+        "major"
+      ],
       "automerge": false,
-      "labels": ["dependencies", "breaking"]
+      "labels": [
+        "dependencies",
+        "breaking"
+      ]
     }
   ],
   "customManagers": [
