@@ -52,23 +52,20 @@ checksum:
 sboms:
   - artifacts: archive
 
-# Keyless cosign signing of the checksums file. Verifying consumers can run:
+# Keyless cosign signing of the checksums file (cosign v3 bundle format).
+# Verifying consumers can run:
 #   cosign verify-blob \
-#     --certificate checksums.txt.pem \
-#     --signature   checksums.txt.sig \
+#     --bundle checksums.txt.sigstore.json \
 #     --certificate-identity-regexp 'https://github.com/remoterabbit/open-inspector/.+' \
 #     --certificate-oidc-issuer     https://token.actions.githubusercontent.com \
 #     checksums.txt
 signs:
   - id: cosign-checksums
     cmd: cosign
-    signature: '${artifact}.sig'
-    certificate: '${artifact}.pem'
+    signature: '${artifact}.sigstore.json'
     args:
       - sign-blob
-      - '--new-bundle-format=false'
-      - '--output-certificate=${certificate}'
-      - '--output-signature=${signature}'
+      - '--bundle=${signature}'
       - '${artifact}'
       - '--yes'
     artifacts: checksum
