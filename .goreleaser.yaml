@@ -79,7 +79,7 @@ changelog:
 release:
   draft: false
   prerelease: auto
-  mode: replace
+  mode: append
   footer: |
     ---
     **Full changelog:** https://github.com/remoterabbit/open-inspector/blob/v{{ .Version }}/CHANGELOG.md
