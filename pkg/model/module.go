@@ -28,6 +28,8 @@ type Module struct {
 
 	Checks []CheckBlock `json:"checks,omitempty"`
 
+	EphemeralResources []EphemeralResource `json:"ephemeral_resources,omitempty"`
+
 	Diagnostics Diagnostics `json:"diagnostics,omitempty"`
 }
 
@@ -84,8 +86,9 @@ type ResourceMode string
 
 // Resource mode values.
 const (
-	ManagedResourceMode ResourceMode = "managed"
-	DataResourceMode    ResourceMode = "data"
+	ManagedResourceMode   ResourceMode = "managed"
+	DataResourceMode      ResourceMode = "data"
+	EphemeralResourceMode ResourceMode = "ephemeral"
 )
 
 // Resource describes a single resource {} or data {} block.

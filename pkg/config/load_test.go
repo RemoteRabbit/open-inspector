@@ -246,16 +246,17 @@ func TestLoad_Fixtures(t *testing.T) {
 // captured under testdata/golden/. Invalid fixtures are excluded —
 // their loader output isn't a useful baseline.
 var snapshotFixtures = []string{
-	"simple",
-	"variables-and-outputs",
+	"ephemeral",
+	"json-config",
+	"module-sources",
+	"multi-module",
+	"overrides",
 	"providers",
 	"resources-count-foreach",
 	"resources-full",
-	"json-config",
-	"multi-module",
-	"module-sources",
+	"simple",
 	"tofu-extension",
-	"overrides",
+	"variables-and-outputs",
 }
 
 // TestLoad_Snapshots round-trips every fixture in snapshotFixtures
@@ -734,7 +735,6 @@ func TestLoad_NoPanic_StepThreeFixtures(t *testing.T) {
 	t.Parallel()
 	dirs := []string{
 		"modern-blocks",
-		"ephemeral",
 		"opentofu-encryption",
 		"opentofu-provider-foreach",
 		"invalid/missing-required",
@@ -922,5 +922,22 @@ func TestLoad_CheckBlocks(t *testing.T) {
 	}
 	if !strings.Contains(c.Assertions[0].ErrorMessage.Source, "example.com returned") {
 		t.Errorf("assertion ErrorMessage.Source = %q", c.Assertions[0].ErrorMessage.Source)
+	}
+}
+
+func TestLoad_EphemeralResources(t *testing.T) {
+	t.Parallel()
+	mod, err := Load(fixturePath(t, "ephemeral"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if mod.Diagnostics.HasErrors() {
+		t.Fatalf("unexpected diagnostics: %#v", mod.Diagnostics)
+	}
+	if len(mod.EphemeralResources) != 1 {
+		t.Fatalf("EphemeralResources: want 1, got %d", len(mod.EphemeralResources))
+	}
+	if mod.EphemeralResources[0].Type != "random_password" {
+		t.Errorf("type = %q", mod.EphemeralResources[0].Type)
 	}
 }
