@@ -47,7 +47,7 @@ func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) 
 		// Decision 1 in docs/step-2-config-loader.md.
 		_, _, tdiag := typeexpr.TypeConstraintWithDefaults(attribute.Expr)
 		diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)
-		variable.Type = string(attribute.Expr.Range().SliceBytes(source))
+		variable.Type = sliceSourceLF(source, attribute.Expr.Range())
 	}
 
 	if attribute, ok := content.Attributes["default"]; ok {

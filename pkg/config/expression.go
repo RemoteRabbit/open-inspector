@@ -5,9 +5,24 @@
 package config
 
 import (
+	"bytes"
+
 	"github.com/hashicorp/hcl/v2"
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
+
+// sliceSourceLF returns the verbatim source bytes covered by rang, with
+// CRLF line endings collapsed to LF. Files checked out on Windows with
+// the default core.autocrlf=true contain \r\n on disk, but we want the
+// captured source text (variable types, expression bodies, etc.) to be
+// byte-identical across platforms.
+func sliceSourceLF(source []byte, rang hcl.Range) string {
+	b := rang.SliceBytes(source)
+	if bytes.IndexByte(b, '\r') < 0 {
+		return string(b)
+	}
+	return string(bytes.ReplaceAll(b, []byte("\r\n"), []byte("\n")))
+}
 
 // capture turns an hcl.Expression into a model.Expression by slicing the verbatim
 // source bytes covered by the expression's range. The expression is never evaluated;
@@ -15,7 +30,7 @@ import (
 func capture(expression hcl.Expression, source []byte) model.Expression {
 	rang := expression.Range()
 	return model.Expression{
-		Source: string(rang.SliceBytes(source)),
+		Source: sliceSourceLF(source, rang),
 		Range:  model.RangeFromHcl(rang),
 	}
 }

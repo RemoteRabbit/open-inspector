@@ -376,15 +376,20 @@ func walkRewriteFilenames(v reflect.Value) {
 
 // rewriteFilename rewrites an absolute fixture path to its <fixture>/
 // equivalent. Non-fixture or empty filenames are left alone.
+//
+// Filenames are normalized to forward slashes before the prefix match
+// so Windows-style separators (D:\a\...\testdata\fixtures\...) collapse
+// to the same canonical form the golden files use.
 func rewriteFilename(r *model.Range) {
 	if r == nil || r.Filename == "" {
 		return
 	}
-	idx := strings.Index(r.Filename, "testdata/fixtures/")
+	slashed := filepath.ToSlash(r.Filename)
+	idx := strings.Index(slashed, "testdata/fixtures/")
 	if idx < 0 {
 		return
 	}
-	r.Filename = "<fixture>/" + r.Filename[idx+len("testdata/fixtures/"):]
+	r.Filename = "<fixture>/" + slashed[idx+len("testdata/fixtures/"):]
 }
 
 // assertNoUnNormalizedFilenames scans a marshaled snapshot for any

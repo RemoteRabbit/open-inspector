@@ -14,7 +14,12 @@ import (
 
 // Version is the semantic version of the open-inspector library.
 // It is reported by the CLI and embedded in JSON output.
-const Version = "0.0.1"
+//
+// The value is a var (not a const) so that release builds can override
+// it via -ldflags "-X github.com/remoterabbit/open-inspector/pkg/inspector.Version=...".
+// release-please rewrites the literal below on each release PR; the
+// trailing marker comment is required - do not remove it.
+var Version = "0.0.1" // x-release-please-version
 
 // Inspect performs a (currently stub) inspection of the Terraform/OpenTofu
 // module rooted at dir and returns the resulting model. Future steps will

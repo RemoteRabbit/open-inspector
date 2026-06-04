@@ -4,7 +4,11 @@
 
 package model
 
-import "github.com/hashicorp/hcl/v2"
+import (
+	"path/filepath"
+
+	"github.com/hashicorp/hcl/v2"
+)
 
 // Range identifies a contiguous span of source code.
 type Range struct {
@@ -21,9 +25,14 @@ type Pos struct {
 }
 
 // RangeFromHcl converts an hcl.Range into the model's wire-friendly Range.
+//
+// Filename is normalized to forward slashes so JSON output is byte-identical
+// across Linux, macOS, and Windows. This is the sole chokepoint where
+// hcl.Range filenames enter the model, so every downstream Range field
+// gets the same canonical form for free.
 func RangeFromHcl(rang hcl.Range) Range {
 	return Range{
-		Filename: rang.Filename,
+		Filename: filepath.ToSlash(rang.Filename),
 		Start:    Pos{Line: rang.Start.Line, Column: rang.Start.Column, Byte: rang.Start.Byte},
 		End:      Pos{Line: rang.End.Line, Column: rang.End.Column, Byte: rang.End.Byte},
 	}

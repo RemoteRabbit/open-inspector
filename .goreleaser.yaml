@@ -1,0 +1,86 @@
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+# See https://goreleaser.com for full documentation.
+version: 2
+
+project_name: open-inspector
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: open-inspector
+    main: ./cmd/open-inspector
+    binary: open-inspector
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/remoterabbit/open-inspector/pkg/inspector.Version={{ .Version }}
+    mod_timestamp: '{{ .CommitTimestamp }}'
+
+archives:
+  - id: default
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_
+      {{- .Os }}_
+      {{- if eq .Arch "amd64" }}x86_64
+      {{- else if eq .Arch "386" }}i386
+      {{- else }}{{ .Arch }}{{ end }}
+    files:
+      - LICENSE
+      - README.md
+      - CHANGELOG.md
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+sboms:
+  - artifacts: archive
+
+# Keyless cosign signing of the checksums file. Verifying consumers can run:
+#   cosign verify-blob \
+#     --certificate checksums.txt.pem \
+#     --signature   checksums.txt.sig \
+#     --certificate-identity-regexp 'https://github.com/remoterabbit/open-inspector/.+' \
+#     --certificate-oidc-issuer     https://token.actions.githubusercontent.com \
+#     checksums.txt
+signs:
+  - id: cosign-checksums
+    cmd: cosign
+    signature: '${artifact}.sig'
+    certificate: '${artifact}.pem'
+    args:
+      - sign-blob
+      - '--output-certificate=${certificate}'
+      - '--output-signature=${signature}'
+      - '${artifact}'
+      - '--yes'
+    artifacts: checksum
+    output: true
+
+# release-please owns the changelog (CHANGELOG.md + release body).
+# Disable GoReleaser's own changelog so we don't double-up.
+changelog:
+  disable: true
+
+release:
+  draft: false
+  prerelease: auto
+  mode: replace
+  footer: |
+    ---
+    **Full changelog:** https://github.com/remoterabbit/open-inspector/blob/v{{ .Version }}/CHANGELOG.md
