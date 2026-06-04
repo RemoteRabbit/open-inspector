@@ -51,8 +51,10 @@
     {
       "description": "Group golang.org/x/* together - they version-lockstep.",
       "matchManagers": ["gomod"],
-      "matchPackagePrefixes": ["golang.org/x/"],
-      "groupName": "golang.org/x"
+      "groupName": "golang.org/x",
+      "matchPackageNames": [
+        "golang.org/x/{/,}**"
+      ]
     },
     {
       "description": "Group hashicorp/hcl + zclconf/go-cty - they release in lockstep.",
@@ -117,7 +119,9 @@
     {
       "description": "Keep `go run github.com/<x>@vX.Y.Z` pins in the Makefile fresh (e.g. addlicense).",
       "customType": "regex",
-      "fileMatch": ["(^|/)Makefile$"],
+      "managerFilePatterns": [
+        "/(^|/)Makefile$/"
+      ],
       "matchStrings": [
         "go run (?<depName>github\\.com/[^@\\s]+)@(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
       ],
