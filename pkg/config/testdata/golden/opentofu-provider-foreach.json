@@ -105,7 +105,7 @@
       "for_each": {
         "source": "var.regions",
         "range": {
-          "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-provider-foreach/main.tf",
+          "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
           "start": {
             "line": 24,
             "column": 14,

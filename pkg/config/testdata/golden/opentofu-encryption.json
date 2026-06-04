@@ -32,7 +32,7 @@
           "passphrase": {
             "source": "\"this-is-only-a-fixture-do-not-use\"",
             "range": {
-              "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+              "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
               "start": {
                 "line": 11,
                 "column": 20,
@@ -47,7 +47,7 @@
           }
         },
         "range": {
-          "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 10,
             "column": 5,
@@ -69,7 +69,7 @@
           "keys": {
             "source": "key_provider.pbkdf2.mykey",
             "range": {
-              "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+              "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
               "start": {
                 "line": 15,
                 "column": 14,
@@ -84,7 +84,7 @@
           }
         },
         "range": {
-          "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 14,
             "column": 5,
@@ -102,7 +102,7 @@
       "method": {
         "source": "method.aes_gcm.new_method",
         "range": {
-          "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 19,
             "column": 16,
@@ -132,7 +132,7 @@
         }
       },
       "range": {
-        "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+        "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
         "start": {
           "line": 18,
           "column": 5,
@@ -149,7 +149,7 @@
       "method": {
         "source": "method.aes_gcm.new_method",
         "range": {
-          "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 23,
             "column": 16,
@@ -179,7 +179,7 @@
         }
       },
       "range": {
-        "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+        "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
         "start": {
           "line": 22,
           "column": 5,
@@ -193,7 +193,7 @@
       }
     },
     "range": {
-      "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-encryption/main.tf",
+      "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
       "start": {
         "line": 9,
         "column": 3,
