@@ -52,18 +52,18 @@
   },
   "packageRules": [
     {
-      "description": "Runtime Go dependencies bump the patch version via fix(deps) so they appear in the changelog and trigger a release.",
+      "description": "Runtime Go dependencies use the deps type so they land in the Dependencies changelog section and still trigger a patch release. Scope is the dep being updated.",
       "matchManagers": [
         "gomod"
       ],
       "matchDepTypes": [
         "require"
       ],
-      "semanticCommitType": "fix",
-      "semanticCommitScope": "deps"
+      "semanticCommitType": "deps",
+      "semanticCommitScope": "{{depName}}"
     },
     {
-      "description": "Indirect Go deps are noise; group them and keep as chore.",
+      "description": "Indirect Go deps are noise; group them. They're external deps, so build(deps).",
       "matchManagers": [
         "gomod"
       ],
@@ -71,7 +71,7 @@
         "indirect"
       ],
       "groupName": "go indirect dependencies",
-      "semanticCommitType": "chore",
+      "semanticCommitType": "build",
       "semanticCommitScope": "deps"
     },
     {
