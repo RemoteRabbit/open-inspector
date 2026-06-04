@@ -900,3 +900,27 @@ func TestLoad_RefactorBlocks(t *testing.T) {
 		t.Errorf("Removed[0].DestroyOnDrop = %v, want *false", mod.Removed[0].DestroyOnDrop)
 	}
 }
+
+func TestLoad_CheckBlocks(t *testing.T) {
+	t.Parallel()
+	mod, err := Load(fixturePath(t, "modern-blocks"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if len(mod.Checks) != 1 {
+		t.Fatalf("Checks: want 1, got %d", len(mod.Checks))
+	}
+	c := mod.Checks[0]
+	if c.Name != "site_is_up" {
+		t.Errorf("Checks[0].Name = %q", c.Name)
+	}
+	if c.DataSource == nil || c.DataSource.Type != "http" {
+		t.Errorf("Checks[0].DataSource = %#v", c.DataSource)
+	}
+	if len(c.Assertions) != 1 {
+		t.Errorf("Checks[0].Assertions: want 1, got %d", len(c.Assertions))
+	}
+	if !strings.Contains(c.Assertions[0].ErrorMessage.Source, "example.com returned") {
+		t.Errorf("assertion ErrorMessage.Source = %q", c.Assertions[0].ErrorMessage.Source)
+	}
+}

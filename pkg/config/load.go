@@ -79,6 +79,8 @@ func decodeFiles(files []*hcl.File, module *model.Module) {
 				module.Diagnostics = append(module.Diagnostics, decodeImportBlock(block, file.Bytes, module)...)
 			case "removed":
 				module.Diagnostics = append(module.Diagnostics, decodeRemovedBlock(block, module)...)
+			case "check":
+				module.Diagnostics = append(module.Diagnostics, decodeCheckBlock(block, file.Bytes, module)...)
 			}
 		}
 	}
