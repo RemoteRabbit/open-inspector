@@ -43,7 +43,7 @@ func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) 
 		// Parse with typeexpr purely for diagnostics (invalid types still
 		// surface as errors). The serialized value is the verbatim source
 		// of the type expression so that `optional(T, default)` markers
-		// and any other user-authored detail survive a round-trip — see
+		// and any other user-authored detail survive a round-trip - see
 		// Decision 1 in docs/step-2-config-loader.md.
 		_, _, tdiag := typeexpr.TypeConstraintWithDefaults(attribute.Expr)
 		diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)

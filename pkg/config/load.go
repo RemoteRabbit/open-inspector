@@ -58,9 +58,9 @@ func decodeFiles(files []*hcl.File, module *model.Module) {
 		for _, block := range content.Blocks {
 			switch block.Type {
 			case "terraform":
-				module.Diagnostics = append(module.Diagnostics, decodeTerraformBlock(block, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeTerraformBlock(block, file.Bytes, module)...)
 			case "provider":
-				module.Diagnostics = append(module.Diagnostics, decodeProviderBlock(block, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeProviderBlock(block, file.Bytes, module)...)
 			case "variable":
 				module.Diagnostics = append(module.Diagnostics, decodeVariableBlock(block, file.Bytes, module)...)
 			case "output":

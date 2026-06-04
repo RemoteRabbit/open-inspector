@@ -1,0 +1,209 @@
+{
+  "path": "\u003cfixture\u003e/opentofu-encryption",
+  "required_core": [
+    "\u003e= 1.7.0"
+  ],
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "null_resource",
+      "name": "example",
+      "range": {
+        "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+        "start": {
+          "line": 28,
+          "column": 1,
+          "byte": 605
+        },
+        "end": {
+          "line": 28,
+          "column": 35,
+          "byte": 639
+        }
+      }
+    }
+  ],
+  "encryption": {
+    "key_providers": [
+      {
+        "type": "pbkdf2",
+        "name": "mykey",
+        "body": {
+          "passphrase": {
+            "source": "\"this-is-only-a-fixture-do-not-use\"",
+            "range": {
+              "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+              "start": {
+                "line": 11,
+                "column": 20,
+                "byte": 355
+              },
+              "end": {
+                "line": 11,
+                "column": 55,
+                "byte": 390
+              }
+            }
+          }
+        },
+        "range": {
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+          "start": {
+            "line": 10,
+            "column": 5,
+            "byte": 304
+          },
+          "end": {
+            "line": 10,
+            "column": 34,
+            "byte": 333
+          }
+        }
+      }
+    ],
+    "methods": [
+      {
+        "type": "aes_gcm",
+        "name": "new_method",
+        "body": {
+          "keys": {
+            "source": "key_provider.pbkdf2.mykey",
+            "range": {
+              "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+              "start": {
+                "line": 15,
+                "column": 14,
+                "byte": 447
+              },
+              "end": {
+                "line": 15,
+                "column": 39,
+                "byte": 472
+              }
+            }
+          }
+        },
+        "range": {
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+          "start": {
+            "line": 14,
+            "column": 5,
+            "byte": 402
+          },
+          "end": {
+            "line": 14,
+            "column": 34,
+            "byte": 431
+          }
+        }
+      }
+    ],
+    "state": {
+      "method": {
+        "source": "method.aes_gcm.new_method",
+        "range": {
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+          "start": {
+            "line": 19,
+            "column": 16,
+            "byte": 507
+          },
+          "end": {
+            "line": 19,
+            "column": 41,
+            "byte": 532
+          }
+        }
+      },
+      "fallback": {
+        "source": "",
+        "range": {
+          "filename": "",
+          "start": {
+            "line": 0,
+            "column": 0,
+            "byte": 0
+          },
+          "end": {
+            "line": 0,
+            "column": 0,
+            "byte": 0
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+        "start": {
+          "line": 18,
+          "column": 5,
+          "byte": 484
+        },
+        "end": {
+          "line": 18,
+          "column": 10,
+          "byte": 489
+        }
+      }
+    },
+    "plan": {
+      "method": {
+        "source": "method.aes_gcm.new_method",
+        "range": {
+          "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+          "start": {
+            "line": 23,
+            "column": 16,
+            "byte": 566
+          },
+          "end": {
+            "line": 23,
+            "column": 41,
+            "byte": 591
+          }
+        }
+      },
+      "fallback": {
+        "source": "",
+        "range": {
+          "filename": "",
+          "start": {
+            "line": 0,
+            "column": 0,
+            "byte": 0
+          },
+          "end": {
+            "line": 0,
+            "column": 0,
+            "byte": 0
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+        "start": {
+          "line": 22,
+          "column": 5,
+          "byte": 544
+        },
+        "end": {
+          "line": 22,
+          "column": 9,
+          "byte": 548
+        }
+      }
+    },
+    "range": {
+      "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+      "start": {
+        "line": 9,
+        "column": 3,
+        "byte": 287
+      },
+      "end": {
+        "line": 9,
+        "column": 13,
+        "byte": 297
+      }
+    }
+  }
+}

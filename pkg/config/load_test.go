@@ -5,6 +5,8 @@
 package config
 
 import (
+	"bufio"
+	"bytes"
 	"encoding/json"
 	"flag"
 	"os"
@@ -243,13 +245,15 @@ func TestLoad_Fixtures(t *testing.T) {
 }
 
 // snapshotFixtures lists the fixtures whose full JSON output is
-// captured under testdata/golden/. Invalid fixtures are excluded —
+// captured under testdata/golden/. Invalid fixtures are excluded
 // their loader output isn't a useful baseline.
 var snapshotFixtures = []string{
 	"ephemeral",
 	"json-config",
 	"module-sources",
 	"multi-module",
+	"opentofu-encryption",
+	"opentofu-provider-foreach",
 	"overrides",
 	"providers",
 	"resources-count-foreach",
@@ -261,7 +265,7 @@ var snapshotFixtures = []string{
 
 // TestLoad_Snapshots round-trips every fixture in snapshotFixtures
 // through Load → JSON and compares against a golden file. Run with
-// -update to regenerate the goldens after an intentional loader change.
+// `-update` to regenerate the goldens after an intentional loader change.
 func TestLoad_Snapshots(t *testing.T) {
 	for _, dir := range snapshotFixtures {
 		t.Run(dir, func(t *testing.T) {
@@ -277,6 +281,13 @@ func TestLoad_Snapshots(t *testing.T) {
 				t.Fatalf("marshal: %v", err)
 			}
 			got = append(got, '\n')
+
+			// Leak guard: every "filename" value in a snapshot must be
+			// either empty or already rewritten to the <fixture>/...
+			// form. Catches missed cases in normalizeForSnapshot before
+			// a machine-specific path lands in a golden file even on
+			// `-update`.
+			assertNoUnNormalizedFilenames(t, dir, got)
 
 			golden := filepath.Join("testdata", "golden", dir+".json")
 			if *update {
@@ -305,111 +316,113 @@ func TestLoad_Snapshots(t *testing.T) {
 // runners. Only the absolute paths (Module.Path and every Range.Filename)
 // vary between hosts; everything else is already derived from fixture
 // content.
+//
+// The Range rewrite is done by reflection it walks every field
+// reachable from *mod and updates each model.Range.Filename in place.
+// This means new model types with embedded Ranges are normalized for
+// free, without touching this function. The leak guard in
+// TestLoad_Snapshots verifies the walk actually caught everything.
 func normalizeForSnapshot(mod *model.Module, fixture string) {
 	mod.Path = "<fixture>/" + fixture
+	walkRewriteFilenames(reflect.ValueOf(mod))
+}
 
-	rewrite := func(r *model.Range) {
-		if r == nil || r.Filename == "" {
+// rangeType is the reflect.Type of model.Range, cached for the walker.
+var rangeType = reflect.TypeOf(model.Range{})
+
+// walkRewriteFilenames descends v and rewrites the Filename field of
+// every model.Range it finds. Unexported fields are skipped (Go's
+// reflection can't address them); the model package keeps all
+// snapshot-relevant fields exported, so this is safe today and any
+// future violation will surface via the leak guard.
+func walkRewriteFilenames(v reflect.Value) {
+	switch v.Kind() {
+	case reflect.Pointer, reflect.Interface:
+		if v.IsNil() {
 			return
 		}
-		// Keep only the path relative to the fixture root.
-		idx := strings.Index(r.Filename, "testdata/fixtures/")
-		if idx < 0 {
+		walkRewriteFilenames(v.Elem())
+	case reflect.Struct:
+		if v.Type() == rangeType && v.CanAddr() {
+			rewriteFilename(v.Addr().Interface().(*model.Range))
 			return
 		}
-		rel := r.Filename[idx+len("testdata/fixtures/"):]
-		r.Filename = "<fixture>/" + rel
-	}
-
-	for k, p := range mod.RequiredProviders {
-		rewrite(&p.Range)
-		mod.RequiredProviders[k] = p
-	}
-	for i := range mod.Variables {
-		rewrite(&mod.Variables[i].Range)
-		if mod.Variables[i].Default != nil {
-			rewrite(&mod.Variables[i].Default.Range)
-		}
-		for j := range mod.Variables[i].Validations {
-			rewrite(&mod.Variables[i].Validations[j].Range)
-			rewrite(&mod.Variables[i].Validations[j].Condition.Range)
-			rewrite(&mod.Variables[i].Validations[j].ErrorMessage.Range)
-		}
-	}
-	for i := range mod.Outputs {
-		rewrite(&mod.Outputs[i].Range)
-		rewrite(&mod.Outputs[i].Value.Range)
-	}
-	for i := range mod.Locals {
-		rewrite(&mod.Locals[i].Range)
-		rewrite(&mod.Locals[i].Value.Range)
-	}
-	rewriteResources := func(rs []model.Resource) {
-		for i := range rs {
-			rewrite(&rs[i].Range)
-			if rs[i].Count != nil {
-				rewrite(&rs[i].Count.Range)
+		for i := 0; i < v.NumField(); i++ {
+			if !v.Type().Field(i).IsExported() {
+				continue
 			}
-			if rs[i].ForEach != nil {
-				rewrite(&rs[i].ForEach.Range)
+			walkRewriteFilenames(v.Field(i))
+		}
+	case reflect.Slice, reflect.Array:
+		for i := 0; i < v.Len(); i++ {
+			walkRewriteFilenames(v.Index(i))
+		}
+	case reflect.Map:
+		// Map values aren't addressable, so copy-modify-store.
+		iter := v.MapRange()
+		for iter.Next() {
+			val := iter.Value()
+			if val.Kind() == reflect.Pointer || val.Kind() == reflect.Interface {
+				walkRewriteFilenames(val)
+				continue
 			}
-			if rs[i].Lifecycle != nil {
-				for j := range rs[i].Lifecycle.Preconditions {
-					rewrite(&rs[i].Lifecycle.Preconditions[j].Range)
-					rewrite(&rs[i].Lifecycle.Preconditions[j].Condition.Range)
-					rewrite(&rs[i].Lifecycle.Preconditions[j].ErrorMessage.Range)
-				}
-				for j := range rs[i].Lifecycle.Postconditions {
-					rewrite(&rs[i].Lifecycle.Postconditions[j].Range)
-					rewrite(&rs[i].Lifecycle.Postconditions[j].Condition.Range)
-					rewrite(&rs[i].Lifecycle.Postconditions[j].ErrorMessage.Range)
-				}
-			}
+			tmp := reflect.New(val.Type()).Elem()
+			tmp.Set(val)
+			walkRewriteFilenames(tmp)
+			v.SetMapIndex(iter.Key(), tmp)
 		}
-	}
-	rewriteResources(mod.ManagedResources)
-	rewriteResources(mod.DataResources)
-	for i := range mod.EphemeralResources {
-		rewrite(&mod.EphemeralResources[i].Range)
-		if mod.EphemeralResources[i].Count != nil {
-			rewrite(&mod.EphemeralResources[i].Count.Range)
-		}
-		if mod.EphemeralResources[i].ForEach != nil {
-			rewrite(&mod.EphemeralResources[i].ForEach.Range)
-		}
-		if mod.EphemeralResources[i].Lifecycle != nil {
-			for j := range mod.EphemeralResources[i].Lifecycle.Preconditions {
-				rewrite(&mod.EphemeralResources[i].Lifecycle.Preconditions[j].Range)
-				rewrite(&mod.EphemeralResources[i].Lifecycle.Preconditions[j].Condition.Range)
-				rewrite(&mod.EphemeralResources[i].Lifecycle.Preconditions[j].ErrorMessage.Range)
-			}
-			for j := range mod.EphemeralResources[i].Lifecycle.Postconditions {
-				rewrite(&mod.EphemeralResources[i].Lifecycle.Postconditions[j].Range)
-				rewrite(&mod.EphemeralResources[i].Lifecycle.Postconditions[j].Condition.Range)
-				rewrite(&mod.EphemeralResources[i].Lifecycle.Postconditions[j].ErrorMessage.Range)
-			}
-		}
-	}
-	for i := range mod.ModuleCalls {
-		rewrite(&mod.ModuleCalls[i].Range)
-		if mod.ModuleCalls[i].Count != nil {
-			rewrite(&mod.ModuleCalls[i].Count.Range)
-		}
-		if mod.ModuleCalls[i].ForEach != nil {
-			rewrite(&mod.ModuleCalls[i].ForEach.Range)
-		}
-	}
-	for i := range mod.Providers {
-		rewrite(&mod.Providers[i].Range)
-	}
-	for i := range mod.Diagnostics {
-		rewrite(mod.Diagnostics[i].Subject)
-		rewrite(mod.Diagnostics[i].Context)
 	}
 }
 
-// TestLoad_VariableTypes confirms Decision 2 from the design doc:
-// variable types are serialized via typeexpr.TypeString so that
+// rewriteFilename rewrites an absolute fixture path to its <fixture>/
+// equivalent. Non-fixture or empty filenames are left alone.
+func rewriteFilename(r *model.Range) {
+	if r == nil || r.Filename == "" {
+		return
+	}
+	idx := strings.Index(r.Filename, "testdata/fixtures/")
+	if idx < 0 {
+		return
+	}
+	r.Filename = "<fixture>/" + r.Filename[idx+len("testdata/fixtures/"):]
+}
+
+// assertNoUnNormalizedFilenames scans a marshaled snapshot for any
+// "filename" line whose value is neither empty nor already rewritten
+// to the <fixture>/ form. Failing here means walkRewriteFilenames
+// missed a field usually a newly added model type that holds a
+// model.Range behind something reflection can't reach (an unexported
+// field, a custom MarshalJSON, etc.).
+func assertNoUnNormalizedFilenames(t *testing.T, fixture string, snapshot []byte) {
+	t.Helper()
+	scanner := bufio.NewScanner(bytes.NewReader(snapshot))
+	scanner.Buffer(make([]byte, 0, 64*1024), 1<<20)
+	for lineNo := 1; scanner.Scan(); lineNo++ {
+		line := scanner.Text()
+		i := strings.Index(line, `"filename":`)
+		if i < 0 {
+			continue
+		}
+		val := strings.TrimSpace(line[i+len(`"filename":`):])
+		val = strings.TrimSuffix(val, ",")
+		// encoding/json escapes "<" as \u003c by default, so accept
+		// both the raw and HTML escaped forms of the <fixture>/ prefix.
+		if val == `""` ||
+			strings.HasPrefix(val, `"<fixture>/`) ||
+			strings.HasPrefix(val, `"\u003cfixture\u003e/`) {
+			continue
+		}
+		t.Fatalf("%s: un-normalized filename at line %d: %s\n"+
+			"normalizeForSnapshot/walkRewriteFilenames missed a field - "+
+			"check for a new model type with an unexported Range or a custom MarshalJSON.",
+			fixture, lineNo, strings.TrimSpace(line))
+	}
+	if err := scanner.Err(); err != nil {
+		t.Fatalf("scan snapshot: %v", err)
+	}
+}
+
+// TestLoad_VariableTypes variable types are serialized via typeexpr.TypeString so that
 // nested types (objects inside lists, optional() markers, etc.)
 // survive a round-trip as the canonical HCL form.
 func TestLoad_VariableTypes(t *testing.T) {
@@ -426,8 +439,7 @@ func TestLoad_VariableTypes(t *testing.T) {
 	byName := indexVariables(mod.Variables)
 
 	// The loader captures the verbatim source of the type expression,
-	// preserving `optional(T, default)` markers and any other detail the
-	// user wrote (see Decision 1 in docs/step-2-config-loader.md). This
+	// preserving `optional(T, default)` markers. This
 	// means whitespace and newlines from the fixture survive too.
 	want := map[string]string{
 		"region":      "string",
@@ -454,9 +466,7 @@ func TestLoad_VariableTypes(t *testing.T) {
 		}
 	}
 
-	// feature_flags must contain the `optional(...)` markers verbatim —
-	// that's the whole point of switching from typeexpr.TypeString to
-	// source capture.
+	// feature_flags must contain the `optional(...)` markers verbatim
 	if !strings.Contains(byName["feature_flags"].Type, "optional(bool, true)") {
 		t.Errorf("feature_flags type missing optional(bool, true): %q", byName["feature_flags"].Type)
 	}
@@ -465,7 +475,7 @@ func TestLoad_VariableTypes(t *testing.T) {
 // TestLoad_MalformedValidation locks in the no-panic guarantee for a
 // validation {} block (and a resource precondition {}) that is missing
 // its required attributes. The loader must surface error diagnostics
-// for the missing attributes instead of nil-dereferencing.
+// for the missing attributes instead of nil dereferencing.
 func TestLoad_MalformedValidation(t *testing.T) {
 	t.Parallel()
 
@@ -508,7 +518,7 @@ func TestLoad_NonLiteralAttrs(t *testing.T) {
 	}
 
 	// Find a diagnostic for each of the three offending attributes via
-	// the source line — HCL points the Subject at the offending
+	// the source line HCL points the Subject at the offending
 	// expression. The fixture is laid out so these lines are stable.
 	wantLines := map[int]string{
 		19: "output.bad_description.description",
@@ -545,8 +555,7 @@ func TestLoad_NonLiteralAttrs(t *testing.T) {
 	}
 }
 
-// TestLoad_ConfigurationAliases confirms Decision 3 from the design
-// doc: configuration_aliases is a list of traversals (provider
+// TestLoad_ConfigurationAliases configuration_aliases is a list of traversals (provider
 // references), not values, and is captured via the traversal helpers.
 func TestLoad_ConfigurationAliases(t *testing.T) {
 	t.Parallel()
@@ -584,7 +593,7 @@ func TestLoad_ConfigurationAliases(t *testing.T) {
 
 // TestLoad_LifecycleAndMeta covers the lifecycle {} block (every
 // sub-feature, including `ignore_changes = all`), the `provider =`
-// meta-arg on a resource (Pitfall #8 — single traversal, not a list),
+// meta-arg on a resource,
 // the resource and module `depends_on` traversal lists, and the
 // `providers = {…}` map on a module call.
 func TestLoad_LifecycleAndMeta(t *testing.T) {
@@ -659,7 +668,7 @@ func TestLoad_LifecycleAndMeta(t *testing.T) {
 
 // TestLoad_VariableDetails reads back the boolean flags, default
 // expression source, and well-formed validation block on the existing
-// variables-and-outputs fixture — fields the other tests touched only
+// variables-and-outputs fixture, fields the other tests touched only
 // indirectly via snapshots.
 func TestLoad_VariableDetails(t *testing.T) {
 	t.Parallel()
@@ -708,7 +717,7 @@ func TestLoad_VariableDetails(t *testing.T) {
 }
 
 // TestLoad_TofuExtension confirms that `.tofu` and `.tofu.json` files
-// are picked up by the walker — a step-2 commitment per the design doc.
+// are picked up by the walker.
 func TestLoad_TofuExtension(t *testing.T) {
 	t.Parallel()
 
@@ -728,8 +737,7 @@ func TestLoad_TofuExtension(t *testing.T) {
 	}
 }
 
-// TestLoad_OverridesNotMerged confirms that step 2 collects override
-// files but does NOT apply them — that's a step-3 promise. The
+// TestLoad_OverridesNotMerged filles but does NOT apply them. The
 // original main.tf values must survive untouched.
 func TestLoad_OverridesNotMerged(t *testing.T) {
 	t.Parallel()
@@ -749,15 +757,13 @@ func TestLoad_OverridesNotMerged(t *testing.T) {
 }
 
 // TestLoad_NoPanic_StepThreeFixtures asserts the loader survives every
-// fixture whose deep semantics are deferred to step 3 without panicking
-// or returning a Go-level error. Diagnostics may be present — we don't
+// fixture whose deep semantics are deferred without panicking
+// or returning a Go-level error. Diagnostics may be present we don't
 // care about their content here.
 func TestLoad_NoPanic_StepThreeFixtures(t *testing.T) {
 	t.Parallel()
 	dirs := []string{
 		"modern-blocks",
-		"opentofu-encryption",
-		"opentofu-provider-foreach",
 		"invalid/missing-required",
 	}
 	for _, dir := range dirs {
@@ -770,7 +776,7 @@ func TestLoad_NoPanic_StepThreeFixtures(t *testing.T) {
 	}
 }
 
-// TestLoad_LegacyProviderForm covers `aws = "~> 4.0"` — the pre-0.13
+// TestLoad_LegacyProviderForm covers `aws = "~> 4.0"` the pre-0.13
 // shorthand still accepted by the modern parser.
 func TestLoad_LegacyProviderForm(t *testing.T) {
 	t.Parallel()
@@ -819,7 +825,7 @@ func TestLoad_MultipleTerraformBlocks(t *testing.T) {
 }
 
 // keysOf returns the keys of a string-keyed map of variables, in
-// sorted order — useful for stable error messages.
+// sorted order useful for stable error messages.
 func keysOf(m map[string]model.Variable) []string {
 	out := make([]string, 0, len(m))
 	for k := range m {
@@ -839,8 +845,7 @@ func keysOfProviders(m map[string]model.ProviderRequirement) []string {
 	return out
 }
 
-// TestLoad_ExpressionCapture confirms Decision 1 from the design doc:
-// expressions are captured as raw source bytes plus a source Range,
+// TestLoad_ExpressionCapture expressions are captured as raw source bytes plus a source Range,
 // never evaluated. The captured source must include the symbolic
 // reference verbatim (e.g. var.replica_count) and the Range must
 // point at the file/line where the expression appears.
@@ -960,5 +965,42 @@ func TestLoad_EphemeralResources(t *testing.T) {
 	}
 	if mod.EphemeralResources[0].Type != "random_password" {
 		t.Errorf("type = %q", mod.EphemeralResources[0].Type)
+	}
+}
+
+func TestLoad_EncryptionBlock(t *testing.T) {
+	t.Parallel()
+	mod, err := Load(fixturePath(t, "opentofu-encryption"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if mod.Encryption == nil {
+		t.Fatalf("Encryption is nil")
+	}
+	if len(mod.Encryption.KeyProviders) != 1 || mod.Encryption.KeyProviders[0].Type != "pbkdf2" {
+		t.Errorf("KeyProviders = %#v", mod.Encryption.KeyProviders)
+	}
+	if mod.Encryption.State == nil || mod.Encryption.Plan == nil {
+		t.Errorf("State or Plan missing: %#v", mod.Encryption)
+	}
+}
+
+func TestLoad_ProviderForEach(t *testing.T) {
+	t.Parallel()
+	mod, err := Load(fixturePath(t, "opentofu-provider-foreach"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	var awsByRegion *model.ProviderConfig
+	for i, p := range mod.Providers {
+		if p.Name == "aws" && p.Alias == "by_region" {
+			awsByRegion = &mod.Providers[i]
+		}
+	}
+	if awsByRegion == nil {
+		t.Fatalf("provider aws.by_region missing")
+	}
+	if awsByRegion.ForEach == nil || !strings.Contains(awsByRegion.ForEach.Source, "var.regions") {
+		t.Errorf("ForEach = %#v", awsByRegion.ForEach)
 	}
 }
