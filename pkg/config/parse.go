@@ -13,30 +13,41 @@ import (
 )
 
 type parsedFiles struct {
-	files  []*hcl.File
-	parser *hclparse.Parser
+	primary  []*hcl.File
+	override []*hcl.File
+	parser   *hclparse.Parser
 }
 
-func parse(fs fileSet) (parsedFiles, model.Diagnostics) {
-	parse := hclparse.NewParser()
+func parse(fileSet fileSet) (parsedFiles, model.Diagnostics) {
+	parser := hclparse.NewParser()
 	var diags hcl.Diagnostics
-	var files []*hcl.File
 
-	for _, path := range fs.Primary {
-		var file *hcl.File
-		var diag hcl.Diagnostics
+	parseAll := func(paths []string) []*hcl.File {
+		var files []*hcl.File
 
-		switch {
-		case strings.HasSuffix(path, ".tf.json"),
-			strings.HasSuffix(path, ".tofu.json"):
-			file, diag = parse.ParseJSONFile(path)
-		default:
-			file, diag = parse.ParseHCLFile(path)
+		for _, path := range paths {
+			var file *hcl.File
+			var diag hcl.Diagnostics
+
+			switch {
+			case strings.HasSuffix(path, ".tf.json"),
+				strings.HasSuffix(path, ".tofu.json"):
+				file, diag = parser.ParseJSONFile(path)
+			default:
+				file, diag = parser.ParseHCLFile(path)
+			}
+			diags = append(diags, diag...)
+
+			if file != nil {
+				files = append(files, file)
+			}
 		}
-		diags = append(diags, diag...)
-		if file != nil {
-			files = append(files, file)
-		}
+		return files
 	}
-	return parsedFiles{files: files, parser: parse}, model.DiagnosticsFromHCL(diags)
+
+	return parsedFiles{
+		primary:  parseAll(fileSet.Primary),
+		override: parseAll(fileSet.Override),
+		parser:   parser,
+	}, model.DiagnosticsFromHCL(diags)
 }

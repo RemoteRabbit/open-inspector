@@ -742,9 +742,10 @@ func TestLoad_TofuExtension(t *testing.T) {
 	}
 }
 
-// TestLoad_OverridesNotMerged filles but does NOT apply them. The
-// original main.tf values must survive untouched.
-func TestLoad_OverridesNotMerged(t *testing.T) {
+// TestLoad_OverridesMerged confirms the loader applies override files
+// per Terraform's documented semantics: override.tf replaces the
+// matching argument from main.tf.
+func TestLoad_OverridesMerged(t *testing.T) {
 	t.Parallel()
 
 	mod, err := Load(fixturePath(t, "overrides"))
@@ -755,9 +756,15 @@ func TestLoad_OverridesNotMerged(t *testing.T) {
 		t.Fatalf("unexpected error diagnostics: %#v", mod.Diagnostics)
 	}
 	region := indexVariables(mod.Variables)["region"]
-	if region.Default == nil || region.Default.Source != `"us-east-1"` {
-		t.Errorf("region.Default = %#v; override.tf must NOT be merged in step 2 (would set %q)",
+	if region.Default == nil || region.Default.Source != `"eu-central-1"` {
+		t.Errorf("region.Default = %#v; override.tf must apply (want %q)",
 			region.Default, `"eu-central-1"`)
+	}
+	// The override resource matches null_resource.configured by Type+Name;
+	// the merge must preserve the resource (no duplicate, no loss of Range).
+	res := findResource(t, mod.ManagedResources, "null_resource", "configured")
+	if res.Range.Filename == "" {
+		t.Errorf("resource Range lost on merge")
 	}
 }
 

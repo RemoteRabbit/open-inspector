@@ -34,11 +34,19 @@ func Load(dir string) (*model.Module, error) {
 	module.Diagnostics = append(module.Diagnostics, walkDiags...)
 	module.Diagnostics = append(module.Diagnostics, parseDiags...)
 
-	decodeFiles(parsed.files, module)
+	decodeFiles(parsed.primary, module)
 
-	// Locals are decoded from a map (JustAttributes), so their order is
-	// non-deterministic across runs. Sort by name once at the end so that
-	// snapshots, JSON output, and downstream consumers see a stable order.
+	// Decode every override file into its own throwaway module, then merge into the base module. Per-file overrides
+	// (foo_override.tf) require us to know which primary file they target; for simplicity and to match Terraform's
+	// behavior, merge ALL overrides last and let identity-based matching do the work.
+	var overrides []*model.Module
+	for _, file := range parsed.override {
+		override := &model.Module{Path: abs}
+		decodeFiles([]*hcl.File{file}, override)
+		overrides = append(overrides, override)
+	}
+	mergeOverrides(module, overrides)
+
 	sort.Slice(module.Locals, func(i, j int) bool {
 		return module.Locals[i].Name < module.Locals[j].Name
 	})
