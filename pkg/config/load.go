@@ -28,7 +28,9 @@ func Load(dir string) (*model.Module, error) {
 	fs, walkDiags := walk(abs)
 	parsed, parseDiags := parse(fs)
 
-	module := &model.Module{Path: abs}
+	// Module.Path is JSON-serialized. Use forward slashes so output
+	// is byte-identical across Linux/macOS/Windows.
+	module := &model.Module{Path: filepath.ToSlash(abs)}
 	module.Diagnostics = append(module.Diagnostics, walkDiags...)
 	module.Diagnostics = append(module.Diagnostics, parseDiags...)
 

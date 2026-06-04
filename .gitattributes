@@ -1,0 +1,27 @@
+# Enforce LF line endings for all text files on every platform.
+#
+# Without this, Windows checkouts get CRLF (default core.autocrlf=true on
+# GitHub-hosted Windows runners), which corrupts snapshot tests that
+# capture HCL source bytes verbatim (e.g. variable type expressions in
+# pkg/config/load_test.go).
+* text=auto eol=lf
+
+# Explicit declarations for the file types we actually ship and test
+# against. Belt-and-braces against future ambiguity.
+*.go            text eol=lf
+*.tf            text eol=lf
+*.tofu          text eol=lf
+*.tf.json       text eol=lf
+*.tofu.json     text eol=lf
+*.json          text eol=lf
+*.yaml          text eol=lf
+*.yml           text eol=lf
+*.md            text eol=lf
+*.sh            text eol=lf
+Makefile        text eol=lf
+*.mod           text eol=lf
+*.sum           text eol=lf
+
+# Lockfiles + generated content should stay byte-identical across hosts.
+go.sum                  -diff
+testdata/golden/**      -diff
