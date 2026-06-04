@@ -17,6 +17,7 @@
   "labels": ["dependencies"],
   "reviewers": ["remoterabbit"],
   "rangeStrategy": "bump",
+  "rebaseWhen": "behind-base-branch",
   "postUpdateOptions": [
     "gomodTidy",
     "gomodUpdateImportPaths"
