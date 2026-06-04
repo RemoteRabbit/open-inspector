@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.1.2...v0.2.0) (2026-06-04)
+
+
+### Features
+
+* **overrides:** Parse override files ([#47](https://github.com/RemoteRabbit/open-inspector/issues/47)) ([e5bf664](https://github.com/RemoteRabbit/open-inspector/commit/e5bf664bcdbd6a4bcc71f1a10b68295ad00e7ee9))
+
+
+### Bug Fixes
+
+* **release:** Gorelease should append to release-please ([#42](https://github.com/RemoteRabbit/open-inspector/issues/42)) ([4873343](https://github.com/RemoteRabbit/open-inspector/commit/4873343cff4668a19ce9858f44787bc48fc5a179))
+
+
+### Documentation
+
+* Update Readme ([#45](https://github.com/RemoteRabbit/open-inspector/issues/45)) ([a696000](https://github.com/RemoteRabbit/open-inspector/commit/a696000c48a9b60ae5c60ea04a47a08ba2a1140c))
+
 ## [0.1.2](https://github.com/RemoteRabbit/open-inspector/compare/v0.1.1...v0.1.2) (2026-06-04)
 
 
