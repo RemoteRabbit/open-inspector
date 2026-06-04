@@ -10,7 +10,7 @@ module "local_relative" {
 
 module "registry" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "~> 5.0"
+  version = "~> 5.21"
 
   name = "open-inspector-fixture"
   cidr = "10.0.0.0/16"
