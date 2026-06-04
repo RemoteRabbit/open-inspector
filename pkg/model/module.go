@@ -26,6 +26,8 @@ type Module struct {
 	Imports []ImportBlock  `json:"imports,omitempty"`
 	Removed []RemovedBlock `json:"removed,omitempty"`
 
+	Checks []CheckBlock `json:"checks,omitempty"`
+
 	Diagnostics Diagnostics `json:"diagnostics,omitempty"`
 }
 

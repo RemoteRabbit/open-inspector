@@ -19,5 +19,6 @@ var rootSchema = &hcl.BodySchema{
 		{Type: "moved"},
 		{Type: "import"},
 		{Type: "removed"},
+		{Type: "check", LabelNames: []string{"name"}},
 	},
 }
