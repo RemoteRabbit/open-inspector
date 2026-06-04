@@ -13,7 +13,9 @@
   "schedule": [
     "before 06:00 on Monday"
   ],
+  "minimumReleaseAge": "14 days",
   "labels": ["dependencies"],
+  "reviewers": ["remoterabbit"],
   "rangeStrategy": "bump",
   "postUpdateOptions": [
     "gomodTidy",
@@ -26,7 +28,8 @@
   "vulnerabilityAlerts": {
     "enabled": true,
     "labels": ["security"],
-    "schedule": ["at any time"]
+    "schedule": ["at any time"],
+    "minimumReleaseAge": "0 days"
   },
   "packageRules": [
     {
@@ -92,6 +95,13 @@
       "description": "Auto-merge indirect Go bumps and patch-level gomod updates.",
       "matchManagers": ["gomod"],
       "matchUpdateTypes": ["patch", "digest"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Auto-merge non-major vulnerability fixes ASAP; majors still require review.",
+      "matchUpdateTypes": ["patch", "minor", "digest", "pin"],
+      "isVulnerabilityAlert": true,
       "automerge": true,
       "platformAutomerge": true
     },
