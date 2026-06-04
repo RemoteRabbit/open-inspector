@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.1.0...v0.1.1) (2026-06-04)
+
+
+### Bug Fixes
+
+* **release:** Add new-bundle-format false ([#38](https://github.com/RemoteRabbit/open-inspector/issues/38)) ([35c6f97](https://github.com/RemoteRabbit/open-inspector/commit/35c6f97f621ba6a0a28242c611d14897f0ef111c))
+
 ## [0.1.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.0.1...v0.1.0) (2026-06-04)
 
 
