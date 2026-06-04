@@ -15,28 +15,34 @@ import (
 var providerSchema = &hcl.BodySchema{
 	Attributes: []hcl.AttributeSchema{
 		{Name: "alias"},
+		{Name: "for_each"},
 	},
 }
 
 // decodeProviderBlock decodes a single provider "name" {} block and
 // appends a ProviderConfig to mod.
-func decodeProviderBlock(block *hcl.Block, mod *model.Module) model.Diagnostics {
-	cfg := model.ProviderConfig{
+func decodeProviderBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
+	config := model.ProviderConfig{
 		Name:  block.Labels[0],
 		Range: model.RangeFromHcl(block.DefRange),
 	}
 
-	content, _, hd := block.Body.PartialContent(providerSchema)
-	diags := model.DiagnosticsFromHCL(hd)
+	content, _, hdiag := block.Body.PartialContent(providerSchema)
+	diags := model.DiagnosticsFromHCL(hdiag)
 
-	if attr, ok := content.Attributes["alias"]; ok {
-		val, vd := attr.Expr.Value(nil)
-		diags = append(diags, model.DiagnosticsFromHCL(vd)...)
-		if !val.IsNull() && val.Type() == cty.String {
-			cfg.Alias = val.AsString()
+	if attribute, ok := content.Attributes["alias"]; ok {
+		value, vdiag := attribute.Expr.Value(nil)
+		diags = append(diags, model.DiagnosticsFromHCL(vdiag)...)
+		if !value.IsNull() && value.Type() == cty.String {
+			config.Alias = value.AsString()
 		}
 	}
 
-	mod.Providers = append(mod.Providers, cfg)
+	if attribute, ok := content.Attributes["for_each"]; ok {
+		expression := capture(attribute.Expr, source)
+		config.ForEach = &expression
+	}
+
+	module.Providers = append(module.Providers, config)
 	return diags
 }

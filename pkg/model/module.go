@@ -30,6 +30,8 @@ type Module struct {
 
 	EphemeralResources []EphemeralResource `json:"ephemeral_resources,omitempty"`
 
+	Encryption *Encryption `json:"encryption,omitempty"`
+
 	Diagnostics Diagnostics `json:"diagnostics,omitempty"`
 }
 
@@ -130,7 +132,8 @@ type ModuleCall struct {
 
 // ProviderConfig describes a single provider {} configuration block.
 type ProviderConfig struct {
-	Name  string `json:"name"`
-	Alias string `json:"alias,omitempty"`
-	Range Range  `json:"range"`
+	Name    string      `json:"name"`
+	Alias   string      `json:"alias,omitempty"`
+	ForEach *Expression `json:"for_each,omitempty"`
+	Range   Range       `json:"range"`
 }

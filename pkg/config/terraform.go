@@ -18,6 +18,7 @@ var terraformSchema = &hcl.BodySchema{
 	},
 	Blocks: []hcl.BlockHeaderSchema{
 		{Type: "required_providers"},
+		{Type: "encryption"},
 	},
 }
 
@@ -26,7 +27,7 @@ var terraformSchema = &hcl.BodySchema{
 // aggregated: required_version values are appended in encounter order
 // and required_providers entries are merged keyed by provider name
 // (last definition wins on conflict).
-func decodeTerraformBlock(block *hcl.Block, module *model.Module) model.Diagnostics {
+func decodeTerraformBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	content, _, hdiag := block.Body.PartialContent(terraformSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
@@ -40,6 +41,10 @@ func decodeTerraformBlock(block *hcl.Block, module *model.Module) model.Diagnost
 
 	for _, requiredProvider := range content.Blocks.OfType("required_providers") {
 		diags = append(diags, decodeRequiredProviders(requiredProvider, module)...)
+	}
+
+	for _, encryption := range content.Blocks.OfType("encryption") {
+		diags = append(diags, decodeEncryptionBlock(encryption, source, module)...)
 	}
 
 	return diags

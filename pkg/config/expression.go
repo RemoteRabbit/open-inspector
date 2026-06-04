@@ -19,3 +19,20 @@ func capture(expression hcl.Expression, source []byte) model.Expression {
 		Range:  model.RangeFromHcl(rang),
 	}
 }
+
+// captureAttributeMap reads every attribute on body as an unevaluated
+// Expression keyed by attribute name. Useful for free-form bodies whose
+// schema is provider/plugin defined (e.g. encryption key_provider /
+// method blocks).
+func captureAttributeMap(body hcl.Body, source []byte) (map[string]model.Expression, model.Diagnostics) {
+	attributes, hdiag := body.JustAttributes()
+	diags := model.DiagnosticsFromHCL(hdiag)
+	if len(attributes) == 0 {
+		return nil, diags
+	}
+	out := make(map[string]model.Expression, len(attributes))
+	for name, attribute := range attributes {
+		out[name] = capture(attribute.Expr, source)
+	}
+	return out, diags
+}

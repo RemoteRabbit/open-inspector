@@ -1,0 +1,156 @@
+{
+  "path": "\u003cfixture\u003e/opentofu-provider-foreach",
+  "required_core": [
+    "\u003e= 1.9.0"
+  ],
+  "required_providers": {
+    "aws": {
+      "source": "hashicorp/aws",
+      "version_constraints": [
+        "~\u003e 5.0"
+      ],
+      "configuration_aliases": [
+        "aws.by_region"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+        "start": {
+          "line": 9,
+          "column": 5,
+          "byte": 326
+        },
+        "end": {
+          "line": 13,
+          "column": 6,
+          "byte": 470
+        }
+      }
+    }
+  },
+  "variables": [
+    {
+      "name": "regions",
+      "type": "set(string)",
+      "default": {
+        "source": "[\"us-east-1\", \"us-west-2\", \"eu-west-1\"]",
+        "range": {
+          "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+          "start": {
+            "line": 19,
+            "column": 13,
+            "byte": 535
+          },
+          "end": {
+            "line": 19,
+            "column": 52,
+            "byte": 574
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+        "start": {
+          "line": 17,
+          "column": 1,
+          "byte": 478
+        },
+        "end": {
+          "line": 17,
+          "column": 19,
+          "byte": 496
+        }
+      }
+    }
+  ],
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "regional",
+      "for_each": {
+        "source": "var.regions",
+        "range": {
+          "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+          "start": {
+            "line": 29,
+            "column": 14,
+            "byte": 721
+          },
+          "end": {
+            "line": 29,
+            "column": 25,
+            "byte": 732
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+        "start": {
+          "line": 28,
+          "column": 1,
+          "byte": 670
+        },
+        "end": {
+          "line": 28,
+          "column": 36,
+          "byte": 705
+        }
+      }
+    }
+  ],
+  "providers": [
+    {
+      "name": "aws",
+      "alias": "by_region",
+      "for_each": {
+        "source": "var.regions",
+        "range": {
+          "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/opentofu-provider-foreach/main.tf",
+          "start": {
+            "line": 24,
+            "column": 14,
+            "byte": 633
+          },
+          "end": {
+            "line": 24,
+            "column": 25,
+            "byte": 644
+          }
+        }
+      },
+      "range": {
+        "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+        "start": {
+          "line": 22,
+          "column": 1,
+          "byte": 578
+        },
+        "end": {
+          "line": 22,
+          "column": 15,
+          "byte": 592
+        }
+      }
+    }
+  ],
+  "diagnostics": [
+    {
+      "severity": "error",
+      "summary": "Invalid expression",
+      "detail": "A single static variable reference is required: only attribute access and indexing with constant keys. No calculations, function calls, template expressions, etc are allowed here.",
+      "subject": {
+        "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+        "start": {
+          "line": 30,
+          "column": 14,
+          "byte": 746
+        },
+        "end": {
+          "line": 30,
+          "column": 37,
+          "byte": 769
+        }
+      }
+    }
+  ]
+}

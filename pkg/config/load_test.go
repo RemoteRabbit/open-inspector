@@ -250,6 +250,8 @@ var snapshotFixtures = []string{
 	"json-config",
 	"module-sources",
 	"multi-module",
+	"opentofu-encryption",
+	"opentofu-provider-foreach",
 	"overrides",
 	"providers",
 	"resources-count-foreach",
@@ -756,8 +758,6 @@ func TestLoad_NoPanic_StepThreeFixtures(t *testing.T) {
 	t.Parallel()
 	dirs := []string{
 		"modern-blocks",
-		"opentofu-encryption",
-		"opentofu-provider-foreach",
 		"invalid/missing-required",
 	}
 	for _, dir := range dirs {
@@ -960,5 +960,42 @@ func TestLoad_EphemeralResources(t *testing.T) {
 	}
 	if mod.EphemeralResources[0].Type != "random_password" {
 		t.Errorf("type = %q", mod.EphemeralResources[0].Type)
+	}
+}
+
+func TestLoad_EncryptionBlock(t *testing.T) {
+	t.Parallel()
+	mod, err := Load(fixturePath(t, "opentofu-encryption"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if mod.Encryption == nil {
+		t.Fatalf("Encryption is nil")
+	}
+	if len(mod.Encryption.KeyProviders) != 1 || mod.Encryption.KeyProviders[0].Type != "pbkdf2" {
+		t.Errorf("KeyProviders = %#v", mod.Encryption.KeyProviders)
+	}
+	if mod.Encryption.State == nil || mod.Encryption.Plan == nil {
+		t.Errorf("State or Plan missing: %#v", mod.Encryption)
+	}
+}
+
+func TestLoad_ProviderForEach(t *testing.T) {
+	t.Parallel()
+	mod, err := Load(fixturePath(t, "opentofu-provider-foreach"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	var awsByRegion *model.ProviderConfig
+	for i, p := range mod.Providers {
+		if p.Name == "aws" && p.Alias == "by_region" {
+			awsByRegion = &mod.Providers[i]
+		}
+	}
+	if awsByRegion == nil {
+		t.Fatalf("provider aws.by_region missing")
+	}
+	if awsByRegion.ForEach == nil || !strings.Contains(awsByRegion.ForEach.Source, "var.regions") {
+		t.Errorf("ForEach = %#v", awsByRegion.ForEach)
 	}
 }
