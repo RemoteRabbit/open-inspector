@@ -85,7 +85,7 @@
       "type": "random_password",
       "name": "db",
       "range": {
-        "filename": "/home/remoterabbit/Projects/open-inspector/testdata/fixtures/ephemeral/main.tf",
+        "filename": "\u003cfixture\u003e/ephemeral/main.tf",
         "start": {
           "line": 21,
           "column": 1,

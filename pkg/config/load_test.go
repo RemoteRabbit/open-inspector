@@ -369,6 +369,27 @@ func normalizeForSnapshot(mod *model.Module, fixture string) {
 	}
 	rewriteResources(mod.ManagedResources)
 	rewriteResources(mod.DataResources)
+	for i := range mod.EphemeralResources {
+		rewrite(&mod.EphemeralResources[i].Range)
+		if mod.EphemeralResources[i].Count != nil {
+			rewrite(&mod.EphemeralResources[i].Count.Range)
+		}
+		if mod.EphemeralResources[i].ForEach != nil {
+			rewrite(&mod.EphemeralResources[i].ForEach.Range)
+		}
+		if mod.EphemeralResources[i].Lifecycle != nil {
+			for j := range mod.EphemeralResources[i].Lifecycle.Preconditions {
+				rewrite(&mod.EphemeralResources[i].Lifecycle.Preconditions[j].Range)
+				rewrite(&mod.EphemeralResources[i].Lifecycle.Preconditions[j].Condition.Range)
+				rewrite(&mod.EphemeralResources[i].Lifecycle.Preconditions[j].ErrorMessage.Range)
+			}
+			for j := range mod.EphemeralResources[i].Lifecycle.Postconditions {
+				rewrite(&mod.EphemeralResources[i].Lifecycle.Postconditions[j].Range)
+				rewrite(&mod.EphemeralResources[i].Lifecycle.Postconditions[j].Condition.Range)
+				rewrite(&mod.EphemeralResources[i].Lifecycle.Postconditions[j].ErrorMessage.Range)
+			}
+		}
+	}
 	for i := range mod.ModuleCalls {
 		rewrite(&mod.ModuleCalls[i].Range)
 		if mod.ModuleCalls[i].Count != nil {
