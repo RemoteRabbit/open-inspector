@@ -18,6 +18,9 @@ build:
 test:
 	go test $(GOFLAGS) -race -count=1 $(PKG)
 
+test-update:
+	go test ./pkg/config -run TestLoad_Snapshots -update
+
 lint:
 	golangci-lint run
 
