@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/RemoteRabbit/open-inspector/compare/v0.1.1...v0.1.2) (2026-06-04)
+
+
+### Bug Fixes
+
+* **release:** Adjust goreleaser ([#40](https://github.com/RemoteRabbit/open-inspector/issues/40)) ([8eb677a](https://github.com/RemoteRabbit/open-inspector/commit/8eb677aac68549ef3acd72b38bb63fd409d2726c))
+
 ## [0.1.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.1.0...v0.1.1) (2026-06-04)
 
 
