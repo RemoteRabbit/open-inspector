@@ -1,8 +1,10 @@
-.PHONY: all build test lint fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
+.PHONY: all build test bench lint fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
 
 BIN            := bin/open-inspector
 PKG            := ./...
 GOFLAGS        ?=
+BENCH          ?= .
+BENCHPKG       ?= ./...
 ADDLICENSE     := go run github.com/google/addlicense@v1.2.0
 LICENSE_HEADER := .licenseheader.tmpl
 # Directories containing source files that must carry the MPL header.
@@ -20,6 +22,12 @@ test:
 
 test-update:
 	go test ./pkg/config -run TestLoad_Snapshots -update
+
+# Run Go benchmarks (no -race; benchmarks measure realistic throughput).
+# Override BENCH to select benchmarks and BENCHPKG to scope packages, e.g.
+#   make bench BENCH=BenchmarkInspect BENCHPKG=./pkg/inspector
+bench:
+	go test -run '^$$' -bench '$(BENCH)' -benchmem $(BENCHPKG)
 
 lint:
 	golangci-lint run
