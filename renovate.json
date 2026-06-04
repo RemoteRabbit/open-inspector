@@ -9,7 +9,7 @@
     ":prConcurrentLimit10",
     "helpers:pinGitHubActionDigests"
   ],
-  "timezone": "Ctc/UTC",
+  "timezone": "America/Chicago",
   "ignorePaths": [
     "**/examples/**",
     "**/__tests__/**",
