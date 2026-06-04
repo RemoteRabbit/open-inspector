@@ -1,3 +1,4 @@
+---
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # See https://goreleaser.com for full documentation.
 version: 2
@@ -65,6 +66,7 @@ signs:
     certificate: '${artifact}.pem'
     args:
       - sign-blob
+      - '--new-bundle-format=false'
       - '--output-certificate=${certificate}'
       - '--output-signature=${signature}'
       - '${artifact}'
