@@ -128,6 +128,9 @@ in [`.tool-versions`](./.tool-versions).
 On `git push` it additionally runs `go test -race`. Every hook shells
 out to the same `make` targets CI uses - single source of truth.
 
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the commit-message
+convention and the release flow.
+
 ## License
 
 [MPL-2.0](./LICENSE). Matches the OpenTofu / HCL ecosystem: derivative

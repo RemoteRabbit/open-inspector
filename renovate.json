@@ -1,0 +1,116 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)",
+    ":prHourlyLimit2",
+    ":prConcurrentLimit10",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "timezone": "Etc/UTC",
+  "schedule": [
+    "before 06:00 on Monday"
+  ],
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "postUpdateOptions": [
+    "gomodTidy",
+    "gomodUpdateImportPaths"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 06:00 on the first day of the month"]
+  },
+  "vulnerabilityAlerts": {
+    "enabled": true,
+    "labels": ["security"],
+    "schedule": ["at any time"]
+  },
+  "packageRules": [
+    {
+      "description": "Runtime Go dependencies bump the patch version via fix(deps) so they appear in the changelog and trigger a release.",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["require"],
+      "semanticCommitType": "fix",
+      "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Indirect Go deps are noise; group them and keep as chore.",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["indirect"],
+      "groupName": "go indirect dependencies",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Group golang.org/x/* together - they version-lockstep.",
+      "matchManagers": ["gomod"],
+      "matchPackagePrefixes": ["golang.org/x/"],
+      "groupName": "golang.org/x"
+    },
+    {
+      "description": "Group hashicorp/hcl + zclconf/go-cty - they release in lockstep.",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/hashicorp/hcl/v2",
+        "github.com/zclconf/go-cty"
+      ],
+      "groupName": "hcl + cty"
+    },
+    {
+      "description": "GitHub Actions: pin to commit SHA, group all together, ship as ci(deps).",
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions",
+      "semanticCommitType": "ci",
+      "semanticCommitScope": "deps",
+      "pinDigests": true
+    },
+    {
+      "description": "pre-commit hooks - grouped, chore.",
+      "matchManagers": ["pre-commit"],
+      "groupName": "pre-commit hooks",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps"
+    },
+    {
+      "description": "asdf / .tool-versions - grouped, chore (build env, not shipped).",
+      "matchManagers": ["asdf"],
+      "groupName": "asdf tool-versions",
+      "semanticCommitType": "chore",
+      "semanticCommitScope": "deps"
+    },
+    {
+      "description": "Auto-merge patch + digest + pin updates for dev tooling once CI is green.",
+      "matchUpdateTypes": ["patch", "digest", "pin"],
+      "matchManagers": ["github-actions", "pre-commit", "asdf"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Auto-merge indirect Go bumps and patch-level gomod updates.",
+      "matchManagers": ["gomod"],
+      "matchUpdateTypes": ["patch", "digest"],
+      "automerge": true,
+      "platformAutomerge": true
+    },
+    {
+      "description": "Major bumps deserve a deliberate review.",
+      "matchUpdateTypes": ["major"],
+      "automerge": false,
+      "labels": ["dependencies", "breaking"]
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Keep `go run github.com/<x>@vX.Y.Z` pins in the Makefile fresh (e.g. addlicense).",
+      "customType": "regex",
+      "fileMatch": ["(^|/)Makefile$"],
+      "matchStrings": [
+        "go run (?<depName>github\\.com/[^@\\s]+)@(?<currentValue>v\\d+\\.\\d+\\.\\d+)"
+      ],
+      "datasourceTemplate": "go"
+    }
+  ]
+}
