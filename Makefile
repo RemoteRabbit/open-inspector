@@ -3,7 +3,7 @@
 BIN            := bin/open-inspector
 PKG            := ./...
 GOFLAGS        ?=
-ADDLICENSE     := go run github.com/google/addlicense@v1.1.1
+ADDLICENSE     := go run github.com/google/addlicense@v1.2.0
 LICENSE_HEADER := .licenseheader.tmpl
 # Directories containing source files that must carry the MPL header.
 # Extend this list as new top-level source dirs are added.
