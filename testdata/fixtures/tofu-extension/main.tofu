@@ -3,7 +3,7 @@
 # Terraform. The loader must walk both extensions.
 
 terraform {
-  required_version = ">= 1.8.0"
+  required_version = ">= 1.15.4"
 }
 
 variable "greeting" {

@@ -4,7 +4,7 @@
 # never persisted to state.
 
 terraform {
-  required_version = ">= 1.10.0"
+  required_version = ">= 1.15.4"
   required_providers {
     random = {
       source  = "hashicorp/random"

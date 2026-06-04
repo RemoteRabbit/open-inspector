@@ -4,7 +4,7 @@
 # notes before relying on this fixture in parser assertions.
 
 terraform {
-  required_version = ">= 1.9.0"
+  required_version = ">= 1.15.4"
   required_providers {
     aws = {
       source                = "hashicorp/aws"

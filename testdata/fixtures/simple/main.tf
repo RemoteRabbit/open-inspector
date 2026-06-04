@@ -2,7 +2,7 @@
 # The smallest plausibly-real module: one variable, one resource, one output.
 
 terraform {
-  required_version = ">= 1.5.0"
+  required_version = ">= 1.15.4"
   required_providers {
     null = {
       source  = "hashicorp/null"

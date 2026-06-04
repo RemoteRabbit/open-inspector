@@ -4,7 +4,7 @@
 # plan blocks and surface them on the model.
 
 terraform {
-  required_version = ">= 1.7.0"
+  required_version = ">= 1.15.4"
 
   encryption {
     key_provider "pbkdf2" "mykey" {
