@@ -1,0 +1,102 @@
+{
+  "path": "\u003cfixture\u003e/ephemeral",
+  "required_core": [
+    "\u003e= 1.10.0"
+  ],
+  "required_providers": {
+    "random": {
+      "source": "hashicorp/random",
+      "version_constraints": [
+        "~\u003e 3.6"
+      ],
+      "range": {
+        "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+        "start": {
+          "line": 9,
+          "column": 5,
+          "byte": 259
+        },
+        "end": {
+          "line": 12,
+          "column": 6,
+          "byte": 335
+        }
+      }
+    }
+  },
+  "variables": [
+    {
+      "name": "ephemeral_input",
+      "type": "string",
+      "ephemeral": true,
+      "range": {
+        "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+        "start": {
+          "line": 16,
+          "column": 1,
+          "byte": 343
+        },
+        "end": {
+          "line": 16,
+          "column": 27,
+          "byte": 369
+        }
+      }
+    }
+  ],
+  "outputs": [
+    {
+      "name": "ephemeral_token",
+      "value": {
+        "source": "ephemeral.random_password.db.result",
+        "range": {
+          "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+          "start": {
+            "line": 27,
+            "column": 15,
+            "byte": 526
+          },
+          "end": {
+            "line": 27,
+            "column": 50,
+            "byte": 561
+          }
+        }
+      },
+      "sensitive": true,
+      "ephemeral": true,
+      "range": {
+        "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+        "start": {
+          "line": 26,
+          "column": 1,
+          "byte": 485
+        },
+        "end": {
+          "line": 26,
+          "column": 25,
+          "byte": 509
+        }
+      }
+    }
+  ],
+  "ephemeral_resources": [
+    {
+      "type": "random_password",
+      "name": "db",
+      "range": {
+        "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+        "start": {
+          "line": 21,
+          "column": 1,
+          "byte": 415
+        },
+        "end": {
+          "line": 21,
+          "column": 33,
+          "byte": 447
+        }
+      }
+    }
+  ]
+}
