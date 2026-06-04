@@ -45,6 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5
+        with:
+          # Workaround for actions/checkout#2299. The nested checkout inside
+          # golang/govulncheck-action collides with the v6 credential helper
+          # and produces a "Duplicate header: Authorization" 400 on fetch.
+          # Remove once govulncheck-action ships a v6-aware checkout or
+          # actions/checkout fixes the credential cleanup upstream.
+          persist-credentials: false
       - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
         with:
           go-version: stable
