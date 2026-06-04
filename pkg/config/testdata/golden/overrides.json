@@ -5,18 +5,18 @@
       "name": "region",
       "type": "string",
       "default": {
-        "source": "\"us-east-1\"",
+        "source": "\"eu-central-1\"",
         "range": {
-          "filename": "\u003cfixture\u003e/overrides/main.tf",
+          "filename": "\u003cfixture\u003e/overrides/override.tf",
           "start": {
-            "line": 14,
+            "line": 5,
             "column": 13,
-            "byte": 324
+            "byte": 147
           },
           "end": {
-            "line": 14,
-            "column": 24,
-            "byte": 335
+            "line": 5,
+            "column": 27,
+            "byte": 161
           }
         }
       },
