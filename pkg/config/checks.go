@@ -24,7 +24,7 @@ func decodeCheckBlock(block *hcl.Block, source []byte, module *model.Module) mod
 
 	check := model.CheckBlock{
 		Name:  block.Labels[0],
-		Range: model.RangeFromHcl(block.DefRange),
+		Range: model.RangeFromHCL(block.DefRange),
 	}
 
 	// NOTE: a check has at most one data block in practice. If a malformed
@@ -71,6 +71,6 @@ func decodeAssertion(block *hcl.Block, source []byte) (model.Assertion, bool, mo
 	return model.Assertion{
 		Condition:    capture(condition.Expr, source),
 		ErrorMessage: capture(errorMessage.Expr, source),
-		Range:        model.RangeFromHcl(block.DefRange),
+		Range:        model.RangeFromHCL(block.DefRange),
 	}, true, diags
 }

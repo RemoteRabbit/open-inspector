@@ -71,7 +71,7 @@ func decodeRequiredProviders(block *hcl.Block, module *model.Module) model.Diagn
 // (`aws = "~> 4.0"`) and the modern object form with source, version,
 // and configuration_aliases.
 func decodeProviderReq(attribute *hcl.Attribute) (model.ProviderRequirement, model.Diagnostics) {
-	req := model.ProviderRequirement{Range: model.RangeFromHcl(attribute.Range)}
+	req := model.ProviderRequirement{Range: model.RangeFromHCL(attribute.Range)}
 	var diags model.Diagnostics
 
 	// Legacy form: a single string version constraint.
