@@ -24,7 +24,7 @@ var providerSchema = &hcl.BodySchema{
 func decodeProviderBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	config := model.ProviderConfig{
 		Name:  block.Labels[0],
-		Range: model.RangeFromHcl(block.DefRange),
+		Range: model.RangeFromHCL(block.DefRange),
 	}
 
 	content, _, hdiag := block.Body.PartialContent(providerSchema)

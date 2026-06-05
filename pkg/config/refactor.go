@@ -52,7 +52,7 @@ func decodeMovedBlock(block *hcl.Block, module *model.Module) model.Diagnostics 
 	module.Moved = append(module.Moved, model.MovedBlock{
 		From:  from,
 		To:    to,
-		Range: model.RangeFromHcl(block.DefRange),
+		Range: model.RangeFromHCL(block.DefRange),
 	})
 	return diags
 }
@@ -68,7 +68,7 @@ func decodeImportBlock(block *hcl.Block, source []byte, module *model.Module) mo
 
 	imp := model.ImportBlock{
 		To:    to,
-		Range: model.RangeFromHcl(block.DefRange),
+		Range: model.RangeFromHCL(block.DefRange),
 	}
 
 	// id can be a string (TF 1.5) or an object (TF 1.6+). Capture as
@@ -98,7 +98,7 @@ func decodeRemovedBlock(block *hcl.Block, module *model.Module) model.Diagnostic
 
 	removed := model.RemovedBlock{
 		From:  from,
-		Range: model.RangeFromHcl(block.DefRange),
+		Range: model.RangeFromHCL(block.DefRange),
 	}
 
 	// removed.lifecycle is a meta-block scoped to this construct; do

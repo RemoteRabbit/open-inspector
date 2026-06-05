@@ -25,7 +25,7 @@ var moduleSchema = &hcl.BodySchema{
 func decodeModuleCallBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	moduleCall := model.ModuleCall{
 		Name:  block.Labels[0],
-		Range: model.RangeFromHcl(block.DefRange),
+		Range: model.RangeFromHCL(block.DefRange),
 	}
 
 	inner, _, hdiag := block.Body.PartialContent(moduleSchema)

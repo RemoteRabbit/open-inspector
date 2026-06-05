@@ -50,11 +50,11 @@ func DiagnosticsFromHCL(hcld hcl.Diagnostics) Diagnostics {
 		}
 		newDiag := Diagnostic{Severity: sev, Summary: diag.Summary, Detail: diag.Detail}
 		if diag.Subject != nil {
-			rang := RangeFromHcl(*diag.Subject)
+			rang := RangeFromHCL(*diag.Subject)
 			newDiag.Subject = &rang
 		}
 		if diag.Context != nil {
-			rang := RangeFromHcl(*diag.Context)
+			rang := RangeFromHCL(*diag.Context)
 			newDiag.Context = &rang
 		}
 		output = append(output, newDiag)
