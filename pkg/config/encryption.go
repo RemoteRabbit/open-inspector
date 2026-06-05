@@ -37,7 +37,7 @@ func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module
 	inner, _, hdiag := block.Body.PartialContent(encryptionSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
-	encryption := &model.Encryption{Range: model.RangeFromHcl(block.DefRange)}
+	encryption := &model.Encryption{Range: model.RangeFromHCL(block.DefRange)}
 
 	for _, keyProvider := range inner.Blocks.OfType("key_provider") {
 		body, bdiag := captureAttributeMap(keyProvider.Body, source)
@@ -46,7 +46,7 @@ func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module
 			Type:  keyProvider.Labels[0],
 			Name:  keyProvider.Labels[1],
 			Body:  body,
-			Range: model.RangeFromHcl(keyProvider.DefRange),
+			Range: model.RangeFromHCL(keyProvider.DefRange),
 		})
 	}
 
@@ -57,7 +57,7 @@ func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module
 			Type:  method.Labels[0],
 			Name:  method.Labels[1],
 			Body:  body,
-			Range: model.RangeFromHcl(method.DefRange),
+			Range: model.RangeFromHCL(method.DefRange),
 		})
 	}
 
@@ -78,7 +78,7 @@ func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module
 		diags = append(diags, bdiag...)
 		encryption.RemoteStateSources = append(encryption.RemoteStateSources, model.EncryptionRemoteState{
 			Body:  body,
-			Range: model.RangeFromHcl(remote.DefRange),
+			Range: model.RangeFromHCL(remote.DefRange),
 		})
 	}
 
@@ -93,7 +93,7 @@ func decodeEncryptionTarget(block *hcl.Block, source []byte) (*model.EncryptionT
 	content, _, hdiag := block.Body.PartialContent(encryptionTargetSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
-	target := &model.EncryptionTarget{Range: model.RangeFromHcl(block.DefRange)}
+	target := &model.EncryptionTarget{Range: model.RangeFromHCL(block.DefRange)}
 	if attribute, ok := content.Attributes["method"]; ok {
 		target.Method = capture(attribute.Expr, source)
 	}

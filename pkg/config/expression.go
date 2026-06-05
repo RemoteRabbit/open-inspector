@@ -31,7 +31,7 @@ func capture(expression hcl.Expression, source []byte) model.Expression {
 	rang := expression.Range()
 	return model.Expression{
 		Source: sliceSourceLF(source, rang),
-		Range:  model.RangeFromHcl(rang),
+		Range:  model.RangeFromHCL(rang),
 	}
 }
 

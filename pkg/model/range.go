@@ -24,13 +24,13 @@ type Pos struct {
 	Byte   int `json:"byte"`
 }
 
-// RangeFromHcl converts an hcl.Range into the model's wire-friendly Range.
+// RangeFromHCL converts an hcl.Range into the model's wire-friendly Range.
 //
 // Filename is normalized to forward slashes so JSON output is byte-identical
 // across Linux, macOS, and Windows. This is the sole chokepoint where
 // hcl.Range filenames enter the model, so every downstream Range field
 // gets the same canonical form for free.
-func RangeFromHcl(rang hcl.Range) Range {
+func RangeFromHCL(rang hcl.Range) Range {
 	return Range{
 		Filename: filepath.ToSlash(rang.Filename),
 		Start:    Pos{Line: rang.Start.Line, Column: rang.Start.Column, Byte: rang.Start.Byte},
