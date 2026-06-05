@@ -29,6 +29,10 @@ var encryptionTargetSchema = &hcl.BodySchema{
 	},
 }
 
+// decodeEncryptionBlock decodes the OpenTofu terraform.encryption {} tree
+// (key providers, methods, state/plan targets, and remote state sources)
+// into module.Encryption. Provider/method bodies are schema-less, so each
+// attribute is captured verbatim.
 func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	inner, _, hdiag := block.Body.PartialContent(encryptionSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)

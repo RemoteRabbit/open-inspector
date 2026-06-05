@@ -20,6 +20,10 @@ var resourceSchema = &hcl.BodySchema{
 	Blocks: []hcl.BlockHeaderSchema{{Type: "lifecycle"}},
 }
 
+// decodeResourceBlock decodes a resource {} or data {} block into the
+// model, appending it to the managed or data slice according to mode. It
+// captures the meta-arguments (count, for_each, provider, depends_on) and
+// the lifecycle {} block.
 func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMode, module *model.Module) model.Diagnostics {
 	resource := model.Resource{
 		Mode:  mode,
@@ -93,6 +97,10 @@ var lifecycleSchema = &hcl.BodySchema{
 	},
 }
 
+// decodeLifecycle decodes a resource lifecycle {} block: the scalar flags
+// (create_before_destroy, prevent_destroy), the traversal lists
+// (ignore_changes, replace_triggered_by), and the precondition/
+// postcondition blocks.
 func decodeLifecycle(block *hcl.Block, source []byte) (*model.Lifecycle, model.Diagnostics) {
 	inner, _, hdiag := block.Body.PartialContent(lifecycleSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)

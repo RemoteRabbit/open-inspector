@@ -16,6 +16,8 @@ var checkSchema = &hcl.BodySchema{
 	},
 }
 
+// decodeCheckBlock decodes a check "<name>" {} block into module.Checks,
+// including its optional scoped data source and its assert {} blocks.
 func decodeCheckBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	inner, _, hdiag := block.Body.PartialContent(checkSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
@@ -25,7 +27,9 @@ func decodeCheckBlock(block *hcl.Block, source []byte, module *model.Module) mod
 		Range: model.RangeFromHcl(block.DefRange),
 	}
 
-	// At most one data block per check.
+	// NOTE: a check has at most one data block in practice. If a malformed
+	// config declares several, only the last is captured and the extras are
+	// silently dropped (no diagnostic).
 	for _, dataBlock := range inner.Blocks.OfType("data") {
 		// Decode into a throwaway module so we can capture the result without polluting
 		// Module.DataResources.
@@ -51,6 +55,9 @@ func decodeCheckBlock(block *hcl.Block, source []byte, module *model.Module) mod
 	return diags
 }
 
+// decodeAssertion decodes a single assert { condition, error_message }
+// block. The bool result is false when the block is malformed and should
+// be skipped.
 func decodeAssertion(block *hcl.Block, source []byte) (model.Assertion, bool, model.Diagnostics) {
 	inner, _, adiag := block.Body.PartialContent(validationSchema)
 	diags := model.DiagnosticsFromHCL(adiag)

@@ -2,7 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-// Package main ...
+// Command open-inspector is the CLI entrypoint. It delegates to the cobra
+// command tree in the cmd package and exits with the returned status code.
 package main
 
 import (
@@ -11,7 +12,7 @@ import (
 	"github.com/remoterabbit/open-inspector/cmd/open-inspector/cmd"
 )
 
-// main
+// main runs the root command and propagates its exit code to the process.
 func main() {
 	os.Exit(cmd.Execute())
 }

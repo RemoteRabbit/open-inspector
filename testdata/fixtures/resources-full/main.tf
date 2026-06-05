@@ -1,6 +1,6 @@
 # Fixture: resources-full
 # Exercises every resource/module meta-argument and lifecycle sub-feature
-# the step-2 loader is expected to capture:
+# the loader is expected to capture:
 #
 #   - resource provider = aws.east           (single-traversal meta-arg)
 #   - resource depends_on = [...]            (traversal list)
