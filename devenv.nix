@@ -8,7 +8,7 @@
   # go.mod requires. Setting it to "auto" lets Go automatically download and use
   # the toolchain pinned in go.mod (e.g. after a Renovate bump), so the local
   # build always matches go.mod without manual intervention.
-  env.GOTOOLCHAIN = "auto";
+  env.GOTOOLCHAIN = lib.mkForce "auto";
 
   # https://devenv.sh/packages/
   packages = [
