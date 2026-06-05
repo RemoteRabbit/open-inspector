@@ -9,6 +9,8 @@ import (
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
+// decodeLocalsBlock reads every name = value binding in a locals {} block
+// and appends them to module.Locals, capturing each value verbatim.
 func decodeLocalsBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	attributes, hdiag := block.Body.JustAttributes()
 	diags := model.DiagnosticsFromHCL(hdiag)

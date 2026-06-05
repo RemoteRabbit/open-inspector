@@ -29,6 +29,7 @@ table or a versioned JSON envelope.`,
 	RunE: runConfig,
 }
 
+// init registers the config subcommand and its flags on the root command.
 func init() {
 	configCmd.Flags().BoolVar(&configJSON, "json", false,
 		"emit machine-readable JSON instead of a human table")
@@ -37,6 +38,10 @@ func init() {
 	rootCmd.AddCommand(configCmd)
 }
 
+// runConfig inspects the module directory in args[0], renders it as JSON or
+// a table, and then applies the --fail-on policy: when diagnostics match
+// the threshold it exits the process directly with the policy's code,
+// bypassing cobra's error-to-exit-1 translation.
 func runConfig(cmd *cobra.Command, args []string) error {
 	stderrLog.infof("inspecting %s", args[0])
 	mod, err := inspector.Inspect(args[0])

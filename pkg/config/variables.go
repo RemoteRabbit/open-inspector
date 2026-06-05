@@ -31,6 +31,9 @@ var validationSchema = &hcl.BodySchema{
 	},
 }
 
+// decodeVariableBlock decodes a variable {} block into module.Variables,
+// capturing its type and default verbatim, its scalar flags (sensitive,
+// nullable, ephemeral), and any validation {} blocks.
 func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	variable := model.Variable{
 		Name:  block.Labels[0],
@@ -43,8 +46,7 @@ func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) 
 		// Parse with typeexpr purely for diagnostics (invalid types still
 		// surface as errors). The serialized value is the verbatim source
 		// of the type expression so that `optional(T, default)` markers
-		// and any other user-authored detail survive a round-trip - see
-		// Decision 1 in docs/step-2-config-loader.md.
+		// and any other user-authored detail survive a round-trip.
 		_, _, tdiag := typeexpr.TypeConstraintWithDefaults(attribute.Expr)
 		diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)
 		variable.Type = sliceSourceLF(source, attribute.Expr.Range())

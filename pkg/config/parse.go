@@ -12,12 +12,17 @@ import (
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
+// parsedFiles holds the parsed HCL files for a module, keeping primary and
+// override files separate, plus the parser that owns their source bytes.
 type parsedFiles struct {
 	primary  []*hcl.File
 	override []*hcl.File
 	parser   *hclparse.Parser
 }
 
+// parse parses every file in fileSet, dispatching on extension between the
+// JSON and native-HCL parsers. The returned parser retains the source
+// bytes needed later for verbatim expression capture.
 func parse(fileSet fileSet) (parsedFiles, model.Diagnostics) {
 	parser := hclparse.NewParser()
 	var diags hcl.Diagnostics

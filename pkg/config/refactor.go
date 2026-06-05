@@ -38,6 +38,7 @@ var removedLifecycleSchema = &hcl.BodySchema{
 	Attributes: []hcl.AttributeSchema{{Name: "destroy"}},
 }
 
+// decodeMovedBlock decodes a moved { from, to } block into module.Moved.
 func decodeMovedBlock(block *hcl.Block, module *model.Module) model.Diagnostics {
 	inner, _, hdiag := block.Body.PartialContent(movedSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
@@ -56,6 +57,8 @@ func decodeMovedBlock(block *hcl.Block, module *model.Module) model.Diagnostics 
 	return diags
 }
 
+// decodeImportBlock decodes an import { to, id, provider } block into
+// module.Imports, capturing the id expression verbatim.
 func decodeImportBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	inner, _, hdiag := block.Body.PartialContent(importSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
@@ -84,6 +87,8 @@ func decodeImportBlock(block *hcl.Block, source []byte, module *model.Module) mo
 	return diags
 }
 
+// decodeRemovedBlock decodes a removed { from, lifecycle { destroy } }
+// block into module.Removed.
 func decodeRemovedBlock(block *hcl.Block, module *model.Module) model.Diagnostics {
 	inner, _, hdiag := block.Body.PartialContent(removedSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)

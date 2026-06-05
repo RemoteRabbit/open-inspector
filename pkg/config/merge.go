@@ -15,8 +15,10 @@ import (
 //   - ProviderConfig: Name + Alias
 //
 // Argument replacement: override wins for any field the override set. Validation blocks REPLACE the entire validation
-// set (per TF docs). depends_on REPLACES rather than appending. An override block with no matching base construct is
-// silently ignored (best-effort merge); a future PR can elevate this to a diagnostic.
+// set (per TF docs). depends_on REPLACES rather than appending.
+//
+// TODO: an override block with no matching base construct is silently ignored (best-effort merge); elevate this to
+// a diagnostic so typo'd override targets are surfaced rather than dropped.
 func mergeOverrides(base *model.Module, overrides []*model.Module) {
 	for _, override := range overrides {
 		mergeVariables(base, override.Variables)
@@ -32,6 +34,8 @@ func mergeOverrides(base *model.Module, overrides []*model.Module) {
 	}
 }
 
+// mergeVariables applies override variables onto base, matched by name.
+// Each field the override set wins; validation blocks replace the whole set.
 func mergeVariables(base *model.Module, overrides []model.Variable) {
 	for _, override := range overrides {
 		for index := range base.Variables {
@@ -65,6 +69,8 @@ func mergeVariables(base *model.Module, overrides []model.Variable) {
 	}
 }
 
+// mergeOutputs applies override outputs onto base, matched by name. Each
+// field the override set wins; depends_on replaces rather than appends.
 func mergeOutputs(base *model.Module, overrides []model.Output) {
 	for _, override := range overrides {
 		for index := range base.Outputs {
@@ -92,6 +98,8 @@ func mergeOutputs(base *model.Module, overrides []model.Output) {
 	}
 }
 
+// mergeLocals applies override locals onto base, matched by name,
+// replacing the value of any local that the override redefines.
 func mergeLocals(base *model.Module, overrides []model.Local) {
 	for _, override := range overrides {
 		for index := range base.Locals {
@@ -107,6 +115,8 @@ func mergeLocals(base *model.Module, overrides []model.Local) {
 	}
 }
 
+// mergeResources applies override resources onto base, matched by type and
+// name. Each meta-argument the override set wins; depends_on replaces.
 func mergeResources(base *[]model.Resource, overrides []model.Resource) {
 	for _, override := range overrides {
 		for index := range *base {
@@ -134,6 +144,9 @@ func mergeResources(base *[]model.Resource, overrides []model.Resource) {
 	}
 }
 
+// mergeEphemeralResources applies override ephemeral resources onto base,
+// matched by type and name, with the same field-replacement rules as
+// mergeResources.
 func mergeEphemeralResources(base *[]model.EphemeralResource, overrides []model.EphemeralResource) {
 	for _, override := range overrides {
 		for index := range *base {
@@ -161,6 +174,8 @@ func mergeEphemeralResources(base *[]model.EphemeralResource, overrides []model.
 	}
 }
 
+// mergeModuleCalls applies override module calls onto base, matched by
+// name. Each field the override set wins; depends_on replaces.
 func mergeModuleCalls(base *model.Module, overrides []model.ModuleCall) {
 	for _, override := range overrides {
 		for index := range base.ModuleCalls {
@@ -191,6 +206,8 @@ func mergeModuleCalls(base *model.Module, overrides []model.ModuleCall) {
 	}
 }
 
+// mergeProviderConfig applies override provider blocks onto base, matched
+// by name and alias, replacing fields the override set.
 func mergeProviderConfig(base *model.Module, overrides []model.ProviderConfig) {
 	for _, override := range overrides {
 		for index := range base.Providers {

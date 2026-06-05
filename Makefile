@@ -1,4 +1,4 @@
-.PHONY: all build test bench lint fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
+.PHONY: all build test docs-cli bench lint fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
 
 BIN            := bin/open-inspector
 PKG            := ./...
@@ -11,7 +11,7 @@ LICENSE_HEADER := .licenseheader.tmpl
 # Extend this list as new top-level source dirs are added.
 LICENSE_PATHS  := cmd pkg
 
-all: fmt lint license-fix test build
+all: fmt lint license-fix test build docs-cli
 
 build:
 	@mkdir -p bin
@@ -35,6 +35,11 @@ lint:
 fmt:
 	gofmt -s -w $(LICENSE_PATHS)
 	go vet $(PKG)
+
+docs-cli:
+	rm -rf docs/cli docs/man
+	mkdir -p docs/cli docs/man
+	go run ./cmd/docgen
 
 tidy:
 	go mod tidy

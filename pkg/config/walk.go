@@ -16,11 +16,17 @@ import (
 // Override files (filename ending _override.<ext> or named override.<ext>))
 // are collected separately and ignored.
 
+// fileSet is the result of walking a module directory: the primary
+// configuration files and the override files, kept separate so overrides
+// can be merged on top of the primary set.
 type fileSet struct {
 	Primary  []string // .tf, .tf.json, .tofu, .tofu.json (no overrides)
 	Override []string // *_override.<ext>, override.<ext>
 }
 
+// walk lists the configuration files in dir (non-recursive), splitting
+// primary files from override files and sorting each group for stable
+// ordering. Subdirectories and non-config files are ignored.
 func walk(dir string) (fileSet, model.Diagnostics) {
 	entries, err := os.ReadDir(dir)
 	if err != nil {

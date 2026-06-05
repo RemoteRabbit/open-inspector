@@ -1,7 +1,7 @@
 # Fixture: invalid/missing-required
 # Syntactically valid, but the resource omits arguments its provider
 # schema marks as required. Only meaningful once provider schema
-# enrichment (step 6) is wired in; until then the config loader should
+# enrichment is wired in; until then the config loader should
 # still parse this cleanly.
 
 terraform {

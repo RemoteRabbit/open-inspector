@@ -30,6 +30,9 @@ func traversalString(traversal hcl.Traversal) string {
 	return builder.String()
 }
 
+// decodeTraversalList decodes a list expression of references (such as a
+// depends_on value) into their source-like string forms, skipping and
+// reporting entries that are not simple traversals.
 func decodeTraversalList(expressions hcl.Expression) ([]string, model.Diagnostics) {
 	list, hdiag := hcl.ExprList(expressions)
 	diags := model.DiagnosticsFromHCL(hdiag)
@@ -46,6 +49,9 @@ func decodeTraversalList(expressions hcl.Expression) ([]string, model.Diagnostic
 	return output, diags
 }
 
+// traversalStringFromAttr renders a single attribute's traversal (e.g. a
+// moved block's from/to) as a source-like string. A nil attribute yields
+// an empty string and no diagnostics.
 func traversalStringFromAttr(attribute *hcl.Attribute) (string, model.Diagnostics) {
 	if attribute == nil {
 		return "", nil

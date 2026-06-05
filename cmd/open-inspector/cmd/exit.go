@@ -18,6 +18,10 @@ const (
 
 // ExitCode returns the process exit code for the given diagnostics under
 // the supplied policy: 2 when a diagnostic matches the threshold, else 0.
+//
+// TODO: an unrecognized policy (e.g. --fail-on=bogus) falls through to the
+// zero return, silently behaving like "never". Validate the --fail-on
+// value when the flag is parsed so invalid input errors out instead.
 func ExitCode(diags model.Diagnostics, policy FailOnPolicy) int {
 	switch policy {
 	case FailOnNever:
