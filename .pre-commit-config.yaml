@@ -52,7 +52,13 @@ repos:
       - id: check-symlinks
       - id: detect-private-key
 
-  # Project-local hooks — keep tool invocation in sync with the Makefile.
+  # Spell-checking for code, comments, and docs.
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.3.0
+    hooks:
+      - id: codespell
+
+  # Project-local hooks: keep tool invocation in sync with the Makefile.
   - repo: local
     hooks:
       - id: gofmt

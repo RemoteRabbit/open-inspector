@@ -9,9 +9,14 @@ linters:
     - errcheck
     - govet
     - ineffassign
+    - misspell
     - revive
     - staticcheck
     - unused
+
+  settings:
+    misspell:
+      locale: US
 
 formatters:
   enable:
