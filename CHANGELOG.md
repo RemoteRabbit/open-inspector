@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.2.0...v0.3.0) (2026-06-06)
+
+
+### Features
+
+* **cli:** Add json/dot/mermaid/tree graph outputs for modulecalls ([#54](https://github.com/RemoteRabbit/open-inspector/issues/54)) ([78110a2](https://github.com/RemoteRabbit/open-inspector/commit/78110a2a322005502b0c2c9a4e6cdc559d54a5f0))
+* **cli:** Setup base output and cli use ([#49](https://github.com/RemoteRabbit/open-inspector/issues/49)) ([ec09f92](https://github.com/RemoteRabbit/open-inspector/commit/ec09f92472c2924de45a7d6077226b89184afdd0))
+
+
+### Documentation
+
+* **cli:** Expand and note cli docs ([#51](https://github.com/RemoteRabbit/open-inspector/issues/51)) ([e7343ab](https://github.com/RemoteRabbit/open-inspector/commit/e7343abc121e93a98e2a40980703d43023000a1e))
+
 ## [0.2.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.1.2...v0.2.0) (2026-06-04)
 
 
