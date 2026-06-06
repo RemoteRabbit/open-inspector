@@ -38,6 +38,34 @@ func fixturePath(t *testing.T, name string) string {
 	return p
 }
 
+func TestLoad_CapturesAttrNames(t *testing.T) {
+	t.Parallel()
+
+	mod, err := Load(fixturePath(t, "simple"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	example := findResource(t, mod.ManagedResources, "null_resource", "example")
+	if want := []string{"triggers"}; !reflect.DeepEqual(example.AttrNames, want) {
+		t.Errorf("AttrNames = %v, want %v", example.AttrNames, want)
+	}
+}
+
+func TestLoad_AttrNamesExcludeMetaArgs(t *testing.T) {
+	t.Parallel()
+
+	mod, err := Load(fixturePath(t, "resources-full"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	// aws_instance.primary sets only meta-args (provider, depends_on) and
+	// a lifecycle block; none should leak into AttrNames.
+	primary := findResource(t, mod.ManagedResources, "aws_instance", "primary")
+	if len(primary.AttrNames) != 0 {
+		t.Errorf("AttrNames = %v, want empty (only meta-args set)", primary.AttrNames)
+	}
+}
+
 func TestLoad_Simple_RequiredProviders(t *testing.T) {
 	t.Parallel()
 

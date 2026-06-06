@@ -156,11 +156,11 @@ func renderResources(ew *errWriter, heading string, res []model.Resource) {
 		return
 	}
 	ew.printf("## %s (%d)\n", heading, len(res))
-	rows := [][]string{{"TYPE", "NAME", "PROVIDER", "COUNT/FOR_EACH", "LIFECYCLE"}}
+	rows := [][]string{{"TYPE", "NAME", "PROVIDER", "COUNT/FOR_EACH", "LIFECYCLE", "FINDINGS"}}
 	for _, r := range res {
 		rows = append(rows, []string{
 			r.Type, r.Name, orNone(r.Provider), repetition(r.Count, r.ForEach),
-			lifecycleSummary(r.Lifecycle),
+			lifecycleSummary(r.Lifecycle), findingsSummary(r.SchemaFindings),
 		})
 	}
 	ew.table(rows)
@@ -173,11 +173,11 @@ func renderEphemeralResources(ew *errWriter, res []model.EphemeralResource) {
 		return
 	}
 	ew.printf("## Ephemeral resources (%d)\n", len(res))
-	rows := [][]string{{"TYPE", "NAME", "PROVIDER", "COUNT/FOR_EACH", "LIFECYCLE"}}
+	rows := [][]string{{"TYPE", "NAME", "PROVIDER", "COUNT/FOR_EACH", "LIFECYCLE", "FINDINGS"}}
 	for _, r := range res {
 		rows = append(rows, []string{
 			r.Type, r.Name, orNone(r.Provider), repetition(r.Count, r.ForEach),
-			lifecycleSummary(r.Lifecycle),
+			lifecycleSummary(r.Lifecycle), findingsSummary(r.SchemaFindings),
 		})
 	}
 	ew.table(rows)
@@ -416,6 +416,50 @@ func lifecycleSummary(lc *model.Lifecycle) string {
 		return "(empty)"
 	}
 	return strings.Join(parts, "; ")
+}
+
+// findingsSummary compactly describes a resource's schema findings: the
+// unknown, deprecated, and missing-required attribute names joined into a
+// single column value. Returns "(none)" when there are no findings, which
+// also covers the common case where no schema was supplied. Full detail
+// (names, messages, ranges) lives in the JSON output.
+func findingsSummary(findings *model.SchemaFindings) string {
+	if findings == nil {
+		return "(none)"
+	}
+	var parts []string
+	if names := attrFindingNames(findings.UnknownAttrs); len(names) > 0 {
+		parts = append(parts, "unknown: "+strings.Join(names, ", "))
+	}
+	if names := deprecatedAttrNames(findings.DeprecatedAttrs); len(names) > 0 {
+		parts = append(parts, "deprecated: "+strings.Join(names, ", "))
+	}
+	if len(findings.MissingRequired) > 0 {
+		parts = append(parts, "missing required: "+strings.Join(findings.MissingRequired, ", "))
+	}
+	if len(parts) == 0 {
+		return "(none)"
+	}
+	return strings.Join(parts, " | ")
+}
+
+// attrFindingNames pulls the attribute names out of a slice of AttrFinding.
+func attrFindingNames(findings []model.AttrFinding) []string {
+	names := make([]string, len(findings))
+	for index, finding := range findings {
+		names[index] = finding.Name
+	}
+	return names
+}
+
+// deprecatedAttrNames pulls the attribute names out of a slice of
+// DeprecatedAttr.
+func deprecatedAttrNames(findings []model.DeprecatedAttr) []string {
+	names := make([]string, len(findings))
+	for index, finding := range findings {
+		names[index] = finding.Name
+	}
+	return names
 }
 
 // repetition renders a resource's count or for_each meta-argument as a

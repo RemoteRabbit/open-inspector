@@ -84,6 +84,10 @@
     {
       "type": "random_password",
       "name": "db",
+      "attr_names": [
+        "length",
+        "special"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/ephemeral/main.tf",
         "start": {

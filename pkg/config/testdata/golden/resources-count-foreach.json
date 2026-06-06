@@ -89,6 +89,9 @@
           }
         }
       },
+      "attr_names": [
+        "triggers"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
@@ -123,6 +126,9 @@
           }
         }
       },
+      "attr_names": [
+        "triggers"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
@@ -159,6 +165,9 @@
           }
         }
       },
+      "attr_names": [
+        "inputs"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {

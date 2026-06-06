@@ -115,6 +115,18 @@ type Resource struct {
 	ForEach   *Expression `json:"for_each,omitempty"`
 	DependsOn []string    `json:"depends_on,omitempty"`
 
+	// AttrNames lists the user-set top-level attribute names that are not
+	// meta-arguments, captured at load time and sorted. It excludes
+	// count, for_each, provider, depends_on, and the lifecycle block. It
+	// is best-effort: nested blocks (for example a versioning {} block)
+	// do not appear here.
+	AttrNames []string `json:"attr_names,omitempty"`
+
+	// SchemaFindings holds schema-derived annotations. It is populated
+	// only when inspection runs with a provider schema (WithSchema or
+	// WithSchemaAuto); otherwise it is nil and omitted from JSON.
+	SchemaFindings *SchemaFindings `json:"schema_findings,omitempty"`
+
 	Lifecycle *Lifecycle `json:"lifecycle,omitempty"`
 	Range     Range      `json:"range"`
 }

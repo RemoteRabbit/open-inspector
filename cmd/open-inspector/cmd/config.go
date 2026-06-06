@@ -16,6 +16,7 @@ import (
 var (
 	configJSON   bool
 	configFailOn string
+	configSchema string
 )
 
 // configCmd inspects a single module directory.
@@ -35,6 +36,8 @@ func init() {
 		"emit machine-readable JSON instead of a human table")
 	configCmd.Flags().StringVar(&configFailOn, "fail-on", "error",
 		"exit nonzero if a diagnostic with this severity is present: error|warning|never")
+	configCmd.Flags().StringVar(&configSchema, "schema", "",
+		"enrich resources with findings from a tofu/terraform 'providers schema -json' document; pass a file path or 'auto' to shell out")
 	rootCmd.AddCommand(configCmd)
 }
 
@@ -44,7 +47,14 @@ func init() {
 // bypassing cobra's error-to-exit-1 translation.
 func runConfig(cmd *cobra.Command, args []string) error {
 	stderrLog.infof("inspecting %s", args[0])
-	mod, err := inspector.Inspect(args[0])
+
+	opts, cleanup, err := schemaOptions()
+	if err != nil {
+		return err
+	}
+	defer cleanup()
+
+	mod, err := inspector.Inspect(args[0], opts...)
 	if err != nil {
 		return fmt.Errorf("inspect: %w", err)
 	}
@@ -63,4 +73,23 @@ func runConfig(cmd *cobra.Command, args []string) error {
 		os.Exit(code)
 	}
 	return nil
+}
+
+// schemaOptions translates the --schema flag into inspector options. It
+// returns a cleanup function (closing any opened schema file) that the
+// caller must defer. With no --schema flag it returns no options.
+func schemaOptions() ([]inspector.Option, func(), error) {
+	noop := func() {}
+	switch configSchema {
+	case "":
+		return nil, noop, nil
+	case "auto":
+		return []inspector.Option{inspector.WithSchemaAuto()}, noop, nil
+	default:
+		file, err := os.Open(configSchema)
+		if err != nil {
+			return nil, noop, fmt.Errorf("open schema: %w", err)
+		}
+		return []inspector.Option{inspector.WithSchema(file)}, func() { _ = file.Close() }, nil
+	}
 }
