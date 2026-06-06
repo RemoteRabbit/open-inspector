@@ -24,6 +24,8 @@ go.work.sum
 coverage.*
 *.coverprofile
 profile.cov
+# Generated coverage report (run `make cover` locally to regenerate)
+docs/test-coverage.md
 
 # env file
 .env

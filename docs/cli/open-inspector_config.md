@@ -18,6 +18,7 @@ open-inspector config <dir> [flags]
       --fail-on string   exit nonzero if a diagnostic with this severity is present: error|warning|never (default "error")
   -h, --help             help for config
       --json             emit machine-readable JSON instead of a human table
+      --schema string    enrich resources with findings from a tofu/terraform 'providers schema -json' document; pass a file path or 'auto' to shell out
 ```
 
 ### Options inherited from parent commands

@@ -83,6 +83,9 @@
           }
         }
       },
+      "attr_names": [
+        "bucket"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
         "start": {

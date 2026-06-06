@@ -5,9 +5,11 @@
 package inspector
 
 import (
+	"io"
 	"path/filepath"
 
 	"github.com/remoterabbit/open-inspector/pkg/graph"
+	"github.com/remoterabbit/open-inspector/pkg/schema"
 	"github.com/remoterabbit/open-inspector/pkg/sources"
 )
 
@@ -18,6 +20,10 @@ type options struct {
 	moduleGraph bool
 	maxDepth    int
 	cacheDir    string
+
+	schema     *schema.Schema
+	schemaAuto bool
+	schemaErr  error
 }
 
 // WithModuleGraph enables recursive resolution of module calls into Module.Children.
@@ -38,6 +44,30 @@ func WithMaxDepth(depth int) Option {
 func WithCache(dir string) Option {
 	return func(opts *options) {
 		opts.cacheDir = filepath.Clean(dir)
+	}
+}
+
+// WithSchema enables provider-schema enrichment using a
+// `tofu/terraform providers schema -json` document read from r. A decode
+// failure is deferred and surfaced as an error from the next Inspect call.
+func WithSchema(r io.Reader) Option {
+	return func(opts *options) {
+		loaded, err := schema.Load(r)
+		if err != nil {
+			opts.schemaErr = err
+			return
+		}
+		opts.schema = loaded
+	}
+}
+
+// WithSchemaAuto enables provider-schema enrichment by shelling out to
+// `tofu` (preferred) or `terraform` in the inspected directory. Failures
+// (no binary, module not initialized) are surfaced as a warning diagnostic
+// on the returned module rather than aborting the inspection.
+func WithSchemaAuto() Option {
+	return func(opts *options) {
+		opts.schemaAuto = true
 	}
 }
 

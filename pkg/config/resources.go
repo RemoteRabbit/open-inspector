@@ -5,6 +5,8 @@
 package config
 
 import (
+	"sort"
+
 	"github.com/hashicorp/hcl/v2"
 
 	"github.com/remoterabbit/open-inspector/pkg/model"
@@ -32,8 +34,23 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 		Range: model.RangeFromHCL(block.DefRange),
 	}
 
-	inner, _, hdiag := block.Body.PartialContent(resourceSchema)
+	inner, remain, hdiag := block.Body.PartialContent(resourceSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
+
+	// Capture the user-set attribute names (everything left after the
+	// meta-args and lifecycle block were consumed) for downstream schema
+	// enrichment. JustAttributes reports a diagnostic when the remainder
+	// still holds nested blocks (provisioner, dynamic, etc.); we ignore
+	// that and keep the attributes it does return. Nested-block contents
+	// are intentionally not captured here.
+	if attributes, _ := remain.JustAttributes(); len(attributes) > 0 {
+		names := make([]string, 0, len(attributes))
+		for name := range attributes {
+			names = append(names, name)
+		}
+		sort.Strings(names)
+		resource.AttrNames = names
+	}
 
 	if attribute, ok := inner.Attributes["count"]; ok {
 		expression := capture(attribute.Expr, source)
@@ -77,6 +94,7 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 				Provider: resource.Provider,
 				Count:    resource.Count, ForEach: resource.ForEach,
 				DependsOn: resource.DependsOn,
+				AttrNames: resource.AttrNames,
 				Lifecycle: resource.Lifecycle,
 				Range:     resource.Range,
 			})

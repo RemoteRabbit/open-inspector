@@ -84,6 +84,9 @@
       "mode": "managed",
       "type": "null_resource",
       "name": "example",
+      "attr_names": [
+        "triggers"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/simple/main.tf",
         "start": {

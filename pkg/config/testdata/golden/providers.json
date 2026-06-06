@@ -71,6 +71,9 @@
       "mode": "managed",
       "type": "random_id",
       "name": "example",
+      "attr_names": [
+        "byte_length"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
@@ -91,6 +94,9 @@
       "mode": "data",
       "type": "http",
       "name": "example",
+      "attr_names": [
+        "url"
+      ],
       "range": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {

@@ -27,6 +27,10 @@ table or a versioned JSON envelope.
 \fB--json\fP[=false]
 	emit machine-readable JSON instead of a human table
 
+.PP
+\fB--schema\fP=""
+	enrich resources with findings from a tofu/terraform 'providers schema -json' document; pass a file path or 'auto' to shell out
+
 
 .SH OPTIONS INHERITED FROM PARENT COMMANDS
 \fB--log-level\fP="info"

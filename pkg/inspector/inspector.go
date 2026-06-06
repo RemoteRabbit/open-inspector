@@ -11,6 +11,7 @@ import (
 	"github.com/remoterabbit/open-inspector/pkg/config"
 	"github.com/remoterabbit/open-inspector/pkg/graph"
 	"github.com/remoterabbit/open-inspector/pkg/model"
+	"github.com/remoterabbit/open-inspector/pkg/schema"
 )
 
 // Version is the semantic version of the open-inspector library.
@@ -30,14 +31,40 @@ func Inspect(dir string, opts ...Option) (*model.Module, error) {
 	for _, fn := range opts {
 		fn(&defaults)
 	}
+	if defaults.schemaErr != nil {
+		return nil, defaults.schemaErr
+	}
 
 	module, err := config.Load(dir)
 	if err != nil {
 		return nil, err
 	}
 
+	enrichSchema(module, dir, &defaults)
+
 	if defaults.moduleGraph {
 		graph.Build(module, defaults.toGraphOptions())
 	}
 	return module, nil
+}
+
+// enrichSchema applies provider-schema enrichment when the caller opted in
+// via WithSchema or WithSchemaAuto. Auto-detection failures are recorded
+// as a warning diagnostic on the module rather than aborting inspection.
+func enrichSchema(module *model.Module, dir string, defaults *options) {
+	if defaults.schemaAuto && defaults.schema == nil {
+		loaded, _, err := schema.Auto(dir)
+		if err != nil {
+			module.Diagnostics = append(module.Diagnostics, model.Diagnostic{
+				Severity: model.SeverityWarning,
+				Summary:  "schema auto-detection failed",
+				Detail:   err.Error(),
+			})
+		} else {
+			defaults.schema = loaded
+		}
+	}
+	if defaults.schema != nil {
+		schema.Enrich(module, defaults.schema)
+	}
 }
