@@ -7,32 +7,43 @@ package model
 // Module is the root inspection result for a single Terraform/OpenTofu
 // module directory.
 type Module struct {
-	Path string `json:"path"`
+	Path               string                         `json:"path"`
+	RequiredCore       []string                       `json:"required_core,omitempty"`
+	RequiredProviders  map[string]ProviderRequirement `json:"required_providers,omitempty"`
+	Variables          []Variable                     `json:"variables,omitempty"`
+	Outputs            []Output                       `json:"outputs,omitempty"`
+	Locals             []Local                        `json:"locals,omitempty"`
+	ManagedResources   []Resource                     `json:"managed_resources,omitempty"`
+	DataResources      []Resource                     `json:"data_resources,omitempty"`
+	ModuleCalls        []ModuleCall                   `json:"module_calls,omitempty"`
+	Providers          []ProviderConfig               `json:"providers,omitempty"`
+	Moved              []MovedBlock                   `json:"moved,omitempty"`
+	Imports            []ImportBlock                  `json:"imports,omitempty"`
+	Removed            []RemovedBlock                 `json:"removed,omitempty"`
+	Checks             []CheckBlock                   `json:"checks,omitempty"`
+	EphemeralResources []EphemeralResource            `json:"ephemeral_resources,omitempty"`
+	Encryption         *Encryption                    `json:"encryption,omitempty"`
+	Children           map[string]*ChildModule        `json:"children,omitempty"`
+	Diagnostics        Diagnostics                    `json:"diagnostics,omitempty"`
+}
 
-	RequiredCore      []string                       `json:"required_core,omitempty"`
-	RequiredProviders map[string]ProviderRequirement `json:"required_providers,omitempty"`
+// ChildModule represents one resolved (or attempted) module call.
+type ChildModule struct {
+	CallName string          `json:"call_name"`
+	Source   string          `json:"source"`
+	Version  string          `json:"version,omitempty"`
+	Resolved *ResolvedSource `json:"resolved,omitempty"`
+	Module   *Module         `json:"module,omitempty"` // populated on success
+	Error    *Diagnostic     `json:"error,omitempty"`  // populated on failure
+}
 
-	Variables []Variable `json:"variables,omitempty"`
-	Outputs   []Output   `json:"outputs,omitempty"`
-	Locals    []Local    `json:"locals,omitempty"`
-
-	ManagedResources []Resource `json:"managed_resources,omitempty"`
-	DataResources    []Resource `json:"data_resources,omitempty"`
-
-	ModuleCalls []ModuleCall     `json:"module_calls,omitempty"`
-	Providers   []ProviderConfig `json:"providers,omitempty"`
-
-	Moved   []MovedBlock   `json:"moved,omitempty"`
-	Imports []ImportBlock  `json:"imports,omitempty"`
-	Removed []RemovedBlock `json:"removed,omitempty"`
-
-	Checks []CheckBlock `json:"checks,omitempty"`
-
-	EphemeralResources []EphemeralResource `json:"ephemeral_resources,omitempty"`
-
-	Encryption *Encryption `json:"encryption,omitempty"`
-
-	Diagnostics Diagnostics `json:"diagnostics,omitempty"`
+// ResolvedSource records what we fetched and where it lives.
+type ResolvedSource struct {
+	Kind      string `json:"kind"`                 // "local" | "registry" | "git" | "http"
+	Address   string `json:"address"`              // canonicalized source string
+	CachePath string `json:"cache_path,omitempty"` // absolute path to extracted module
+	Ref       string `json:"ref,omitempty"`        // git ref (commit SHA)
+	Version   string `json:"version,omitempty"`    // registry version
 }
 
 // ProviderRequirement describes a single entry inside a

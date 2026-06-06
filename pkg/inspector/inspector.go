@@ -9,6 +9,7 @@ package inspector
 
 import (
 	"github.com/remoterabbit/open-inspector/pkg/config"
+	"github.com/remoterabbit/open-inspector/pkg/graph"
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
@@ -24,6 +25,19 @@ var Version = "0.2.0" // x-release-please-version
 // Inspect performs a (currently stub) inspection of the Terraform/OpenTofu
 // module rooted at dir and returns the resulting model. Future steps will
 // add HCL parsing, child module resolution, and optional schema enrichment.
-func Inspect(dir string) (*model.Module, error) {
-	return config.Load(dir)
+func Inspect(dir string, opts ...Option) (*model.Module, error) {
+	defaults := defaultOptions()
+	for _, fn := range opts {
+		fn(&defaults)
+	}
+
+	module, err := config.Load(dir)
+	if err != nil {
+		return nil, err
+	}
+
+	if defaults.moduleGraph {
+		graph.Build(module, defaults.toGraphOptions())
+	}
+	return module, nil
 }
