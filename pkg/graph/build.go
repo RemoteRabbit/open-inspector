@@ -8,6 +8,7 @@ package graph
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/remoterabbit/open-inspector/pkg/config"
 	"github.com/remoterabbit/open-inspector/pkg/model"
@@ -25,7 +26,7 @@ type Options struct {
 // in place. Per-call failures attach to the relevant ChildModule.Error and do not abort the walk.
 func Build(root *model.Module, opts Options) {
 	state := newLoadState()
-	state.visited[root.Path] = true
+	state.visited[visitKey(root.Path)] = true
 	for _, call := range root.ModuleCalls {
 		resolveAndLoad(root, call, state, opts)
 	}
@@ -41,12 +42,13 @@ func resolveAndLoad(parent *model.Module, call model.ModuleCall, state *loadStat
 		attachError(parent, call, err)
 		return
 	}
-	if state.visited[resolved.CachePath] {
+	key := visitKey(resolved.CachePath)
+	if state.visited[key] {
 		addDiagnostic(parent, fmt.Sprintf("module call %q forms a cycle at %s", call.Name, resolved.CachePath))
 		return
 	}
-	state.visited[resolved.CachePath] = true
-	defer delete(state.visited, resolved.CachePath)
+	state.visited[key] = true
+	defer delete(state.visited, key)
 	state.depth++
 	defer func() {
 		state.depth--
@@ -92,6 +94,13 @@ func attachError(parent *model.Module, call model.ModuleCall, err error) {
 			Summary:  fmt.Sprintf("module call %q: %v", call.Name, err),
 		},
 	}
+}
+
+// visitKey normalizes a path for the cycle-detection set. Module.Path is stored
+// with forward slashes (see config.Load) while ResolvedSource.CachePath keeps the
+// OS-native separator, so both are slash-normalized here to compare equal on Windows.
+func visitKey(path string) string {
+	return filepath.ToSlash(path)
 }
 
 // addDiagnostic appends a graph-level warning (cycle or depth-limit) to the module's own Diagnostics.
