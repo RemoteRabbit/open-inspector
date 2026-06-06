@@ -2,17 +2,15 @@
 .TH "OPEN-INSPECTOR" "1" "Jun 2026" "open-inspector dev" ""
 
 .SH NAME
-open-inspector-config - Inspect a Terraform/OpenTofu module directory
+open-inspector-graph - Render the module call graph rooted at \&.
 
 
 .SH SYNOPSIS
-\fBopen-inspector config  [flags]\fP
+\fBopen-inspector graph  [flags]\fP
 
 
 .SH DESCRIPTION
-config parses every .tf, .tf.json, .tofu, and .tofu.json file
-in  (non-recursive) and prints either a human-readable summary
-table or a versioned JSON envelope.
+Render the module call graph rooted at \&.
 
 
 .SH OPTIONS
@@ -20,12 +18,12 @@ table or a versioned JSON envelope.
 	exit nonzero if a diagnostic with this severity is present: error|warning|never
 
 .PP
-\fB-h\fP, \fB--help\fP[=false]
-	help for config
+\fB--format\fP="tree"
+	output format: tree|dot|mermaid|json
 
 .PP
-\fB--json\fP[=false]
-	emit machine-readable JSON instead of a human table
+\fB-h\fP, \fB--help\fP[=false]
+	help for graph
 
 
 .SH OPTIONS INHERITED FROM PARENT COMMANDS
