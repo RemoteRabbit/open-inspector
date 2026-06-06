@@ -55,7 +55,7 @@ func Load(dir string) (*model.Module, error) {
 }
 
 // decodeFiles walks every parsed file, applies the root schema, and
-// dispatches each recognised top-level block to its decoder. Blocks
+// dispatches each recognized top-level block to its decoder. Blocks
 // not listed in rootSchema are left in the file's leftover body.
 func decodeFiles(files []*hcl.File, module *model.Module) {
 	for _, file := range files {

@@ -1,4 +1,4 @@
-.PHONY: all build test docs-cli bench lint fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
+.PHONY: all build test docs-cli bench lint spell fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
 
 BIN            := bin/open-inspector
 PKG            := ./...
@@ -11,7 +11,7 @@ LICENSE_HEADER := .licenseheader.tmpl
 # Extend this list as new top-level source dirs are added.
 LICENSE_PATHS  := cmd pkg
 
-all: fmt lint license-fix test build docs-cli
+all: fmt lint spell license-fix test build docs-cli
 
 build:
 	@mkdir -p bin
@@ -31,6 +31,10 @@ bench:
 
 lint:
 	golangci-lint run
+
+# Spell-check source, comments, and docs (config in .codespellrc).
+spell:
+	codespell
 
 fmt:
 	gofmt -s -w $(LICENSE_PATHS)

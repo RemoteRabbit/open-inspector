@@ -1,0 +1,5 @@
+# Shared codespell config for the Makefile target, pre-commit hook, and CI.
+[codespell]
+skip = .git,.devenv,.direnv,.local,bin,docs/cli,docs/man,go.sum,LICENSE,testdata,*.lock
+# Add comma-separated lowercase words here to ignore false positives, e.g.
+# ignore-words-list = nd,thirdparty
