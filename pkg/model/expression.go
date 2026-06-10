@@ -8,6 +8,6 @@ package model
 // Range identifies its position;  Source is the verbatim bytes from
 // the file. Neither field is evaluated by the loader.
 type Expression struct {
-	Source string `json:"source"`
-	Range  Range  `json:"range"`
+	Source string `json:"source"` // verbatim HCL source bytes
+	Range  Range  `json:"range"`  // position of the expression in source
 }

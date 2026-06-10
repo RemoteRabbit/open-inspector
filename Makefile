@@ -1,4 +1,4 @@
-.PHONY: all build test test-update cover docs-cli bench lint spell fmt tidy clean run license license-check license-fix pre-commit-install pre-commit
+.PHONY: all build test test-update cover docs-cli bench lint spell fmt tidy clean run license license-check license-fix pre-commit-install pre-commit fuzz-config-hcl fuzz-config-json jsonschema
 
 BIN            := bin/open-inspector
 PKG            := ./...
@@ -80,6 +80,19 @@ docs-cli:
 	rm -rf docs/cli docs/man
 	mkdir -p docs/cli docs/man
 	go run ./cmd/docgen
+
+# Fuzz the config loader for a short, local-friendly burst. CI runs these
+# longer on a weekly cron (.github/workflows/fuzz.yml).
+fuzz-config-hcl:
+	go test -run '^$$' -fuzz=FuzzConfigLoader_HCL -fuzztime=30s ./pkg/config
+
+fuzz-config-json:
+	go test -run '^$$' -fuzz=FuzzConfigLoader_JSON -fuzztime=30s ./pkg/config
+
+# Regenerate the JSON Schema for the --json output (docs/schema/v1.{json,md})
+# from pkg/model.Module. CI diff-checks the committed output.
+jsonschema:
+	go run ./cmd/jsonschemagen
 
 tidy:
 	go mod tidy

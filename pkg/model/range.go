@@ -12,16 +12,16 @@ import (
 
 // Range identifies a contiguous span of source code.
 type Range struct {
-	Filename string `json:"filename"`
-	Start    Pos    `json:"start"`
-	End      Pos    `json:"end"`
+	Filename string `json:"filename"` // source file, with forward-slash separators
+	Start    Pos    `json:"start"`    // start position (inclusive)
+	End      Pos    `json:"end"`      // end position (exclusive)
 }
 
 // Pos is a single position within a source file.
 type Pos struct {
-	Line   int `json:"line"`
-	Column int `json:"column"`
-	Byte   int `json:"byte"`
+	Line   int `json:"line"`   // 1-based line number
+	Column int `json:"column"` // 1-based column number
+	Byte   int `json:"byte"`   // 0-based byte offset
 }
 
 // RangeFromHCL converts an hcl.Range into the model's wire-friendly Range.

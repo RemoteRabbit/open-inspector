@@ -41,6 +41,21 @@ jobs:
           go-version: stable
           cache: true
       - run: make license-check
+  schema:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+      - uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6
+        with:
+          go-version: stable
+          cache: true
+      - run: make jsonschema
+      - name: Verify docs/schema is up to date
+        run: |
+          if ! git diff --exit-code docs/schema; then
+            echo "::error::JSON schema is stale. Run 'make jsonschema' locally and commit the result." >&2
+            exit 1
+          fi
   vuln:
     runs-on: ubuntu-latest
     steps:

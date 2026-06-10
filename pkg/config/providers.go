@@ -33,7 +33,7 @@ func decodeProviderBlock(block *hcl.Block, source []byte, module *model.Module) 
 	if attribute, ok := content.Attributes["alias"]; ok {
 		value, vdiag := attribute.Expr.Value(nil)
 		diags = append(diags, model.DiagnosticsFromHCL(vdiag)...)
-		if !value.IsNull() && value.Type() == cty.String {
+		if !value.IsNull() && value.IsKnown() && value.Type() == cty.String {
 			config.Alias = value.AsString()
 		}
 	}
