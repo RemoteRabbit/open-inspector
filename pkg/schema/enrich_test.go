@@ -48,8 +48,8 @@ func TestEnrich_UnknownAttr(t *testing.T) {
 	if got := len(example.SchemaFindings.UnknownAttrs); got != 1 {
 		t.Fatalf("UnknownAttrs count = %d, want 1: %#v", got, example.SchemaFindings)
 	}
-	if name := example.SchemaFindings.UnknownAttrs[0].Name; name != "trigerz" {
-		t.Errorf("UnknownAttrs[0].Name = %q, want %q", name, "trigerz")
+	if name := example.SchemaFindings.UnknownAttrs[0].Name; name != "trigger_z" {
+		t.Errorf("UnknownAttrs[0].Name = %q, want %q", name, "trigger_z")
 	}
 	if example.SchemaFindings.UnknownAttrs[0].Position.Filename == "" {
 		t.Errorf("UnknownAttrs[0].Position.Filename is empty")

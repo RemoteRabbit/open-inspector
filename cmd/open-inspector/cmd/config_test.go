@@ -55,7 +55,7 @@ func TestConfig_WithSchema_FindsUnknown(t *testing.T) {
 	if !strings.Contains(out, "schema_findings") {
 		t.Errorf("output missing schema_findings: %s", out)
 	}
-	if !strings.Contains(out, "trigerz") {
+	if !strings.Contains(out, "trigger_z") {
 		t.Errorf("output missing the unknown attribute name: %s", out)
 	}
 }
@@ -78,7 +78,7 @@ func TestConfig_WithSchema_Table(t *testing.T) {
 	if !strings.Contains(out, "FINDINGS") {
 		t.Errorf("table missing FINDINGS column: %s", out)
 	}
-	if !strings.Contains(out, "unknown: trigerz") {
+	if !strings.Contains(out, "unknown: trigger_z") {
 		t.Errorf("table missing findings summary: %s", out)
 	}
 }

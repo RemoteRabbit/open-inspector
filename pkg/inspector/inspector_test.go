@@ -77,8 +77,8 @@ func TestInspect_WithSchema_Enriches(t *testing.T) {
 	if example.SchemaFindings == nil || len(example.SchemaFindings.UnknownAttrs) != 1 {
 		t.Fatalf("expected one unknown-attr finding, got %#v", example.SchemaFindings)
 	}
-	if got := example.SchemaFindings.UnknownAttrs[0].Name; got != "trigerz" {
-		t.Errorf("unknown attr = %q, want %q", got, "trigerz")
+	if got := example.SchemaFindings.UnknownAttrs[0].Name; got != "trigger_z" {
+		t.Errorf("unknown attr = %q, want %q", got, "trigger_z")
 	}
 }
 
