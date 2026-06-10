@@ -14,7 +14,7 @@ LICENSE_HEADER := .github/.licenseheader.tmpl
 # Extend this list as new top-level source dirs are added.
 LICENSE_PATHS  := cmd pkg
 
-all: fmt lint spell license-fix test build docs-cli
+all: fmt lint spell license-fix test build docs-cli jsonschema
 
 build:
 	@mkdir -p bin
