@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.5.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.4.1...v0.5.0) (2026-06-10)
+
+
+### Features
+
+* **pkg:** Attach comments that are above blocks to output ([#70](https://github.com/RemoteRabbit/open-inspector/issues/70)) ([4cf078b](https://github.com/RemoteRabbit/open-inspector/commit/4cf078bc9877404e7c1d3f140f40bb047ab30a19))
+
+
+### Bug Fixes
+
+* **docs:** Makefile now auto runs jsonschema doc generation ([#69](https://github.com/RemoteRabbit/open-inspector/issues/69)) ([ae310ff](https://github.com/RemoteRabbit/open-inspector/commit/ae310ffd0b149dadbdb3924754c37719e1dec747))
+
+
+### Documentation
+
+* **readme:** Update what is here and the roadmap ([#64](https://github.com/RemoteRabbit/open-inspector/issues/64)) ([481a968](https://github.com/RemoteRabbit/open-inspector/commit/481a968b61370cb7aa8d31368953f8e4eaed1345))
+
 ## [0.4.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.4.0...v0.4.1) (2026-06-10)
 
 
