@@ -11,7 +11,7 @@ default_stages: [pre-commit]
 
 repos:
   # Conventional Commits enforcement (pure-Python, no Node required).
-  # Matches the types listed in release-please-config.json so commit
+  # Matches the types listed in .github/release-please-config.json so commit
   # messages land in the right CHANGELOG section.
   - repo: https://github.com/compilerla/conventional-pre-commit
     rev: v4.0.0

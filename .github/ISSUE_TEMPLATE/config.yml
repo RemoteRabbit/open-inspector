@@ -4,7 +4,7 @@ contact_links:
     url: https://github.com/remoterabbit/open-inspector/discussions
     about: Ask usage questions or discuss ideas before filing a feature request.
   - name: Contributing guide
-    url: https://github.com/remoterabbit/open-inspector/blob/main/CONTRIBUTING.md
+    url: https://github.com/remoterabbit/open-inspector/blob/main/.github/CONTRIBUTING.md
     about: Local dev loop, commit conventions, and how releases work.
   - name: Security report
     url: https://github.com/remoterabbit/open-inspector/security/advisories/new
