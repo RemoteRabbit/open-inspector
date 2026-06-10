@@ -185,7 +185,7 @@
   ],
   "module_calls": [
     {
-      "name": "fanout",
+      "name": "fan_out",
       "source": "./child",
       "for_each": {
         "source": "var.names",
@@ -194,12 +194,12 @@
           "start": {
             "line": 42,
             "column": 14,
-            "byte": 768
+            "byte": 769
           },
           "end": {
             "line": 42,
             "column": 23,
-            "byte": 777
+            "byte": 778
           }
         }
       },
@@ -212,8 +212,8 @@
         },
         "end": {
           "line": 40,
-          "column": 16,
-          "byte": 729
+          "column": 17,
+          "byte": 730
         }
       }
     },
@@ -227,12 +227,12 @@
           "start": {
             "line": 48,
             "column": 12,
-            "byte": 857
+            "byte": 858
           },
           "end": {
             "line": 48,
             "column": 29,
-            "byte": 874
+            "byte": 875
           }
         }
       },
@@ -241,12 +241,12 @@
         "start": {
           "line": 46,
           "column": 1,
-          "byte": 805
+          "byte": 806
         },
         "end": {
           "line": 46,
           "column": 18,
-          "byte": 822
+          "byte": 823
         }
       }
     }

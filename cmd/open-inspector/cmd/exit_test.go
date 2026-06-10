@@ -11,8 +11,8 @@ import (
 )
 
 func TestExitCode(t *testing.T) {
-	errd := model.Diagnostics{{Severity: model.SeverityError}}
-	warnd := model.Diagnostics{{Severity: model.SeverityWarning}}
+	ediag := model.Diagnostics{{Severity: model.SeverityError}}
+	wdiag := model.Diagnostics{{Severity: model.SeverityWarning}}
 	empty := model.Diagnostics{}
 
 	cases := []struct {
@@ -22,11 +22,11 @@ func TestExitCode(t *testing.T) {
 		want   int
 	}{
 		{"empty/error", empty, FailOnError, 0},
-		{"warn/error", warnd, FailOnError, 0},
-		{"err/error", errd, FailOnError, 2},
-		{"warn/warning", warnd, FailOnWarning, 2},
-		{"err/warning", errd, FailOnWarning, 2},
-		{"err/never", errd, FailOnNever, 0},
+		{"warn/error", wdiag, FailOnError, 0},
+		{"err/error", ediag, FailOnError, 2},
+		{"warn/warning", wdiag, FailOnWarning, 2},
+		{"err/warning", ediag, FailOnWarning, 2},
+		{"err/never", ediag, FailOnNever, 0},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

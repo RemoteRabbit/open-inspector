@@ -1,6 +1,6 @@
 # Fixture: simple-with-typo
 # Like the simple fixture, but the null_resource misspells `triggers` as
-# `trigerz`. Used to exercise schema enrichment's unknown-attribute path.
+# `trigger_z`. Used to exercise schema enrichment's unknown-attribute path.
 
 terraform {
   required_version = ">= 1.5.0"
@@ -13,7 +13,7 @@ terraform {
 }
 
 resource "null_resource" "example" {
-  trigerz = {
+  trigger_z = {
     name = "oops"
   }
 }

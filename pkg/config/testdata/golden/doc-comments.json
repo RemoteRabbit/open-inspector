@@ -1,0 +1,115 @@
+{
+  "path": "\u003cfixture\u003e/doc-comments",
+  "variables": [
+    {
+      "name": "region",
+      "type": "string",
+      "default": {
+        "source": "\"us-east-1\"",
+        "position": {
+          "filename": "\u003cfixture\u003e/doc-comments/main.tf",
+          "start": {
+            "line": 9,
+            "column": 13,
+            "byte": 310
+          },
+          "end": {
+            "line": 9,
+            "column": 24,
+            "byte": 321
+          }
+        }
+      },
+      "comment": "The AWS region to deploy into.\nDefaults to us-east-1.",
+      "position": {
+        "filename": "\u003cfixture\u003e/doc-comments/main.tf",
+        "start": {
+          "line": 7,
+          "column": 1,
+          "byte": 259
+        },
+        "end": {
+          "line": 7,
+          "column": 18,
+          "byte": 276
+        }
+      }
+    },
+    {
+      "name": "no_comment",
+      "type": "string",
+      "position": {
+        "filename": "\u003cfixture\u003e/doc-comments/main.tf",
+        "start": {
+          "line": 17,
+          "column": 1,
+          "byte": 415
+        },
+        "end": {
+          "line": 17,
+          "column": 22,
+          "byte": 436
+        }
+      }
+    },
+    {
+      "name": "detached",
+      "type": "string",
+      "position": {
+        "filename": "\u003cfixture\u003e/doc-comments/main.tf",
+        "start": {
+          "line": 23,
+          "column": 1,
+          "byte": 580
+        },
+        "end": {
+          "line": 23,
+          "column": 20,
+          "byte": 599
+        }
+      }
+    },
+    {
+      "name": "instance_type",
+      "type": "string",
+      "comment": "Multi-line block comment\nfor the instance type.",
+      "position": {
+        "filename": "\u003cfixture\u003e/doc-comments/main.tf",
+        "start": {
+          "line": 31,
+          "column": 1,
+          "byte": 682
+        },
+        "end": {
+          "line": 31,
+          "column": 25,
+          "byte": 706
+        }
+      }
+    }
+  ],
+  "managed_resources": [
+    {
+      "mode": "managed",
+      "type": "aws_s3_bucket",
+      "name": "logs",
+      "attr_names": [
+        "bucket"
+      ],
+      "comment": "Bucket for application logs.",
+      "position": {
+        "filename": "\u003cfixture\u003e/doc-comments/main.tf",
+        "start": {
+          "line": 13,
+          "column": 1,
+          "byte": 357
+        },
+        "end": {
+          "line": 13,
+          "column": 32,
+          "byte": 388
+        }
+      }
+    }
+  ]
+}

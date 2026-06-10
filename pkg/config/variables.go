@@ -34,9 +34,10 @@ var validationSchema = &hcl.BodySchema{
 // decodeVariableBlock decodes a variable {} block into module.Variables,
 // capturing its type and default verbatim, its scalar flags (sensitive,
 // nullable, ephemeral), and any validation {} blocks.
-func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
+func decodeVariableBlock(block *hcl.Block, source []byte, comments commentIndex, module *model.Module) model.Diagnostics {
 	variable := model.Variable{
 		Name:     block.Labels[0],
+		Comment:  comments[block.DefRange.Start.Byte],
 		Position: model.PositionFromHCL(block.DefRange),
 	}
 	content, _, hdiag := block.Body.PartialContent(variableSchema)

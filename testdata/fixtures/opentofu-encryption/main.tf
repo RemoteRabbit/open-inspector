@@ -7,12 +7,12 @@ terraform {
   required_version = ">= 1.7.0"
 
   encryption {
-    key_provider "pbkdf2" "mykey" {
+    key_provider "pbkdf2" "my_key" {
       passphrase = "this-is-only-a-fixture-do-not-use"
     }
 
     method "aes_gcm" "new_method" {
-      keys = key_provider.pbkdf2.mykey
+      keys = key_provider.pbkdf2.my_key
     }
 
     state {

@@ -37,7 +37,7 @@ data "null_data_source" "by_for_each" {
   }
 }
 
-module "fanout" {
+module "fan_out" {
   source   = "./child"
   for_each = var.names
   name     = each.value

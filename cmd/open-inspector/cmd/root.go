@@ -4,7 +4,7 @@
 
 // Package cmd defines the open-inspector cobra command tree: the root
 // command, its persistent flags, the subcommands, and the output
-// renderers and exit-code policy that back them.
+// renders and exit-code policy that back them.
 package cmd
 
 import (

@@ -23,9 +23,10 @@ var outputSchema = &hcl.BodySchema{
 // decodeOutputsBlock decodes an output {} block into module.Outputs:
 // the value expression (captured verbatim), the description, the
 // sensitive/ephemeral flags, and depends_on.
-func decodeOutputsBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
+func decodeOutputsBlock(block *hcl.Block, source []byte, comments commentIndex, module *model.Module) model.Diagnostics {
 	output := model.Output{
 		Name:     block.Labels[0],
+		Comment:  comments[block.DefRange.Start.Byte],
 		Position: model.PositionFromHCL(block.DefRange),
 	}
 

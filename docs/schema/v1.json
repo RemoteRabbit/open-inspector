@@ -369,6 +369,10 @@
           "$ref": "#/$defs/Lifecycle",
           "description": "lifecycle block, if present"
         },
+        "comment": {
+          "type": "string",
+          "description": "leading docstring comment above block, if any."
+        },
         "position": {
           "$ref": "#/$defs/Position",
           "description": "source position of the ephemeral block"
@@ -533,6 +537,10 @@
           "type": "object",
           "description": "local -\u003e remote"
         },
+        "comment": {
+          "type": "string",
+          "description": "leading docstring comment above block, if any."
+        },
         "position": {
           "$ref": "#/$defs/Position",
           "description": "source position of the module block"
@@ -599,6 +607,10 @@
           },
           "type": "array",
           "description": "traversal source forms"
+        },
+        "comment": {
+          "type": "string",
+          "description": "leading docstring comment above the block, if any."
         },
         "position": {
           "$ref": "#/$defs/Position",
@@ -823,6 +835,10 @@
           "$ref": "#/$defs/Lifecycle",
           "description": "lifecycle block, if present"
         },
+        "comment": {
+          "type": "string",
+          "description": "leading docstring comment above block, if any."
+        },
         "position": {
           "$ref": "#/$defs/Position",
           "description": "source position of the resource block"
@@ -926,6 +942,10 @@
           },
           "type": "array",
           "description": "validation blocks attached to the variable"
+        },
+        "comment": {
+          "type": "string",
+          "description": "leading docstring comment above the block, if any."
         },
         "position": {
           "$ref": "#/$defs/Position",

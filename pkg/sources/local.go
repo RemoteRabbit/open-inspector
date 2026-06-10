@@ -13,10 +13,10 @@ import (
 
 // resolveLocal resolves a `./`, `../`, or absolute source against the calling module's
 // directory and verifies the target exists.
-func resolveLocal(parsed ParsedSource, partentDir string) (model.ResolvedSource, error) {
+func resolveLocal(parsed ParsedSource, parentDir string) (model.ResolvedSource, error) {
 	target := parsed.Raw
 	if !filepath.IsAbs(target) {
-		target = filepath.Join(partentDir, target)
+		target = filepath.Join(parentDir, target)
 	}
 	target = filepath.Clean(target)
 	if !exists(target) {

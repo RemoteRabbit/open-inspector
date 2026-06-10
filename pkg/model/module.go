@@ -65,6 +65,7 @@ type Variable struct {
 	Nullable    *bool        `json:"nullable,omitempty"`    // pointer: distinguish unset vs false
 	Ephemeral   bool         `json:"ephemeral,omitempty"`   // whether the variable is ephemeral (TF/OpenTofu 1.10+)
 	Validations []Validation `json:"validations,omitempty"` // validation blocks attached to the variable
+	Comment     string       `json:"comment,omitempty"`     // leading docstring comment above the block, if any.
 	Position    Position     `json:"position"`              // source position of the variable block
 }
 
@@ -84,6 +85,7 @@ type Output struct {
 	Sensitive   bool       `json:"sensitive,omitempty"`   // whether the value is marked sensitive
 	Ephemeral   bool       `json:"ephemeral,omitempty"`   // whether the output is ephemeral (TF/OpenTofu 1.10+)
 	DependsOn   []string   `json:"depends_on,omitempty"`  // traversal source forms
+	Comment     string     `json:"comment,omitempty"`     // leading docstring comment above the block, if any.
 	Position    Position   `json:"position"`              // source position of the output block
 }
 
@@ -106,14 +108,13 @@ const (
 
 // Resource describes a single resource {} or data {} block.
 type Resource struct {
-	Mode     ResourceMode `json:"mode"`               // managed, data, or ephemeral
-	Type     string       `json:"type"`               // resource type, e.g. "aws_instance"
-	Name     string       `json:"name"`               // local name, e.g. "web"
-	Provider string       `json:"provider,omitempty"` // from `provider =` meta-arg, if set
-
-	Count     *Expression `json:"count,omitempty"`      // count meta-argument expression, if set
-	ForEach   *Expression `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
-	DependsOn []string    `json:"depends_on,omitempty"` // explicit dependency references
+	Mode      ResourceMode `json:"mode"`                 // managed, data, or ephemeral
+	Type      string       `json:"type"`                 // resource type, e.g. "aws_instance"
+	Name      string       `json:"name"`                 // local name, e.g. "web"
+	Provider  string       `json:"provider,omitempty"`   // from `provider =` meta-arg, if set
+	Count     *Expression  `json:"count,omitempty"`      // count meta-argument expression, if set
+	ForEach   *Expression  `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
+	DependsOn []string     `json:"depends_on,omitempty"` // explicit dependency references
 
 	// AttrNames lists the user-set top-level attribute names that are not
 	// meta-arguments, captured at load time and sorted. It excludes
@@ -128,6 +129,7 @@ type Resource struct {
 	SchemaFindings *SchemaFindings `json:"schema_findings,omitempty"`
 
 	Lifecycle *Lifecycle `json:"lifecycle,omitempty"` // lifecycle block, if present
+	Comment   string     `json:"comment,omitempty"`   // leading docstring comment above block, if any.
 	Position  Position   `json:"position"`            // source position of the resource block
 }
 
@@ -150,6 +152,7 @@ type ModuleCall struct {
 	ForEach   *Expression       `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
 	DependsOn []string          `json:"depends_on,omitempty"` // explicit dependency references
 	Providers map[string]string `json:"providers,omitempty"`  // local -> remote
+	Comment   string            `json:"comment,omitempty"`    // leading docstring comment above block, if any.
 	Position  Position          `json:"position"`             // source position of the module block
 }
 
