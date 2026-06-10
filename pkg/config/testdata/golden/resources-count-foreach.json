@@ -20,7 +20,6 @@
           }
         }
       },
-      "comment": "Fixture: resources-count-foreach\nResources, data sources, and module calls using both count and for_each\nmeta-arguments. The loader should capture the expression (not evaluate\nit) and surface its source range.",
       "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {

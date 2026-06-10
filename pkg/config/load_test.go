@@ -222,7 +222,7 @@ func TestLoad_Fixtures(t *testing.T) {
 		{dir: "invalid/syntax-error", wantErrorDiagnostic: true},
 		{dir: "invalid/malformed-validation", wantErrorDiagnostic: true},
 		{dir: "invalid/non-literal-attrs", wantErrorDiagnostic: true},
-		{dir: "doc-comments", wantErrorDiagnostic: true},
+		{dir: "doc-comments", wantVars: 4, wantManagedRes: 1},
 	}
 	for _, tc := range cases {
 		t.Run(tc.dir, func(t *testing.T) {

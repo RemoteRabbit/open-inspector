@@ -32,10 +32,8 @@ func buildCommentIndex(filename string, source []byte) commentIndex {
 		}
 
 		// Associate only if no blank line separates the last comment from the next token.
-		// TokenComment for # and // lines includes its trailing newline, so an adjacent
-		// token starts on the line right after; a blank line shows up as a >1 line gap.
 		last := run[len(run)-1]
-		if next.Range.Start.Line-last.Range.End.Line <= 1 {
+		if next.Range.Start.Line-commentEndLine(last) <= 1 {
 			if text := cleanComments(run); text != "" {
 				index[next.Range.Start.Byte] = text
 			}
@@ -46,16 +44,33 @@ func buildCommentIndex(filename string, source []byte) commentIndex {
 	for _, token := range tokens {
 		switch token.Type {
 		case hclsyntax.TokenComment:
+			// Start a fresh run when a blank line separates this comment from the
+			// previous one, so only the contiguous run nearest the block survives.
+			if len(run) > 0 && token.Range.Start.Line-commentEndLine(run[len(run)-1]) > 1 {
+				run = nil
+			}
 			run = append(run, token)
 		case hclsyntax.TokenNewline:
-			// A standalone newline between comments keeps the run going; a blank line (newline
-			// with no preceding comment-adjacency) is handled by the line-gap check in flush.
+			// Newlines never extend or break a run on their own: blank-line gaps are
+			// detected from line numbers when the next comment or token arrives.
 			continue
 		default:
 			flush(token)
 		}
 	}
 	return index
+}
+
+// commentEndLine returns the source line of a comment token's last content. The HCL lexer
+// folds the trailing newline into # and // comment tokens, pushing Range.End onto the next
+// line; block comments (/* */) keep their end on the closing line. Normalizing to the
+// content's final line lets the blank-line gap check compare line comments and block
+// comments on equal footing.
+func commentEndLine(token hclsyntax.Token) int {
+	if strings.HasSuffix(string(token.Bytes), "\n") {
+		return token.Range.End.Line - 1
+	}
+	return token.Range.End.Line
 }
 
 // cleanComments strips comment markers (#, //, /* */, leading *) and joins the lines of a

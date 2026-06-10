@@ -20,7 +20,6 @@
           }
         }
       },
-      "comment": "Fixture: overrides - global overlay.\nApplies after main_override.tf; should change the default of var.region.",
       "position": {
         "filename": "\u003cfixture\u003e/overrides/main.tf",
         "start": {
@@ -44,7 +43,6 @@
       "attr_names": [
         "triggers"
       ],
-      "comment": "Fixture: overrides - base file.\nSee override.tf and main_override.tf for the overlays the loader must\nmerge per Terraform's documented override semantics.",
       "position": {
         "filename": "\u003cfixture\u003e/overrides/main.tf",
         "start": {
