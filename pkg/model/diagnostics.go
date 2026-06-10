@@ -18,11 +18,11 @@ const (
 // Diagnostic is a single problem reported by a loader, with optional
 // source location information.
 type Diagnostic struct {
-	Severity Severity `json:"severity"`
-	Summary  string   `json:"summary"`
-	Detail   string   `json:"detail,omitempty"`
-	Subject  *Range   `json:"subject,omitempty"`
-	Context  *Range   `json:"context,omitempty"`
+	Severity Severity `json:"severity"`          // error or warning
+	Summary  string   `json:"summary"`           // short problem description
+	Detail   string   `json:"detail,omitempty"`  // optional longer explanation
+	Subject  *Range   `json:"subject,omitempty"` // optional primary source location
+	Context  *Range   `json:"context,omitempty"` // optional surrounding source location
 }
 
 // Diagnostics is a collection of Diagnostic values.

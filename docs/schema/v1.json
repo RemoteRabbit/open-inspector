@@ -1,0 +1,1069 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/remoterabbit/open-inspector/pkg/model/module",
+  "$defs": {
+    "Assertion": {
+      "properties": {
+        "condition": {
+          "$ref": "#/$defs/Expression",
+          "description": "boolean condition expression"
+        },
+        "expression": {
+          "$ref": "#/$defs/Expression",
+          "description": "message shown when the condition fails"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the assert block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "condition",
+        "expression",
+        "range"
+      ],
+      "description": "Assertion is one `assert { condition, error_message }` inside a check block."
+    },
+    "AttrFinding": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "attribute name"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "where the attribute was set"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "range"
+      ],
+      "description": "AttrFinding names a single attribute and points at the block that set it."
+    },
+    "CheckBlock": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "check block name"
+        },
+        "data_source": {
+          "$ref": "#/$defs/Resource",
+          "description": "optional scoped data source the assertions read"
+        },
+        "assertions": {
+          "items": {
+            "$ref": "#/$defs/Assertion"
+          },
+          "type": "array",
+          "description": "assert blocks inside the check"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the check block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "range"
+      ],
+      "description": "CheckBlock corresponds to `check \"\u003cname\u003e\" { data ..."
+    },
+    "ChildModule": {
+      "properties": {
+        "call_name": {
+          "type": "string",
+          "description": "name of the module call that produced this child"
+        },
+        "source": {
+          "type": "string",
+          "description": "raw source argument from the module block"
+        },
+        "version": {
+          "type": "string",
+          "description": "version constraint, for registry modules"
+        },
+        "resolved": {
+          "$ref": "#/$defs/ResolvedSource",
+          "description": "what was fetched and where, on success"
+        },
+        "module": {
+          "$ref": "#/$defs/Module",
+          "description": "populated on success"
+        },
+        "error": {
+          "$ref": "#/$defs/Diagnostic",
+          "description": "populated on failure"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "call_name",
+        "source"
+      ],
+      "description": "ChildModule represents one resolved (or attempted) module call."
+    },
+    "DeprecatedAttr": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "attribute name"
+        },
+        "message": {
+          "type": "string",
+          "description": "schema's deprecation message"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "where the attribute was set"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "range"
+      ],
+      "description": "DeprecatedAttr names a deprecated attribute and carries the schema's deprecation/description message."
+    },
+    "Diagnostic": {
+      "properties": {
+        "severity": {
+          "type": "string",
+          "description": "error or warning"
+        },
+        "summary": {
+          "type": "string",
+          "description": "short problem description"
+        },
+        "detail": {
+          "type": "string",
+          "description": "optional longer explanation"
+        },
+        "subject": {
+          "$ref": "#/$defs/Range",
+          "description": "optional primary source location"
+        },
+        "context": {
+          "$ref": "#/$defs/Range",
+          "description": "optional surrounding source location"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "severity",
+        "summary"
+      ],
+      "description": "Diagnostic is a single problem reported by a loader, with optional source location information."
+    },
+    "Diagnostics": {
+      "items": {
+        "$ref": "#/$defs/Diagnostic"
+      },
+      "type": "array",
+      "description": "Diagnostics is a collection of Diagnostic values."
+    },
+    "Encryption": {
+      "properties": {
+        "key_providers": {
+          "items": {
+            "$ref": "#/$defs/EncryptionKeyProvider"
+          },
+          "type": "array",
+          "description": "key_provider blocks"
+        },
+        "methods": {
+          "items": {
+            "$ref": "#/$defs/EncryptionMethod"
+          },
+          "type": "array",
+          "description": "method blocks"
+        },
+        "state": {
+          "$ref": "#/$defs/EncryptionTarget",
+          "description": "state encryption target, if configured"
+        },
+        "plan": {
+          "$ref": "#/$defs/EncryptionTarget",
+          "description": "plan encryption target, if configured"
+        },
+        "remote_state_data_sources": {
+          "items": {
+            "$ref": "#/$defs/EncryptionRemoteState"
+          },
+          "type": "array",
+          "description": "remote_state_data_sources entries"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the encryption block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "range"
+      ],
+      "description": "Encryption corresponds to OpenTofu's `terraform { encryption {} }` configuration tree (OpenTofu 1.7+)."
+    },
+    "EncryptionKeyProvider": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "key provider type"
+        },
+        "name": {
+          "type": "string",
+          "description": "key provider name"
+        },
+        "body": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Expression"
+          },
+          "type": "object",
+          "description": "provider-defined attributes, captured verbatim"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "name",
+        "range"
+      ],
+      "description": "EncryptionKeyProvider describes one `key_provider \"\u003ctype\u003e\" \"\u003cname\u003e\" {}` inside an encryption block."
+    },
+    "EncryptionMethod": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "method type"
+        },
+        "name": {
+          "type": "string",
+          "description": "method name"
+        },
+        "body": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Expression"
+          },
+          "type": "object",
+          "description": "method-defined attributes, captured verbatim"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "name",
+        "range"
+      ],
+      "description": "EncryptionMethod describes one `method \"\u003ctype\u003e\" \"\u003cname\u003e\" {}` inside an encryption block."
+    },
+    "EncryptionRemoteState": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "data source name"
+        },
+        "body": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Expression"
+          },
+          "type": "object",
+          "description": "open-ended attributes, captured verbatim"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "range"
+      ],
+      "description": "EncryptionRemoteState describes a `remote_state_data_sources {}` entry."
+    },
+    "EncryptionTarget": {
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/Expression",
+          "description": "required method reference"
+        },
+        "fallback": {
+          "$ref": "#/$defs/Expression",
+          "description": "optional fallback method reference"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "method",
+        "range"
+      ],
+      "description": "EncryptionTarget describes the `state {}` or `plan {}` sub-block: a required `method` reference and an optional `fallback`."
+    },
+    "EphemeralResource": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "resource type"
+        },
+        "name": {
+          "type": "string",
+          "description": "local name"
+        },
+        "provider": {
+          "type": "string",
+          "description": "from the provider meta-argument, if set"
+        },
+        "count": {
+          "$ref": "#/$defs/Expression",
+          "description": "count meta-argument expression, if set"
+        },
+        "for_each": {
+          "$ref": "#/$defs/Expression",
+          "description": "for_each meta-argument expression, if set"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "explicit dependency references"
+        },
+        "attr_names": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "AttrNames lists the user-set top-level attribute names that are not\nmeta-arguments, captured at load time and sorted. See\nResource.AttrNames for the exact semantics and caveats."
+        },
+        "schema_findings": {
+          "$ref": "#/$defs/SchemaFindings",
+          "description": "SchemaFindings holds schema-derived annotations, populated only when\ninspection runs with a provider schema. See Resource.SchemaFindings."
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/Lifecycle",
+          "description": "lifecycle block, if present"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the ephemeral block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "name",
+        "range"
+      ],
+      "description": "EphemeralResource corresponds to `ephemeral \"\u003ctype\u003e\" \"\u003cname\u003e\" {}` Same meta-args as a managed resource."
+    },
+    "Expression": {
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "verbatim HCL source bytes"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "position of the expression in source"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "source",
+        "range"
+      ],
+      "description": "Expression is a snippet of HCL source captured at parse time."
+    },
+    "ImportBlock": {
+      "properties": {
+        "to": {
+          "type": "string",
+          "description": "address the resource is imported to"
+        },
+        "id": {
+          "$ref": "#/$defs/Expression",
+          "description": "import ID expression"
+        },
+        "provider": {
+          "type": "string",
+          "description": "provider reference, if set"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the import block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "to",
+        "id",
+        "range"
+      ],
+      "description": "ImportBlock corresponds to `import { to = X, id = ..., provider = ..."
+    },
+    "Lifecycle": {
+      "properties": {
+        "create_before_destroy": {
+          "type": "boolean",
+          "description": "create_before_destroy setting, if set"
+        },
+        "prevent_destroy": {
+          "type": "boolean",
+          "description": "prevent_destroy setting, if set"
+        },
+        "ignore_changes": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "attribute names or \"all\""
+        },
+        "replace_triggered_by": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "replace_triggered_by references"
+        },
+        "preconditions": {
+          "items": {
+            "$ref": "#/$defs/Validation"
+          },
+          "type": "array",
+          "description": "precondition blocks"
+        },
+        "postconditions": {
+          "items": {
+            "$ref": "#/$defs/Validation"
+          },
+          "type": "array",
+          "description": "postcondition blocks"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Lifecycle describes a resource lifecycle {} block."
+    },
+    "Local": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "local value name"
+        },
+        "value": {
+          "$ref": "#/$defs/Expression",
+          "description": "value expression"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the binding"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "value",
+        "range"
+      ],
+      "description": "Local describes a single name = value binding inside a locals {} block."
+    },
+    "ModuleCall": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "module call name"
+        },
+        "source": {
+          "type": "string",
+          "description": "raw source argument"
+        },
+        "version": {
+          "type": "string",
+          "description": "version constraint, for registry modules"
+        },
+        "count": {
+          "$ref": "#/$defs/Expression",
+          "description": "count meta-argument expression, if set"
+        },
+        "for_each": {
+          "$ref": "#/$defs/Expression",
+          "description": "for_each meta-argument expression, if set"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "explicit dependency references"
+        },
+        "providers": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "type": "object",
+          "description": "local -\u003e remote"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the module block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "source",
+        "range"
+      ],
+      "description": "ModuleCall describes a module {} block invoking another module."
+    },
+    "MovedBlock": {
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "old address"
+        },
+        "to": {
+          "type": "string",
+          "description": "new address"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the moved block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "from",
+        "to",
+        "range"
+      ],
+      "description": "MovedBlock corresponds to `moved { from = X, to = Y }`"
+    },
+    "Output": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "output name"
+        },
+        "value": {
+          "$ref": "#/$defs/Expression",
+          "description": "output value expression"
+        },
+        "description": {
+          "type": "string",
+          "description": "human-readable description"
+        },
+        "sensitive": {
+          "type": "boolean",
+          "description": "whether the value is marked sensitive"
+        },
+        "ephemeral": {
+          "type": "boolean",
+          "description": "whether the output is ephemeral (TF/OpenTofu 1.10+)"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "traversal source forms"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the output block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "value",
+        "range"
+      ],
+      "description": "Output describes a single output {} block declared by the module."
+    },
+    "Pos": {
+      "properties": {
+        "line": {
+          "type": "integer",
+          "description": "1-based line number"
+        },
+        "column": {
+          "type": "integer",
+          "description": "1-based column number"
+        },
+        "byte": {
+          "type": "integer",
+          "description": "0-based byte offset"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "line",
+        "column",
+        "byte"
+      ],
+      "description": "Pos is a single position within a source file."
+    },
+    "ProviderConfig": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "provider name, e.g. \"aws\""
+        },
+        "alias": {
+          "type": "string",
+          "description": "provider alias, if set"
+        },
+        "for_each": {
+          "$ref": "#/$defs/Expression",
+          "description": "for_each expression for multi-instance providers (OpenTofu 1.9+)"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the provider block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "range"
+      ],
+      "description": "ProviderConfig describes a single provider {} configuration block."
+    },
+    "ProviderRequirement": {
+      "properties": {
+        "source": {
+          "type": "string",
+          "description": "provider source address, e.g. \"hashicorp/aws\""
+        },
+        "version_constraints": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "version constraint strings, e.g. [\"~\u003e 4.0\"]"
+        },
+        "configuration_aliases": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "e.g. [\"aws.east\", \"aws.west\"]"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the entry"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "range"
+      ],
+      "description": "ProviderRequirement describes a single entry inside a terraform.required_providers block."
+    },
+    "Range": {
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "source file, with forward-slash separators"
+        },
+        "start": {
+          "$ref": "#/$defs/Pos",
+          "description": "start position (inclusive)"
+        },
+        "end": {
+          "$ref": "#/$defs/Pos",
+          "description": "end position (exclusive)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "filename",
+        "start",
+        "end"
+      ],
+      "description": "Range identifies a contiguous span of source code."
+    },
+    "RemovedBlock": {
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "address being removed"
+        },
+        "destroy_on_drop": {
+          "type": "boolean",
+          "description": "whether to destroy on removal (lifecycle { destroy })"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the removed block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "from",
+        "range"
+      ],
+      "description": "RemovedBlock corresponds to `removed { from, lifecycle {destroy } }`"
+    },
+    "ResolvedSource": {
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "\"local\" | \"registry\" | \"git\" | \"http\""
+        },
+        "address": {
+          "type": "string",
+          "description": "canonicalized source string"
+        },
+        "cache_path": {
+          "type": "string",
+          "description": "absolute path to extracted module"
+        },
+        "ref": {
+          "type": "string",
+          "description": "git ref (commit SHA)"
+        },
+        "version": {
+          "type": "string",
+          "description": "registry version"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind",
+        "address"
+      ],
+      "description": "ResolvedSource records what we fetched and where it lives."
+    },
+    "Resource": {
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "managed, data, or ephemeral"
+        },
+        "type": {
+          "type": "string",
+          "description": "resource type, e.g. \"aws_instance\""
+        },
+        "name": {
+          "type": "string",
+          "description": "local name, e.g. \"web\""
+        },
+        "provider": {
+          "type": "string",
+          "description": "from `provider =` meta-arg, if set"
+        },
+        "count": {
+          "$ref": "#/$defs/Expression",
+          "description": "count meta-argument expression, if set"
+        },
+        "for_each": {
+          "$ref": "#/$defs/Expression",
+          "description": "for_each meta-argument expression, if set"
+        },
+        "depends_on": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "explicit dependency references"
+        },
+        "attr_names": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "AttrNames lists the user-set top-level attribute names that are not\nmeta-arguments, captured at load time and sorted. It excludes\ncount, for_each, provider, depends_on, and the lifecycle block. It\nis best-effort: nested blocks (for example a versioning {} block)\ndo not appear here."
+        },
+        "schema_findings": {
+          "$ref": "#/$defs/SchemaFindings",
+          "description": "SchemaFindings holds schema-derived annotations. It is populated\nonly when inspection runs with a provider schema (WithSchema or\nWithSchemaAuto); otherwise it is nil and omitted from JSON."
+        },
+        "lifecycle": {
+          "$ref": "#/$defs/Lifecycle",
+          "description": "lifecycle block, if present"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the resource block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "mode",
+        "type",
+        "name",
+        "range"
+      ],
+      "description": "Resource describes a single resource {} or data {} block."
+    },
+    "SchemaFindings": {
+      "properties": {
+        "unknown_attrs": {
+          "items": {
+            "$ref": "#/$defs/AttrFinding"
+          },
+          "type": "array",
+          "description": "UnknownAttrs are attributes the user set that the schema does not\ndefine (for example a misspelled attribute name)."
+        },
+        "deprecated_attrs": {
+          "items": {
+            "$ref": "#/$defs/DeprecatedAttr"
+          },
+          "type": "array",
+          "description": "DeprecatedAttrs are attributes the user set that the schema marks\ndeprecated."
+        },
+        "missing_required": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "MissingRequired are attribute names the schema marks required that\nthe user did not set. Sorted for deterministic output."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "SchemaFindings groups the schema-derived annotations for a single resource, data source, or ephemeral resource."
+    },
+    "Validation": {
+      "properties": {
+        "condition": {
+          "$ref": "#/$defs/Expression",
+          "description": "boolean condition expression"
+        },
+        "error_message": {
+          "$ref": "#/$defs/Expression",
+          "description": "message shown when the condition fails"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the validation block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "condition",
+        "error_message",
+        "range"
+      ],
+      "description": "Validation describes a validation {} block attached to a Variable or to a resource lifecycle precondition/postcondition."
+    },
+    "Variable": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "variable name"
+        },
+        "type": {
+          "type": "string",
+          "description": "typeexpr.TypeString"
+        },
+        "default": {
+          "$ref": "#/$defs/Expression",
+          "description": "default value expression, if any"
+        },
+        "description": {
+          "type": "string",
+          "description": "human-readable description"
+        },
+        "sensitive": {
+          "type": "boolean",
+          "description": "whether the value is marked sensitive"
+        },
+        "nullable": {
+          "type": "boolean",
+          "description": "pointer: distinguish unset vs false"
+        },
+        "ephemeral": {
+          "type": "boolean",
+          "description": "whether the variable is ephemeral (TF/OpenTofu 1.10+)"
+        },
+        "validations": {
+          "items": {
+            "$ref": "#/$defs/Validation"
+          },
+          "type": "array",
+          "description": "validation blocks attached to the variable"
+        },
+        "range": {
+          "$ref": "#/$defs/Range",
+          "description": "source range of the variable block"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "name",
+        "range"
+      ],
+      "description": "Variable describes a single variable {} block declared by the module."
+    }
+  },
+  "properties": {
+    "path": {
+      "type": "string",
+      "description": "filesystem path to the module directory"
+    },
+    "required_core": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array",
+      "description": "required_version constraints from terraform blocks, in encounter order"
+    },
+    "required_providers": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ProviderRequirement"
+      },
+      "type": "object",
+      "description": "required_providers entries keyed by provider name"
+    },
+    "variables": {
+      "items": {
+        "$ref": "#/$defs/Variable"
+      },
+      "type": "array",
+      "description": "variable blocks declared by the module"
+    },
+    "outputs": {
+      "items": {
+        "$ref": "#/$defs/Output"
+      },
+      "type": "array",
+      "description": "output blocks declared by the module"
+    },
+    "locals": {
+      "items": {
+        "$ref": "#/$defs/Local"
+      },
+      "type": "array",
+      "description": "named values from locals blocks"
+    },
+    "managed_resources": {
+      "items": {
+        "$ref": "#/$defs/Resource"
+      },
+      "type": "array",
+      "description": "resource blocks (managed resources)"
+    },
+    "data_resources": {
+      "items": {
+        "$ref": "#/$defs/Resource"
+      },
+      "type": "array",
+      "description": "data blocks (data sources)"
+    },
+    "module_calls": {
+      "items": {
+        "$ref": "#/$defs/ModuleCall"
+      },
+      "type": "array",
+      "description": "module blocks invoking child modules"
+    },
+    "providers": {
+      "items": {
+        "$ref": "#/$defs/ProviderConfig"
+      },
+      "type": "array",
+      "description": "provider configuration blocks"
+    },
+    "moved": {
+      "items": {
+        "$ref": "#/$defs/MovedBlock"
+      },
+      "type": "array",
+      "description": "moved blocks"
+    },
+    "imports": {
+      "items": {
+        "$ref": "#/$defs/ImportBlock"
+      },
+      "type": "array",
+      "description": "import blocks"
+    },
+    "removed": {
+      "items": {
+        "$ref": "#/$defs/RemovedBlock"
+      },
+      "type": "array",
+      "description": "removed blocks"
+    },
+    "checks": {
+      "items": {
+        "$ref": "#/$defs/CheckBlock"
+      },
+      "type": "array",
+      "description": "check blocks"
+    },
+    "ephemeral_resources": {
+      "items": {
+        "$ref": "#/$defs/EphemeralResource"
+      },
+      "type": "array",
+      "description": "ephemeral blocks (ephemeral resources)"
+    },
+    "encryption": {
+      "$ref": "#/$defs/Encryption",
+      "description": "OpenTofu encryption block; nil for Terraform modules"
+    },
+    "children": {
+      "additionalProperties": {
+        "$ref": "#/$defs/ChildModule"
+      },
+      "type": "object",
+      "description": "resolved child modules keyed by call name; populated only with WithModuleGraph"
+    },
+    "diagnostics": {
+      "$ref": "#/$defs/Diagnostics",
+      "description": "problems found while loading the module"
+    }
+  },
+  "additionalProperties": false,
+  "type": "object",
+  "required": [
+    "path"
+  ],
+  "description": "Module is the root inspection result for a single Terraform/OpenTofu module directory."
+}

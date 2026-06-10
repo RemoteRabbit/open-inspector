@@ -84,7 +84,7 @@ func decodeProviderMap(expression hcl.Expression) (map[string]string, model.Diag
 	for _, pair := range pairs {
 		key, kdiag := pair.Key.Value(nil)
 		diags = append(diags, model.DiagnosticsFromHCL(kdiag)...)
-		if key.IsNull() || key.Type() != cty.String {
+		if key.IsNull() || !key.IsKnown() || key.Type() != cty.String {
 			continue
 		}
 		traversal, tdiag := hcl.AbsTraversalForExpr(pair.Value)

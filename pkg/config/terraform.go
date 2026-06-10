@@ -34,7 +34,7 @@ func decodeTerraformBlock(block *hcl.Block, source []byte, module *model.Module)
 	if attribute, ok := content.Attributes["required_version"]; ok {
 		value, vdiag := attribute.Expr.Value(nil)
 		diags = append(diags, model.DiagnosticsFromHCL(vdiag)...)
-		if !value.IsNull() && value.Type() == cty.String {
+		if !value.IsNull() && value.IsKnown() && value.Type() == cty.String {
 			module.RequiredCore = append(module.RequiredCore, value.AsString())
 		}
 	}
@@ -76,7 +76,7 @@ func decodeProviderReq(attribute *hcl.Attribute) (model.ProviderRequirement, mod
 
 	// Legacy form: a single string version constraint.
 	if value, vdiag := attribute.Expr.Value(nil); !vdiag.HasErrors() &&
-		!value.IsNull() && value.Type() == cty.String {
+		!value.IsNull() && value.IsKnown() && value.Type() == cty.String {
 		req.VersionConstraints = []string{value.AsString()}
 		return req, diags
 	}
@@ -90,20 +90,20 @@ func decodeProviderReq(attribute *hcl.Attribute) (model.ProviderRequirement, mod
 	for _, pair := range pairs {
 		keyVal, kdiag := pair.Key.Value(nil)
 		diags = append(diags, model.DiagnosticsFromHCL(kdiag)...)
-		if keyVal.IsNull() || keyVal.Type() != cty.String {
+		if keyVal.IsNull() || !keyVal.IsKnown() || keyVal.Type() != cty.String {
 			continue
 		}
 		switch keyVal.AsString() {
 		case "source":
 			value, vdiag := pair.Value.Value(nil)
 			diags = append(diags, model.DiagnosticsFromHCL(vdiag)...)
-			if !value.IsNull() && value.Type() == cty.String {
+			if !value.IsNull() && value.IsKnown() && value.Type() == cty.String {
 				req.Source = value.AsString()
 			}
 		case "version":
 			value, vdiag := pair.Value.Value(nil)
 			diags = append(diags, model.DiagnosticsFromHCL(vdiag)...)
-			if !value.IsNull() && value.Type() == cty.String {
+			if !value.IsNull() && value.IsKnown() && value.Type() == cty.String {
 				req.VersionConstraints = append(req.VersionConstraints, value.AsString())
 			}
 		case "configuration_aliases":

@@ -121,7 +121,7 @@ func decodeBool(attribute *hcl.Attribute) (bool, bool, hcl.Diagnostics) {
 	}
 
 	value, diag := attribute.Expr.Value(nil)
-	if diag.HasErrors() || value.IsNull() || value.Type() != cty.Bool {
+	if diag.HasErrors() || value.IsNull() || !value.IsKnown() || value.Type() != cty.Bool {
 		return false, false, diag
 	}
 	return value.True(), true, diag
@@ -134,7 +134,7 @@ func decodeBool(attribute *hcl.Attribute) (bool, bool, hcl.Diagnostics) {
 // interpolation where a literal is required).
 func literalString(expression hcl.Expression) (string, bool, hcl.Diagnostics) {
 	value, diag := expression.Value(nil)
-	if diag.HasErrors() || value.IsNull() || value.Type() != cty.String {
+	if diag.HasErrors() || value.IsNull() || !value.IsKnown() || value.Type() != cty.String {
 		return "", false, diag
 	}
 	return value.AsString(), true, diag

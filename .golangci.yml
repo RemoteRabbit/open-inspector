@@ -1,3 +1,4 @@
+---
 version: "2"
 
 run:
@@ -17,6 +18,13 @@ linters:
   settings:
     misspell:
       locale: US
+    revive:
+      rules:
+        - name: exported
+          arguments:
+            - checkPrivateReceivers
+            - disableStutteringCheck
+        - name: package-comments
 
 formatters:
   enable:

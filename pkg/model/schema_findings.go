@@ -22,14 +22,14 @@ type SchemaFindings struct {
 
 // AttrFinding names a single attribute and points at the block that set it.
 type AttrFinding struct {
-	Name  string `json:"name"`
-	Range Range  `json:"range"`
+	Name  string `json:"name"`  // attribute name
+	Range Range  `json:"range"` // where the attribute was set
 }
 
 // DeprecatedAttr names a deprecated attribute and carries the schema's
 // deprecation/description message.
 type DeprecatedAttr struct {
-	Name    string `json:"name"`
-	Message string `json:"message,omitempty"`
-	Range   Range  `json:"range"`
+	Name    string `json:"name"`              // attribute name
+	Message string `json:"message,omitempty"` // schema's deprecation message
+	Range   Range  `json:"range"`             // where the attribute was set
 }
