@@ -156,6 +156,7 @@ func TestEnrich_MissingRequired(t *testing.T) {
 	findings := mod.ManagedResources[0].SchemaFindings
 	if findings == nil {
 		t.Fatalf("expected SchemaFindings")
+		return
 	}
 	if want := []string{"name"}; !reflect.DeepEqual(findings.MissingRequired, want) {
 		t.Errorf("MissingRequired = %v, want %v (computed `id` must be excluded)", findings.MissingRequired, want)
@@ -207,6 +208,7 @@ func TestEnrich_EphemeralResource(t *testing.T) {
 	findings := mod.EphemeralResources[0].SchemaFindings
 	if findings == nil {
 		t.Fatalf("expected SchemaFindings on the ephemeral resource")
+		return
 	}
 	if len(findings.UnknownAttrs) != 1 || findings.UnknownAttrs[0].Name != "bogus" {
 		t.Errorf("UnknownAttrs = %#v, want one entry named %q", findings.UnknownAttrs, "bogus")

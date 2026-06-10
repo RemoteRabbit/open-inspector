@@ -22,6 +22,7 @@ func TestAuto_RequiresBinary(t *testing.T) {
 	_, _, err := Auto(t.TempDir())
 	if err == nil {
 		t.Fatalf("expected an error when no tofu/terraform binary is present")
+		return
 	}
 	if !strings.Contains(err.Error(), "PATH") {
 		t.Errorf("error should mention PATH: %v", err)
@@ -58,6 +59,7 @@ func TestAuto_RequiresInit(t *testing.T) {
 	_, _, err := Auto(dir)
 	if err == nil {
 		t.Fatalf("expected an error for an uninitialized directory")
+		return
 	}
 	if !strings.Contains(err.Error(), "init") {
 		t.Errorf("error should guide the user to run init: %v", err)
