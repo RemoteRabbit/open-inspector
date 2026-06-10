@@ -97,6 +97,7 @@ func TestConfig_MissingSchemaFile(t *testing.T) {
 	err := rootCmd.Execute()
 	if err == nil {
 		t.Fatalf("expected an error for a missing schema file")
+		return
 	}
 	if !strings.Contains(err.Error(), "open schema") {
 		t.Errorf("error = %v, want it to mention opening the schema", err)

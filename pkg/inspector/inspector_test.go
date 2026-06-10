@@ -23,6 +23,7 @@ func TestInspectReturnsAbsolutePath(t *testing.T) {
 	}
 	if mod == nil {
 		t.Fatal("Inspect returned nil module")
+		return
 	}
 	if !filepath.IsAbs(mod.Path) {
 		t.Errorf("module path %q is not absolute", mod.Path)

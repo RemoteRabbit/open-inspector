@@ -45,6 +45,7 @@ func TestLoad_NullSchema(t *testing.T) {
 	resource, source := s.LookupResource("registry.opentofu.org/hashicorp/null", "null_resource")
 	if resource == nil {
 		t.Fatalf("null_resource missing; source=%q", source)
+		return
 	}
 	if _, ok := resource.Block.Attributes["triggers"]; !ok {
 		t.Errorf("null_resource.triggers missing from schema")
@@ -76,6 +77,7 @@ func TestLoad_LookupDataSource(t *testing.T) {
 	dataSource, source := s.LookupDataSource("registry.opentofu.org/hashicorp/null", "null_data_source")
 	if dataSource == nil {
 		t.Fatalf("null_data_source missing; source=%q", source)
+		return
 	}
 	deprecated, ok := dataSource.Block.Attributes["id"]
 	if !ok {

@@ -651,6 +651,7 @@ func TestLoad_LifecycleAndMeta(t *testing.T) {
 	lc := primary.Lifecycle
 	if lc == nil {
 		t.Fatalf("primary.Lifecycle is nil")
+		return
 	}
 	if lc.CreateBeforeDestroy == nil || *lc.CreateBeforeDestroy != true {
 		t.Errorf("CreateBeforeDestroy = %v, want *true", lc.CreateBeforeDestroy)
@@ -1039,6 +1040,7 @@ func TestLoad_ProviderForEach(t *testing.T) {
 	}
 	if awsByRegion == nil {
 		t.Fatalf("provider aws.by_region missing")
+		return
 	}
 	if awsByRegion.ForEach == nil || !strings.Contains(awsByRegion.ForEach.Source, "var.regions") {
 		t.Errorf("ForEach = %#v", awsByRegion.ForEach)
