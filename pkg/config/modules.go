@@ -24,9 +24,10 @@ var moduleSchema = &hcl.BodySchema{
 // decodeModuleCallBlock decodes a module {} invocation into
 // module.ModuleCalls: the literal source/version plus the count, for_each,
 // providers, and depends_on meta-arguments.
-func decodeModuleCallBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
+func decodeModuleCallBlock(block *hcl.Block, source []byte, comments commentIndex, module *model.Module) model.Diagnostics {
 	moduleCall := model.ModuleCall{
 		Name:     block.Labels[0],
+		Comment:  comments[block.DefRange.Start.Byte],
 		Position: model.PositionFromHCL(block.DefRange),
 	}
 

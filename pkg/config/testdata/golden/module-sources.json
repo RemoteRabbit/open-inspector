@@ -4,6 +4,7 @@
     {
       "name": "local_relative",
       "source": "../multi-module/modules/network",
+      "comment": "Fixture: module-sources\nDeclarations of every module source type the graph builder must\nrecognize. These are NOT fetched by unit tests; integration tests opt\nin explicitly.",
       "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {

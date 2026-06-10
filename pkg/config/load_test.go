@@ -121,7 +121,7 @@ func TestLoad_Providers_FullDecoding(t *testing.T) {
 		t.Errorf("RequiredCore = %v, want %v", got, want)
 	}
 
-	wantProvs := map[string]struct {
+	selectedProviders := map[string]struct {
 		source   string
 		versions []string
 		aliases  []string
@@ -130,10 +130,10 @@ func TestLoad_Providers_FullDecoding(t *testing.T) {
 		"random": {"hashicorp/random", []string{">= 3.0, < 4.0"}, nil},
 		"http":   {"hashicorp/http", []string{"~> 3.4"}, nil},
 	}
-	if got, want := len(mod.RequiredProviders), len(wantProvs); got != want {
+	if got, want := len(mod.RequiredProviders), len(selectedProviders); got != want {
 		t.Fatalf("RequiredProviders count = %d, want %d", got, want)
 	}
-	for name, want := range wantProvs {
+	for name, want := range selectedProviders {
 		got, ok := mod.RequiredProviders[name]
 		if !ok {
 			t.Errorf("RequiredProviders[%s] missing", name)
@@ -182,7 +182,7 @@ func TestLoad_Providers_FullDecoding(t *testing.T) {
 	}
 }
 
-// emptyToNil normalises an empty slice into nil so reflect.DeepEqual
+// emptyToNil normalizes an empty slice into nil so reflect.DeepEqual
 // treats `[]string{}` and `nil` the same way callers expect.
 func emptyToNil(s []string) []string {
 	if len(s) == 0 {
@@ -198,30 +198,31 @@ func TestLoad_Fixtures(t *testing.T) {
 	t.Parallel()
 
 	cases := []struct {
-		dir                 string
-		wantVars            int
-		wantOutputs         int
-		wantLocals          int
-		wantManagedRes      int
-		wantDataRes         int
-		wantModuleCalls     int
-		wantRequiredProvs   int
-		wantProviderConfigs int
-		wantErrorDiagnostic bool
+		dir                   string
+		wantVars              int
+		wantOutputs           int
+		wantLocals            int
+		wantManagedRes        int
+		wantDataRes           int
+		wantModuleCalls       int
+		wantRequiredProviders int
+		wantProviderConfigs   int
+		wantErrorDiagnostic   bool
 	}{
-		{dir: "simple", wantVars: 1, wantOutputs: 1, wantManagedRes: 1, wantRequiredProvs: 1},
+		{dir: "simple", wantVars: 1, wantOutputs: 1, wantManagedRes: 1, wantRequiredProviders: 1},
 		{dir: "variables-and-outputs", wantVars: 5, wantOutputs: 3, wantLocals: 2},
-		{dir: "providers", wantRequiredProvs: 3, wantDataRes: 1, wantManagedRes: 1, wantProviderConfigs: 3},
+		{dir: "providers", wantRequiredProviders: 3, wantDataRes: 1, wantManagedRes: 1, wantProviderConfigs: 3},
 		{dir: "resources-count-foreach", wantManagedRes: 2, wantDataRes: 1, wantModuleCalls: 2, wantVars: 2},
-		{dir: "json-config", wantVars: 1, wantOutputs: 1, wantManagedRes: 1, wantRequiredProvs: 1},
+		{dir: "json-config", wantVars: 1, wantOutputs: 1, wantManagedRes: 1, wantRequiredProviders: 1},
 		{dir: "multi-module", wantModuleCalls: 2, wantOutputs: 1, wantVars: 1},
 		{dir: "module-sources", wantModuleCalls: 6},
-		{dir: "resources-full", wantManagedRes: 2, wantModuleCalls: 1, wantRequiredProvs: 1, wantProviderConfigs: 1},
+		{dir: "resources-full", wantManagedRes: 2, wantModuleCalls: 1, wantRequiredProviders: 1, wantProviderConfigs: 1},
 		{dir: "tofu-extension", wantVars: 2, wantOutputs: 2},
 		{dir: "overrides", wantVars: 1, wantManagedRes: 1},
 		{dir: "invalid/syntax-error", wantErrorDiagnostic: true},
 		{dir: "invalid/malformed-validation", wantErrorDiagnostic: true},
 		{dir: "invalid/non-literal-attrs", wantErrorDiagnostic: true},
+		{dir: "doc-comments", wantErrorDiagnostic: true},
 	}
 	for _, tc := range cases {
 		t.Run(tc.dir, func(t *testing.T) {
@@ -262,8 +263,8 @@ func TestLoad_Fixtures(t *testing.T) {
 			if got := len(mod.ModuleCalls); got != tc.wantModuleCalls {
 				t.Errorf("ModuleCalls: want %d, got %d", tc.wantModuleCalls, got)
 			}
-			if got := len(mod.RequiredProviders); got != tc.wantRequiredProvs {
-				t.Errorf("RequiredProviders: want %d, got %d", tc.wantRequiredProvs, got)
+			if got := len(mod.RequiredProviders); got != tc.wantRequiredProviders {
+				t.Errorf("RequiredProviders: want %d, got %d", tc.wantRequiredProviders, got)
 			}
 			if got := len(mod.Providers); got != tc.wantProviderConfigs {
 				t.Errorf("Providers: want %d, got %d", tc.wantProviderConfigs, got)
@@ -280,6 +281,7 @@ var snapshotFixtures = []string{
 	"json-config",
 	"module-sources",
 	"multi-module",
+	"doc-comments",
 	"opentofu-encryption",
 	"opentofu-provider-foreach",
 	"overrides",
@@ -293,7 +295,7 @@ var snapshotFixtures = []string{
 
 // TestLoad_Snapshots round-trips every fixture in snapshotFixtures
 // through Load → JSON and compares against a golden file. Run with
-// `-update` to regenerate the goldens after an intentional loader change.
+// `-update` to regenerate the golden's after an intentional loader change.
 func TestLoad_Snapshots(t *testing.T) {
 	for _, dir := range snapshotFixtures {
 		t.Run(dir, func(t *testing.T) {

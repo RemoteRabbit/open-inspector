@@ -26,11 +26,12 @@ var resourceSchema = &hcl.BodySchema{
 // model, appending it to the managed or data slice according to mode. It
 // captures the meta-arguments (count, for_each, provider, depends_on) and
 // the lifecycle {} block.
-func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMode, module *model.Module) model.Diagnostics {
+func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMode, comments commentIndex, module *model.Module) model.Diagnostics {
 	resource := model.Resource{
 		Mode:     mode,
 		Type:     block.Labels[0],
 		Name:     block.Labels[1],
+		Comment:  comments[block.DefRange.Start.Byte],
 		Position: model.PositionFromHCL(block.DefRange),
 	}
 
@@ -96,6 +97,7 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 				DependsOn: resource.DependsOn,
 				AttrNames: resource.AttrNames,
 				Lifecycle: resource.Lifecycle,
+				Comment:   resource.Comment,
 				Position:  resource.Position,
 			})
 	}

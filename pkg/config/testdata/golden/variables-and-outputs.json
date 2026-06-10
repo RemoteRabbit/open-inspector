@@ -71,6 +71,7 @@
           }
         }
       ],
+      "comment": "Fixture: variables-and-outputs\nBroad coverage of variable / output / local features the loader must\nextract: types, defaults, descriptions, sensitive, nullable, validation.",
       "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {

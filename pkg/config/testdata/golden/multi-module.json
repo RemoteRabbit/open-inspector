@@ -20,6 +20,7 @@
           }
         }
       },
+      "comment": "Fixture: multi-module - root.\nTwo local child module calls with explicit dependency to exercise the\nmodule graph builder.",
       "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",
         "start": {

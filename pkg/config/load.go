@@ -12,6 +12,7 @@ import (
 	"sort"
 
 	"github.com/hashicorp/hcl/v2"
+	"github.com/hashicorp/hcl/v2/hclsyntax"
 
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
@@ -62,6 +63,11 @@ func decodeFiles(files []*hcl.File, module *model.Module) {
 		if file == nil {
 			continue
 		}
+		var comments commentIndex
+		if _, native := file.Body.(*hclsyntax.Body); native {
+			comments = buildCommentIndex(file.Body.(*hclsyntax.Body).SrcRange.Filename, file.Bytes)
+		}
+
 		content, _, hdiag := file.Body.PartialContent(rootSchema)
 		module.Diagnostics = append(module.Diagnostics, model.DiagnosticsFromHCL(hdiag)...)
 
@@ -72,17 +78,17 @@ func decodeFiles(files []*hcl.File, module *model.Module) {
 			case "provider":
 				module.Diagnostics = append(module.Diagnostics, decodeProviderBlock(block, file.Bytes, module)...)
 			case "variable":
-				module.Diagnostics = append(module.Diagnostics, decodeVariableBlock(block, file.Bytes, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeVariableBlock(block, file.Bytes, comments, module)...)
 			case "output":
-				module.Diagnostics = append(module.Diagnostics, decodeOutputsBlock(block, file.Bytes, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeOutputsBlock(block, file.Bytes, comments, module)...)
 			case "locals":
 				module.Diagnostics = append(module.Diagnostics, decodeLocalsBlock(block, file.Bytes, module)...)
 			case "resource":
-				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.ManagedResourceMode, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.ManagedResourceMode, comments, module)...)
 			case "data":
-				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.DataResourceMode, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.DataResourceMode, comments, module)...)
 			case "module":
-				module.Diagnostics = append(module.Diagnostics, decodeModuleCallBlock(block, file.Bytes, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeModuleCallBlock(block, file.Bytes, comments, module)...)
 			case "moved":
 				module.Diagnostics = append(module.Diagnostics, decodeMovedBlock(block, module)...)
 			case "import":
@@ -90,9 +96,9 @@ func decodeFiles(files []*hcl.File, module *model.Module) {
 			case "removed":
 				module.Diagnostics = append(module.Diagnostics, decodeRemovedBlock(block, module)...)
 			case "check":
-				module.Diagnostics = append(module.Diagnostics, decodeCheckBlock(block, file.Bytes, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeCheckBlock(block, file.Bytes, comments, module)...)
 			case "ephemeral":
-				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.EphemeralResourceMode, module)...)
+				module.Diagnostics = append(module.Diagnostics, decodeResourceBlock(block, file.Bytes, model.EphemeralResourceMode, comments, module)...)
 			}
 		}
 	}

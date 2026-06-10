@@ -1,0 +1,23 @@
+{
+  "path": "\u003cfixture\u003e/doc-comments",
+  "diagnostics": [
+    {
+      "severity": "error",
+      "summary": "cannot read module directory.",
+      "detail": "open /home/remoterabbit/Projects/open-inspector/testdata/fixtures/doc-comments: no such file or directory",
+      "subject": {
+        "filename": "\u003cfixture\u003e/doc-comments",
+        "start": {
+          "line": 0,
+          "column": 0,
+          "byte": 0
+        },
+        "end": {
+          "line": 0,
+          "column": 0,
+          "byte": 0
+        }
+      }
+    }
+  ]
+}

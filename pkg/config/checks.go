@@ -18,7 +18,7 @@ var checkSchema = &hcl.BodySchema{
 
 // decodeCheckBlock decodes a check "<name>" {} block into module.Checks,
 // including its optional scoped data source and its assert {} blocks.
-func decodeCheckBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
+func decodeCheckBlock(block *hcl.Block, source []byte, comments commentIndex, module *model.Module) model.Diagnostics {
 	inner, _, hdiag := block.Body.PartialContent(checkSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
@@ -34,7 +34,7 @@ func decodeCheckBlock(block *hcl.Block, source []byte, module *model.Module) mod
 		// Decode into a throwaway module so we can capture the result without polluting
 		// Module.DataResources.
 		var tmp model.Module
-		ddiag := decodeResourceBlock(dataBlock, source, model.DataResourceMode, &tmp)
+		ddiag := decodeResourceBlock(dataBlock, source, model.DataResourceMode, comments, &tmp)
 		diags = append(diags, ddiag...)
 
 		if len(tmp.DataResources) > 0 {

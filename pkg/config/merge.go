@@ -18,7 +18,7 @@ import (
 // set (per TF docs). depends_on REPLACES rather than appending.
 //
 // TODO: an override block with no matching base construct is silently ignored (best-effort merge); elevate this to
-// a diagnostic so typo'd override targets are surfaced rather than dropped.
+// a diagnostic so typo's override targets are surfaced rather than dropped.
 func mergeOverrides(base *model.Module, overrides []*model.Module) {
 	for _, override := range overrides {
 		mergeVariables(base, override.Variables)
@@ -59,6 +59,9 @@ func mergeVariables(base *model.Module, overrides []model.Variable) {
 			}
 			if override.Ephemeral {
 				base.Variables[index].Ephemeral = override.Ephemeral
+			}
+			if override.Comment != "" {
+				base.Variables[index].Comment = override.Comment
 			}
 			if len(override.Validations) > 0 {
 				base.Variables[index].Validations = override.Validations

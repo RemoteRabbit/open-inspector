@@ -13,12 +13,12 @@
         "start": {
           "line": 28,
           "column": 1,
-          "byte": 605
+          "byte": 607
         },
         "end": {
           "line": 28,
           "column": 35,
-          "byte": 639
+          "byte": 641
         }
       }
     }
@@ -27,7 +27,7 @@
     "key_providers": [
       {
         "type": "pbkdf2",
-        "name": "mykey",
+        "name": "my_key",
         "body": {
           "passphrase": {
             "source": "\"this-is-only-a-fixture-do-not-use\"",
@@ -36,12 +36,12 @@
               "start": {
                 "line": 11,
                 "column": 20,
-                "byte": 355
+                "byte": 356
               },
               "end": {
                 "line": 11,
                 "column": 55,
-                "byte": 390
+                "byte": 391
               }
             }
           }
@@ -55,8 +55,8 @@
           },
           "end": {
             "line": 10,
-            "column": 34,
-            "byte": 333
+            "column": 35,
+            "byte": 334
           }
         }
       }
@@ -67,18 +67,18 @@
         "name": "new_method",
         "body": {
           "keys": {
-            "source": "key_provider.pbkdf2.mykey",
+            "source": "key_provider.pbkdf2.my_key",
             "position": {
               "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
               "start": {
                 "line": 15,
                 "column": 14,
-                "byte": 447
+                "byte": 448
               },
               "end": {
                 "line": 15,
-                "column": 39,
-                "byte": 472
+                "column": 40,
+                "byte": 474
               }
             }
           }
@@ -88,12 +88,12 @@
           "start": {
             "line": 14,
             "column": 5,
-            "byte": 402
+            "byte": 403
           },
           "end": {
             "line": 14,
             "column": 34,
-            "byte": 431
+            "byte": 432
           }
         }
       }
@@ -106,12 +106,12 @@
           "start": {
             "line": 19,
             "column": 16,
-            "byte": 507
+            "byte": 509
           },
           "end": {
             "line": 19,
             "column": 41,
-            "byte": 532
+            "byte": 534
           }
         }
       },
@@ -136,12 +136,12 @@
         "start": {
           "line": 18,
           "column": 5,
-          "byte": 484
+          "byte": 486
         },
         "end": {
           "line": 18,
           "column": 10,
-          "byte": 489
+          "byte": 491
         }
       }
     },
@@ -153,12 +153,12 @@
           "start": {
             "line": 23,
             "column": 16,
-            "byte": 566
+            "byte": 568
           },
           "end": {
             "line": 23,
             "column": 41,
-            "byte": 591
+            "byte": 593
           }
         }
       },
@@ -183,12 +183,12 @@
         "start": {
           "line": 22,
           "column": 5,
-          "byte": 544
+          "byte": 546
         },
         "end": {
           "line": 22,
           "column": 9,
-          "byte": 548
+          "byte": 550
         }
       }
     },
