@@ -9,7 +9,7 @@ MODULE         := $(shell go list -m)
 COVERAGE_OUT   := coverage.out
 COVERAGE_DOC   := docs/test-coverage.md
 ADDLICENSE     := go run github.com/google/addlicense@v1.2.0
-LICENSE_HEADER := .licenseheader.tmpl
+LICENSE_HEADER := .github/.licenseheader.tmpl
 # Directories containing source files that must carry the MPL header.
 # Extend this list as new top-level source dirs are added.
 LICENSE_PATHS  := cmd pkg
