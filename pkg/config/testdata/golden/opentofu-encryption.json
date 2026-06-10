@@ -8,7 +8,7 @@
       "mode": "managed",
       "type": "null_resource",
       "name": "example",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
         "start": {
           "line": 28,
@@ -31,7 +31,7 @@
         "body": {
           "passphrase": {
             "source": "\"this-is-only-a-fixture-do-not-use\"",
-            "range": {
+            "position": {
               "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
               "start": {
                 "line": 11,
@@ -46,7 +46,7 @@
             }
           }
         },
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 10,
@@ -68,7 +68,7 @@
         "body": {
           "keys": {
             "source": "key_provider.pbkdf2.mykey",
-            "range": {
+            "position": {
               "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
               "start": {
                 "line": 15,
@@ -83,7 +83,7 @@
             }
           }
         },
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 14,
@@ -101,7 +101,7 @@
     "state": {
       "method": {
         "source": "method.aes_gcm.new_method",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 19,
@@ -117,7 +117,7 @@
       },
       "fallback": {
         "source": "",
-        "range": {
+        "position": {
           "filename": "",
           "start": {
             "line": 0,
@@ -131,7 +131,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
         "start": {
           "line": 18,
@@ -148,7 +148,7 @@
     "plan": {
       "method": {
         "source": "method.aes_gcm.new_method",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
           "start": {
             "line": 23,
@@ -164,7 +164,7 @@
       },
       "fallback": {
         "source": "",
-        "range": {
+        "position": {
           "filename": "",
           "start": {
             "line": 0,
@@ -178,7 +178,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
         "start": {
           "line": 22,
@@ -192,7 +192,7 @@
         }
       }
     },
-    "range": {
+    "position": {
       "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
       "start": {
         "line": 9,

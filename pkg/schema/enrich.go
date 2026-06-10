@@ -38,24 +38,24 @@ func Enrich(module *model.Module, s *Schema) {
 	for index := range module.ManagedResources {
 		resource := &module.ManagedResources[index]
 		block, _ := s.LookupResource(providerSource(sources, resource.Provider, resource.Type), resource.Type)
-		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Range)
+		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Position)
 	}
 	for index := range module.DataResources {
 		resource := &module.DataResources[index]
 		block, _ := s.LookupDataSource(providerSource(sources, resource.Provider, resource.Type), resource.Type)
-		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Range)
+		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Position)
 	}
 	for index := range module.EphemeralResources {
 		resource := &module.EphemeralResources[index]
 		block, _ := s.LookupEphemeralResource(providerSource(sources, resource.Provider, resource.Type), resource.Type)
-		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Range)
+		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Position)
 	}
 }
 
 // findingsFor compares the user-set attribute names against the schema
 // block and returns the resulting findings, or nil when the schema does
 // not cover the block or there is nothing to report.
-func findingsFor(block *tfjson.Schema, attrNames []string, blockRange model.Range) *model.SchemaFindings {
+func findingsFor(block *tfjson.Schema, attrNames []string, blockRange model.Position) *model.SchemaFindings {
 	if block == nil || block.Block == nil {
 		return nil
 	}
@@ -71,16 +71,16 @@ func findingsFor(block *tfjson.Schema, attrNames []string, blockRange model.Rang
 		attribute, ok := schemaAttrs[name]
 		if !ok {
 			findings.UnknownAttrs = append(findings.UnknownAttrs, model.AttrFinding{
-				Name:  name,
-				Range: blockRange,
+				Name:     name,
+				Position: blockRange,
 			})
 			continue
 		}
 		if attribute.Deprecated {
 			findings.DeprecatedAttrs = append(findings.DeprecatedAttrs, model.DeprecatedAttr{
-				Name:    name,
-				Message: attribute.Description,
-				Range:   blockRange,
+				Name:     name,
+				Message:  attribute.Description,
+				Position: blockRange,
 			})
 		}
 	}

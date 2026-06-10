@@ -6,7 +6,7 @@
       "type": "string",
       "default": {
         "source": "\"us-east-1\"",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 8,
@@ -26,7 +26,7 @@
         {
           "condition": {
             "source": "can(regex(\"^[a-z]{2}-[a-z]+-[0-9]+$\", var.region))",
-            "range": {
+            "position": {
               "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
               "start": {
                 "line": 12,
@@ -42,7 +42,7 @@
           },
           "error_message": {
             "source": "\"Region must look like us-east-1.\"",
-            "range": {
+            "position": {
               "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
               "start": {
                 "line": 13,
@@ -56,7 +56,7 @@
               }
             }
           },
-          "range": {
+          "position": {
             "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
             "start": {
               "line": 11,
@@ -71,7 +71,7 @@
           }
         }
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 5,
@@ -90,7 +90,7 @@
       "type": "map(string)",
       "default": {
         "source": "{}",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 20,
@@ -105,7 +105,7 @@
         }
       },
       "description": "Tags applied to every resource.",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 17,
@@ -124,7 +124,7 @@
       "type": "list(object({\n    name = string\n    cpu  = number\n    mem  = number\n  }))",
       "default": {
         "source": "[]",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 29,
@@ -138,7 +138,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 23,
@@ -156,7 +156,7 @@
       "name": "db_password",
       "type": "string",
       "sensitive": true,
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 32,
@@ -175,7 +175,7 @@
       "type": "object({\n    enable_logging = optional(bool, true)\n    enable_metrics = optional(bool, false)\n  })",
       "default": {
         "source": "{}",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 42,
@@ -189,7 +189,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 37,
@@ -209,7 +209,7 @@
       "name": "region",
       "value": {
         "source": "var.region",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 55,
@@ -224,7 +224,7 @@
         }
       },
       "description": "Echoed region.",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 53,
@@ -242,7 +242,7 @@
       "name": "db_password",
       "value": {
         "source": "var.db_password",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 60,
@@ -258,7 +258,7 @@
       },
       "description": "Re-emitted password (sensitive).",
       "sensitive": true,
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 58,
@@ -276,7 +276,7 @@
       "name": "tag_count",
       "value": {
         "source": "length(local.common_tags)",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 65,
@@ -290,7 +290,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 64,
@@ -310,7 +310,7 @@
       "name": "common_tags",
       "value": {
         "source": "merge(var.tags, {\n    managed_by = \"open-inspector-fixture\"\n  })",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 46,
@@ -324,7 +324,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 46,
@@ -342,7 +342,7 @@
       "name": "region_short",
       "value": {
         "source": "substr(var.region, 0, 2)",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
           "start": {
             "line": 50,
@@ -356,7 +356,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
         "start": {
           "line": 50,

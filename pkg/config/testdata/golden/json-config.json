@@ -6,7 +6,7 @@
       "version_constraints": [
         "~\u003e 3.2"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/json-config/main.tf.json",
         "start": {
           "line": 4,
@@ -27,7 +27,7 @@
       "type": "\"string\"",
       "default": {
         "source": "\"json-fixture\"",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/json-config/main.tf.json",
           "start": {
             "line": 13,
@@ -41,7 +41,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/json-config/main.tf.json",
         "start": {
           "line": 11,
@@ -61,7 +61,7 @@
       "name": "id",
       "value": {
         "source": "\"${null_resource.example.id}\"",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/json-config/main.tf.json",
           "start": {
             "line": 27,
@@ -75,7 +75,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/json-config/main.tf.json",
         "start": {
           "line": 26,
@@ -98,7 +98,7 @@
       "attr_names": [
         "triggers"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/json-config/main.tf.json",
         "start": {
           "line": 18,

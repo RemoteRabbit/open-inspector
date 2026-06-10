@@ -12,26 +12,26 @@ type Encryption struct {
 	State              *EncryptionTarget       `json:"state,omitempty"`                     // state encryption target, if configured
 	Plan               *EncryptionTarget       `json:"plan,omitempty"`                      // plan encryption target, if configured
 	RemoteStateSources []EncryptionRemoteState `json:"remote_state_data_sources,omitempty"` // remote_state_data_sources entries
-	Range              Range                   `json:"range"`                               // source range of the encryption block
+	Position           Position                `json:"position"`                            // source position of the encryption block
 }
 
 // EncryptionKeyProvider describes one `key_provider "<type>" "<name>" {}`
 // inside an encryption block. The body schema is provider-defined, so
 // each attribute is captured verbatim as an Expression.
 type EncryptionKeyProvider struct {
-	Type  string                `json:"type"`           // key provider type
-	Name  string                `json:"name"`           // key provider name
-	Body  map[string]Expression `json:"body,omitempty"` // provider-defined attributes, captured verbatim
-	Range Range                 `json:"range"`          // source range of the block
+	Type     string                `json:"type"`           // key provider type
+	Name     string                `json:"name"`           // key provider name
+	Body     map[string]Expression `json:"body,omitempty"` // provider-defined attributes, captured verbatim
+	Position Position              `json:"position"`       // source position of the block
 }
 
 // EncryptionMethod describes one `method "<type>" "<name>" {}` inside
 // an encryption block. Body shape is method-defined; captured verbatim.
 type EncryptionMethod struct {
-	Type  string                `json:"type"`           // method type
-	Name  string                `json:"name"`           // method name
-	Body  map[string]Expression `json:"body,omitempty"` // method-defined attributes, captured verbatim
-	Range Range                 `json:"range"`          // source range of the block
+	Type     string                `json:"type"`           // method type
+	Name     string                `json:"name"`           // method name
+	Body     map[string]Expression `json:"body,omitempty"` // method-defined attributes, captured verbatim
+	Position Position              `json:"position"`       // source position of the block
 }
 
 // EncryptionTarget describes the `state {}` or `plan {}` sub-block:
@@ -39,13 +39,13 @@ type EncryptionMethod struct {
 type EncryptionTarget struct {
 	Method   Expression `json:"method"`             // required method reference
 	Fallback Expression `json:"fallback,omitempty"` // optional fallback method reference
-	Range    Range      `json:"range"`              // source range of the block
+	Position Position   `json:"position"`           // source position of the block
 }
 
 // EncryptionRemoteState describes a `remote_state_data_sources {}` entry.
 // Its body schema is open-ended; captured verbatim.
 type EncryptionRemoteState struct {
-	Name  string                `json:"name"`           // data source name
-	Body  map[string]Expression `json:"body,omitempty"` // open-ended attributes, captured verbatim
-	Range Range                 `json:"range"`          // source range of the block
+	Name     string                `json:"name"`           // data source name
+	Body     map[string]Expression `json:"body,omitempty"` // open-ended attributes, captured verbatim
+	Position Position              `json:"position"`       // source position of the block
 }

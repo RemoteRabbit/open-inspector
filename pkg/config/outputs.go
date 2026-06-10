@@ -25,8 +25,8 @@ var outputSchema = &hcl.BodySchema{
 // sensitive/ephemeral flags, and depends_on.
 func decodeOutputsBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	output := model.Output{
-		Name:  block.Labels[0],
-		Range: model.RangeFromHCL(block.DefRange),
+		Name:     block.Labels[0],
+		Position: model.PositionFromHCL(block.DefRange),
 	}
 
 	content, _, hdiag := block.Body.PartialContent(outputSchema)

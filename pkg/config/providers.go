@@ -23,8 +23,8 @@ var providerSchema = &hcl.BodySchema{
 // appends a ProviderConfig to mod.
 func decodeProviderBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	config := model.ProviderConfig{
-		Name:  block.Labels[0],
-		Range: model.RangeFromHCL(block.DefRange),
+		Name:     block.Labels[0],
+		Position: model.PositionFromHCL(block.DefRange),
 	}
 
 	content, _, hdiag := block.Body.PartialContent(providerSchema)

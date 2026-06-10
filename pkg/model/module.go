@@ -52,7 +52,7 @@ type ProviderRequirement struct {
 	Source               string   `json:"source,omitempty"`                // provider source address, e.g. "hashicorp/aws"
 	VersionConstraints   []string `json:"version_constraints,omitempty"`   // version constraint strings, e.g. ["~> 4.0"]
 	ConfigurationAliases []string `json:"configuration_aliases,omitempty"` // e.g. ["aws.east", "aws.west"]
-	Range                Range    `json:"range"`                           // source range of the entry
+	Position             Position `json:"position"`                        // source position of the entry
 }
 
 // Variable describes a single variable {} block declared by the module.
@@ -65,7 +65,7 @@ type Variable struct {
 	Nullable    *bool        `json:"nullable,omitempty"`    // pointer: distinguish unset vs false
 	Ephemeral   bool         `json:"ephemeral,omitempty"`   // whether the variable is ephemeral (TF/OpenTofu 1.10+)
 	Validations []Validation `json:"validations,omitempty"` // validation blocks attached to the variable
-	Range       Range        `json:"range"`                 // source range of the variable block
+	Position    Position     `json:"position"`              // source position of the variable block
 }
 
 // Validation describes a validation {} block attached to a Variable or
@@ -73,7 +73,7 @@ type Variable struct {
 type Validation struct {
 	Condition    Expression `json:"condition"`     // boolean condition expression
 	ErrorMessage Expression `json:"error_message"` // message shown when the condition fails
-	Range        Range      `json:"range"`         // source range of the validation block
+	Position     Position   `json:"position"`      // source position of the validation block
 }
 
 // Output describes a single output {} block declared by the module.
@@ -84,14 +84,14 @@ type Output struct {
 	Sensitive   bool       `json:"sensitive,omitempty"`   // whether the value is marked sensitive
 	Ephemeral   bool       `json:"ephemeral,omitempty"`   // whether the output is ephemeral (TF/OpenTofu 1.10+)
 	DependsOn   []string   `json:"depends_on,omitempty"`  // traversal source forms
-	Range       Range      `json:"range"`                 // source range of the output block
+	Position    Position   `json:"position"`              // source position of the output block
 }
 
 // Local describes a single name = value binding inside a locals {} block.
 type Local struct {
-	Name  string     `json:"name"`  // local value name
-	Value Expression `json:"value"` // value expression
-	Range Range      `json:"range"` // source range of the binding
+	Name     string     `json:"name"`     // local value name
+	Value    Expression `json:"value"`    // value expression
+	Position Position   `json:"position"` // source position of the binding
 }
 
 // ResourceMode distinguishes managed resources from data resources.
@@ -128,7 +128,7 @@ type Resource struct {
 	SchemaFindings *SchemaFindings `json:"schema_findings,omitempty"`
 
 	Lifecycle *Lifecycle `json:"lifecycle,omitempty"` // lifecycle block, if present
-	Range     Range      `json:"range"`               // source range of the resource block
+	Position  Position   `json:"position"`            // source position of the resource block
 }
 
 // Lifecycle describes a resource lifecycle {} block.
@@ -150,13 +150,13 @@ type ModuleCall struct {
 	ForEach   *Expression       `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
 	DependsOn []string          `json:"depends_on,omitempty"` // explicit dependency references
 	Providers map[string]string `json:"providers,omitempty"`  // local -> remote
-	Range     Range             `json:"range"`                // source range of the module block
+	Position  Position          `json:"position"`             // source position of the module block
 }
 
 // ProviderConfig describes a single provider {} configuration block.
 type ProviderConfig struct {
-	Name    string      `json:"name"`               // provider name, e.g. "aws"
-	Alias   string      `json:"alias,omitempty"`    // provider alias, if set
-	ForEach *Expression `json:"for_each,omitempty"` // for_each expression for multi-instance providers (OpenTofu 1.9+)
-	Range   Range       `json:"range"`              // source range of the provider block
+	Name     string      `json:"name"`               // provider name, e.g. "aws"
+	Alias    string      `json:"alias,omitempty"`    // provider alias, if set
+	ForEach  *Expression `json:"for_each,omitempty"` // for_each expression for multi-instance providers (OpenTofu 1.9+)
+	Position Position    `json:"position"`           // source position of the provider block
 }

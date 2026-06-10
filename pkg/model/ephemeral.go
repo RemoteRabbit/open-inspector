@@ -25,5 +25,5 @@ type EphemeralResource struct {
 	SchemaFindings *SchemaFindings `json:"schema_findings,omitempty"`
 
 	Lifecycle *Lifecycle `json:"lifecycle,omitempty"` // lifecycle block, if present
-	Range     Range      `json:"range"`               // source range of the ephemeral block
+	Position  Position   `json:"position"`            // source position of the ephemeral block
 }

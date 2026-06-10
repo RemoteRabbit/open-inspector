@@ -6,7 +6,7 @@
       "type": "string",
       "default": {
         "source": "\"eu-central-1\"",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/overrides/override.tf",
           "start": {
             "line": 5,
@@ -20,7 +20,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/overrides/main.tf",
         "start": {
           "line": 12,
@@ -43,7 +43,7 @@
       "attr_names": [
         "triggers"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/overrides/main.tf",
         "start": {
           "line": 5,

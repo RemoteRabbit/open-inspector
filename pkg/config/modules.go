@@ -14,8 +14,10 @@ var moduleSchema = &hcl.BodySchema{
 	Attributes: []hcl.AttributeSchema{
 		{Name: "source", Required: true},
 		{Name: "version"},
-		{Name: "count"}, {Name: "for_each"},
-		{Name: "providers"}, {Name: "depends_on"},
+		{Name: "count"},
+		{Name: "for_each"},
+		{Name: "providers"},
+		{Name: "depends_on"},
 	},
 }
 
@@ -24,8 +26,8 @@ var moduleSchema = &hcl.BodySchema{
 // providers, and depends_on meta-arguments.
 func decodeModuleCallBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	moduleCall := model.ModuleCall{
-		Name:  block.Labels[0],
-		Range: model.RangeFromHCL(block.DefRange),
+		Name:     block.Labels[0],
+		Position: model.PositionFromHCL(block.DefRange),
 	}
 
 	inner, _, hdiag := block.Body.PartialContent(moduleSchema)

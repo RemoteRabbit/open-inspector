@@ -13,7 +13,7 @@
         "aws.east",
         "aws.west"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 9,
@@ -32,7 +32,7 @@
       "version_constraints": [
         "~\u003e 3.4"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 18,
@@ -51,7 +51,7 @@
       "version_constraints": [
         "\u003e= 3.0, \u003c 4.0"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 14,
@@ -74,7 +74,7 @@
       "attr_names": [
         "byte_length"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 41,
@@ -97,7 +97,7 @@
       "attr_names": [
         "url"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 37,
@@ -116,7 +116,7 @@
     {
       "name": "aws",
       "alias": "east",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 25,
@@ -133,7 +133,7 @@
     {
       "name": "aws",
       "alias": "west",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 30,
@@ -149,7 +149,7 @@
     },
     {
       "name": "random",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
           "line": 35,

@@ -36,8 +36,8 @@ var validationSchema = &hcl.BodySchema{
 // nullable, ephemeral), and any validation {} blocks.
 func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) model.Diagnostics {
 	variable := model.Variable{
-		Name:  block.Labels[0],
-		Range: model.RangeFromHCL(block.DefRange),
+		Name:     block.Labels[0],
+		Position: model.PositionFromHCL(block.DefRange),
 	}
 	content, _, hdiag := block.Body.PartialContent(variableSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
@@ -106,7 +106,7 @@ func decodeVariableBlock(block *hcl.Block, source []byte, module *model.Module) 
 		variable.Validations = append(variable.Validations, model.Validation{
 			Condition:    capture(condition.Expr, source),
 			ErrorMessage: capture(errorMessage.Expr, source),
-			Range:        model.RangeFromHCL(variableBlock.DefRange),
+			Position:     model.PositionFromHCL(variableBlock.DefRange),
 		})
 	}
 	module.Variables = append(module.Variables, variable)
