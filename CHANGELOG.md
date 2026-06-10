@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.3.0...v0.4.0) (2026-06-06)
+
+
+### Features
+
+* **pkg:** Schema aware inspection ([#56](https://github.com/RemoteRabbit/open-inspector/issues/56)) ([edc5904](https://github.com/RemoteRabbit/open-inspector/commit/edc5904a3dbf75229527734e237db9afff8b0c16))
+
 ## [0.3.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.2.0...v0.3.0) (2026-06-06)
 
 
