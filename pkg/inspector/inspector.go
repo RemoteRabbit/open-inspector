@@ -23,9 +23,10 @@ import (
 // trailing marker comment is required - do not remove it.
 var Version = "0.4.1" // x-release-please-version
 
-// Inspect performs a (currently stub) inspection of the Terraform/OpenTofu
-// module rooted at dir and returns the resulting model. Future steps will
-// add HCL parsing, child module resolution, and optional schema enrichment.
+// Inspect loads the Terraform/OpenTofu module rooted at dir and returns the
+// resulting model. It always parses the module's configuration; passing
+// WithModuleGraph also resolves child module calls, and WithSchema or
+// WithSchemaAuto enriches the model with provider-schema findings.
 func Inspect(dir string, opts ...Option) (*model.Module, error) {
 	defaults := defaultOptions()
 	for _, fn := range opts {

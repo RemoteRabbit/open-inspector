@@ -3,11 +3,10 @@
 A modern, OpenTofu-aware inspector for Terraform / OpenTofu configurations,
 usable both as a Go library and a CLI.
 
-> **Status:** the config loader is complete: it parses every
-> Terraform / OpenTofu module directory listed under "Compatibility"
-> below into a stable, source-range-accurate `model.Module`. The CLI is
-> still a thin scaffold; module-graph resolution and provider-schema
-> enrichment are the next milestones.
+> **Status:** the config loader, the cobra CLI (`config` and `graph`
+> subcommands), module-graph resolution (local, registry, git, and http
+> sources), and optional provider-schema enrichment are all in place. Work
+> now focuses on enriching the model itself; see "Coming next" below.
 
 ## Goals
 
@@ -23,6 +22,61 @@ usable both as a Go library and a CLI.
   `configuration_aliases`, and other features the original
   `terraform-config-inspect` never learned.
 
+## Design thesis
+
+A few principles drive every decision in this codebase. They explain why the
+model looks the way it does and what the project deliberately refuses to do.
+
+- **The model is the product.** The deliverable is a stable,
+  JSON-serializable, source-range-accurate `model.Module`, consumed
+  identically by the Go library, the CLI, and downstream tools. `pkg/model`
+  and `pkg/inspector` are the public contract; lower-level packages
+  (`config`, `graph`, `schema`) may change without notice until v1.
+- **Capture, never evaluate.** Every expression is stored verbatim (its
+  source bytes plus its range) and is never resolved by the loader.
+  Downstream consumers decide whether and how to evaluate. This preserves
+  authoring detail that evaluation would erase, such as the
+  `optional(T, default)` markers in a variable type.
+- **Partial, forward-compatible decoding.** Decoding is schema-driven:
+  blocks and attributes the loader does not yet understand are ignored, not
+  rejected. A module that uses a brand-new Terraform or OpenTofu feature
+  still loads cleanly; explicit support can be added later without breaking
+  older files.
+- **Diagnostics, not failures.** Malformed configuration produces
+  `Diagnostics` on the result rather than aborting. Only system-level
+  problems (for example, an unreadable directory) return a Go `error`. One
+  bad file never sinks the whole inspection.
+- **Deterministic, byte-identical output.** Paths are normalized to forward
+  slashes, `\r\n` is collapsed to `\n`, maps and locals are sorted, and
+  slices keep encounter order. Output is identical across Linux, macOS, and
+  Windows, and golden snapshots enforce it.
+- **OpenTofu is a first-class peer.** `.tofu` / `.tofu.json` files,
+  `encryption {}` blocks, and provider `for_each` are handled alongside
+  their Terraform equivalents, not bolted on as an afterthought.
+- **The schema is a versioned contract.** `model.SchemaVersion` and the
+  generated JSON Schema (`docs/schema/`) define the wire format. Changes are
+  additive (new `omitempty` fields) unless a deliberate, breaking version
+  bump is made.
+
+### Hard decisions and trade-offs
+
+- **Verbatim over typed (for now).** Variable types and defaults are kept as
+  source strings, not decoded trees. This chose round-trip fidelity over
+  consumer convenience; richer structured forms are additive future work.
+- **HCL2 floor (Terraform 0.12+).** The pre-0.12 untyped-attribute syntax is
+  unsupported. The legacy `required_providers { aws = "~> 4.0" }` shorthand
+  is still accepted.
+- **Best-effort over strict.** `AttrNames` captures top-level attribute
+  names only, and override merging silently ignores override blocks with no
+  matching target (tracked as a TODO). Loading something useful beats
+  rejecting the input.
+- **Out-of-process, optional schema enrichment.** Provider details come from
+  `terraform`/`tofu providers schema -json`; the project never executes
+  providers itself, and enrichment failures degrade to warnings rather than
+  errors.
+- **One source of truth for builds.** CI and the git hooks both shell out to
+  the same `make` targets, so local and remote checks can never drift.
+
 ## Compatibility
 
 The config loader uses schema-driven partial decoding, which means it
@@ -36,9 +90,8 @@ erroring on them. The practical compatibility floor is:
   `postcondition` / `replace_triggered_by` (1.2+), `nullable` (1.1+),
   `optional(T, default)` in type expressions (1.3+, preserved verbatim).
 - **OpenTofu** all versions. `.tofu` and `.tofu.json` files are walked
-  alongside their `.tf` cousins. OpenTofu-specific blocks like
-  `encryption {}` and provider `for_each` parse without errors today but
-  their fields are not yet surfaced (see "Coming next" below).
+  alongside their `.tf` cousins, and OpenTofu-specific constructs like the
+  `encryption {}` block and provider `for_each` are decoded into the model.
 - **Forward compatibility** is automatic: when Terraform or OpenTofu
   adds a new block or attribute, the loader will load the file cleanly
   and ignore the new construct until a future release of open-inspector
@@ -50,28 +103,42 @@ supported.
 
 ## Coming next
 
-Near-term:
+The loader, CLI, module graph, and schema enrichment are in place; the focus
+now is making the model richer for downstream consumers. Each item below is
+additive to both the model and the JSON schema:
 
-- **CLI:** replace the flag scaffold with cobra; add
-  `open-inspector config <dir>` with a human table renderer and
-  versioned JSON output; configurable exit codes via
-  `--fail-on=error|warning|never`; auto-generated markdown and man-page
-  docs.
-- **module graph:** recursively resolve `module` calls across
-  local, registry, git, and HTTP sources; emit JSON, DOT, Mermaid, or
-  tree views; cache downloaded modules under `$XDG_CACHE_HOME`.
-- **provider schema enrichment, optional:** annotate the model
-  with unknown attributes, deprecations, and missing-required findings
-  from `tofu providers schema -json` output.
+- **Reference extraction:** expose the `var` / `local` / `module` / `data` /
+  resource references each expression makes as structured data, not just
+  verbatim source. Unblocks used-by cross-references and unused-variable /
+  unreferenced-output detection.
+- **Doc-comment capture:** attach the leading comment above a block so it can
+  serve as a description when no `description` argument is set.
+- **Structured variable types and decoded defaults:** surface the parsed
+  type as a tree and constant defaults as typed values, alongside the
+  verbatim source kept today.
 
-## Usage (today)
+## Usage
 
 ```sh
 make build
-./bin/open-inspector .
-./bin/open-inspector --json .
+
+# Inspect a module directory.
+./bin/open-inspector config ./path/to/module
+./bin/open-inspector config --json ./path/to/module
+./bin/open-inspector config --schema schema.json ./path/to/module
+
+# Render the module call graph.
+./bin/open-inspector graph ./path/to/module                  # tree (default)
+./bin/open-inspector graph --format mermaid ./path/to/module
+./bin/open-inspector graph --format dot ./path/to/module
+./bin/open-inspector graph --format json ./path/to/module
+
 ./bin/open-inspector --version
 ```
+
+Both subcommands accept `--fail-on=error|warning|never` to control the exit
+code. See [docs/cli](./docs/cli) for the generated command reference and
+[docs/man](./docs/man) for man pages.
 
 ## Library
 
