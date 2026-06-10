@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.4.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.4.0...v0.4.1) (2026-06-10)
+
+
+### Dependencies
+
+* **github.com/hashicorp/terraform-json:** update module github.com/hashicorp/terraform-json to v0.27.2 ([#59](https://github.com/RemoteRabbit/open-inspector/issues/59)) ([c45c0ba](https://github.com/RemoteRabbit/open-inspector/commit/c45c0ba29a7e99f600e382e249475cf6b81aaf1e))
+
+
+### Documentation
+
+* Setup rough fuzz testings and Schema doc generation ([#62](https://github.com/RemoteRabbit/open-inspector/issues/62)) ([23d1427](https://github.com/RemoteRabbit/open-inspector/commit/23d1427dcf2762a33210caba50aec2204b9ecb0d))
+
 ## [0.4.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.3.0...v0.4.0) (2026-06-06)
 
 
