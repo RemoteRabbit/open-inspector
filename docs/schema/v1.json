@@ -12,9 +12,9 @@
           "$ref": "#/$defs/Expression",
           "description": "message shown when the condition fails"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the assert block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the assert block"
         }
       },
       "additionalProperties": false,
@@ -22,7 +22,7 @@
       "required": [
         "condition",
         "expression",
-        "range"
+        "position"
       ],
       "description": "Assertion is one `assert { condition, error_message }` inside a check block."
     },
@@ -32,8 +32,8 @@
           "type": "string",
           "description": "attribute name"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
+        "position": {
+          "$ref": "#/$defs/Position",
           "description": "where the attribute was set"
         }
       },
@@ -41,7 +41,7 @@
       "type": "object",
       "required": [
         "name",
-        "range"
+        "position"
       ],
       "description": "AttrFinding names a single attribute and points at the block that set it."
     },
@@ -62,16 +62,16 @@
           "type": "array",
           "description": "assert blocks inside the check"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the check block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the check block"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "name",
-        "range"
+        "position"
       ],
       "description": "CheckBlock corresponds to `check \"\u003cname\u003e\" { data ..."
     },
@@ -120,8 +120,8 @@
           "type": "string",
           "description": "schema's deprecation message"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
+        "position": {
+          "$ref": "#/$defs/Position",
           "description": "where the attribute was set"
         }
       },
@@ -129,7 +129,7 @@
       "type": "object",
       "required": [
         "name",
-        "range"
+        "position"
       ],
       "description": "DeprecatedAttr names a deprecated attribute and carries the schema's deprecation/description message."
     },
@@ -148,11 +148,11 @@
           "description": "optional longer explanation"
         },
         "subject": {
-          "$ref": "#/$defs/Range",
+          "$ref": "#/$defs/Position",
           "description": "optional primary source location"
         },
         "context": {
-          "$ref": "#/$defs/Range",
+          "$ref": "#/$defs/Position",
           "description": "optional surrounding source location"
         }
       },
@@ -202,15 +202,15 @@
           "type": "array",
           "description": "remote_state_data_sources entries"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the encryption block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the encryption block"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "range"
+        "position"
       ],
       "description": "Encryption corresponds to OpenTofu's `terraform { encryption {} }` configuration tree (OpenTofu 1.7+)."
     },
@@ -231,9 +231,9 @@
           "type": "object",
           "description": "provider-defined attributes, captured verbatim"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the block"
         }
       },
       "additionalProperties": false,
@@ -241,7 +241,7 @@
       "required": [
         "type",
         "name",
-        "range"
+        "position"
       ],
       "description": "EncryptionKeyProvider describes one `key_provider \"\u003ctype\u003e\" \"\u003cname\u003e\" {}` inside an encryption block."
     },
@@ -262,9 +262,9 @@
           "type": "object",
           "description": "method-defined attributes, captured verbatim"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the block"
         }
       },
       "additionalProperties": false,
@@ -272,7 +272,7 @@
       "required": [
         "type",
         "name",
-        "range"
+        "position"
       ],
       "description": "EncryptionMethod describes one `method \"\u003ctype\u003e\" \"\u003cname\u003e\" {}` inside an encryption block."
     },
@@ -289,16 +289,16 @@
           "type": "object",
           "description": "open-ended attributes, captured verbatim"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the block"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "name",
-        "range"
+        "position"
       ],
       "description": "EncryptionRemoteState describes a `remote_state_data_sources {}` entry."
     },
@@ -312,16 +312,16 @@
           "$ref": "#/$defs/Expression",
           "description": "optional fallback method reference"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the block"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "method",
-        "range"
+        "position"
       ],
       "description": "EncryptionTarget describes the `state {}` or `plan {}` sub-block: a required `method` reference and an optional `fallback`."
     },
@@ -369,9 +369,9 @@
           "$ref": "#/$defs/Lifecycle",
           "description": "lifecycle block, if present"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the ephemeral block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the ephemeral block"
         }
       },
       "additionalProperties": false,
@@ -379,7 +379,7 @@
       "required": [
         "type",
         "name",
-        "range"
+        "position"
       ],
       "description": "EphemeralResource corresponds to `ephemeral \"\u003ctype\u003e\" \"\u003cname\u003e\" {}` Same meta-args as a managed resource."
     },
@@ -389,8 +389,8 @@
           "type": "string",
           "description": "verbatim HCL source bytes"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
+        "position": {
+          "$ref": "#/$defs/Position",
           "description": "position of the expression in source"
         }
       },
@@ -398,7 +398,7 @@
       "type": "object",
       "required": [
         "source",
-        "range"
+        "position"
       ],
       "description": "Expression is a snippet of HCL source captured at parse time."
     },
@@ -416,9 +416,9 @@
           "type": "string",
           "description": "provider reference, if set"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the import block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the import block"
         }
       },
       "additionalProperties": false,
@@ -426,7 +426,7 @@
       "required": [
         "to",
         "id",
-        "range"
+        "position"
       ],
       "description": "ImportBlock corresponds to `import { to = X, id = ..., provider = ..."
     },
@@ -483,9 +483,9 @@
           "$ref": "#/$defs/Expression",
           "description": "value expression"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the binding"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the binding"
         }
       },
       "additionalProperties": false,
@@ -493,7 +493,7 @@
       "required": [
         "name",
         "value",
-        "range"
+        "position"
       ],
       "description": "Local describes a single name = value binding inside a locals {} block."
     },
@@ -533,9 +533,9 @@
           "type": "object",
           "description": "local -\u003e remote"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the module block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the module block"
         }
       },
       "additionalProperties": false,
@@ -543,7 +543,7 @@
       "required": [
         "name",
         "source",
-        "range"
+        "position"
       ],
       "description": "ModuleCall describes a module {} block invoking another module."
     },
@@ -557,9 +557,9 @@
           "type": "string",
           "description": "new address"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the moved block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the moved block"
         }
       },
       "additionalProperties": false,
@@ -567,7 +567,7 @@
       "required": [
         "from",
         "to",
-        "range"
+        "position"
       ],
       "description": "MovedBlock corresponds to `moved { from = X, to = Y }`"
     },
@@ -600,9 +600,9 @@
           "type": "array",
           "description": "traversal source forms"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the output block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the output block"
         }
       },
       "additionalProperties": false,
@@ -610,7 +610,7 @@
       "required": [
         "name",
         "value",
-        "range"
+        "position"
       ],
       "description": "Output describes a single output {} block declared by the module."
     },
@@ -638,6 +638,30 @@
       ],
       "description": "Pos is a single position within a source file."
     },
+    "Position": {
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "source file, with forward-slash separators"
+        },
+        "start": {
+          "$ref": "#/$defs/Pos",
+          "description": "start position (inclusive)"
+        },
+        "end": {
+          "$ref": "#/$defs/Pos",
+          "description": "end position (exclusive)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "filename",
+        "start",
+        "end"
+      ],
+      "description": "Position identifies a contiguous span of source code."
+    },
     "ProviderConfig": {
       "properties": {
         "name": {
@@ -652,16 +676,16 @@
           "$ref": "#/$defs/Expression",
           "description": "for_each expression for multi-instance providers (OpenTofu 1.9+)"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the provider block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the provider block"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "name",
-        "range"
+        "position"
       ],
       "description": "ProviderConfig describes a single provider {} configuration block."
     },
@@ -685,41 +709,17 @@
           "type": "array",
           "description": "e.g. [\"aws.east\", \"aws.west\"]"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the entry"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the entry"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "range"
+        "position"
       ],
       "description": "ProviderRequirement describes a single entry inside a terraform.required_providers block."
-    },
-    "Range": {
-      "properties": {
-        "filename": {
-          "type": "string",
-          "description": "source file, with forward-slash separators"
-        },
-        "start": {
-          "$ref": "#/$defs/Pos",
-          "description": "start position (inclusive)"
-        },
-        "end": {
-          "$ref": "#/$defs/Pos",
-          "description": "end position (exclusive)"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "required": [
-        "filename",
-        "start",
-        "end"
-      ],
-      "description": "Range identifies a contiguous span of source code."
     },
     "RemovedBlock": {
       "properties": {
@@ -731,16 +731,16 @@
           "type": "boolean",
           "description": "whether to destroy on removal (lifecycle { destroy })"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the removed block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the removed block"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "from",
-        "range"
+        "position"
       ],
       "description": "RemovedBlock corresponds to `removed { from, lifecycle {destroy } }`"
     },
@@ -823,9 +823,9 @@
           "$ref": "#/$defs/Lifecycle",
           "description": "lifecycle block, if present"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the resource block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the resource block"
         }
       },
       "additionalProperties": false,
@@ -834,7 +834,7 @@
         "mode",
         "type",
         "name",
-        "range"
+        "position"
       ],
       "description": "Resource describes a single resource {} or data {} block."
     },
@@ -876,9 +876,9 @@
           "$ref": "#/$defs/Expression",
           "description": "message shown when the condition fails"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the validation block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the validation block"
         }
       },
       "additionalProperties": false,
@@ -886,7 +886,7 @@
       "required": [
         "condition",
         "error_message",
-        "range"
+        "position"
       ],
       "description": "Validation describes a validation {} block attached to a Variable or to a resource lifecycle precondition/postcondition."
     },
@@ -927,16 +927,16 @@
           "type": "array",
           "description": "validation blocks attached to the variable"
         },
-        "range": {
-          "$ref": "#/$defs/Range",
-          "description": "source range of the variable block"
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the variable block"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
         "name",
-        "range"
+        "position"
       ],
       "description": "Variable describes a single variable {} block declared by the module."
     }
