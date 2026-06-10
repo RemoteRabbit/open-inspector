@@ -1,0 +1,69 @@
+name: Parsing / OpenTofu compatibility
+description: Report a Terraform or OpenTofu construct that is modeled incorrectly or not at all.
+title: "parsing: <construct> handled incorrectly"
+labels: ["bug", "parsing"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this for cases where a valid Terraform/OpenTofu construct is parsed
+        into the wrong model, or is silently ignored when it should be modeled.
+        Reminder: unknown blocks/attributes are **ignored by design**, not errors;
+        report cases where a construct open-inspector *claims* to support is wrong.
+  - type: dropdown
+    id: dialect
+    attributes:
+      label: Dialect
+      options:
+        - Terraform (.tf / .tf.json)
+        - OpenTofu (.tofu / .tofu.json)
+        - Override file (_override)
+        - Both / either
+    validations:
+      required: true
+  - type: input
+    id: construct
+    attributes:
+      label: Construct
+      description: The language construct involved.
+      placeholder: provider for_each, encryption {}, moved {}, dynamic blocks, ...
+    validations:
+      required: true
+  - type: textarea
+    id: config
+    attributes:
+      label: Config
+      description: The minimal config exhibiting the problem.
+      render: hcl
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual model / output
+      description: What open-inspector produced (JSON, diagnostics, or golden snapshot).
+      render: json
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected model / output
+      description: What the model should contain instead.
+      render: json
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: open-inspector version
+      placeholder: v0.x.y or commit abc1234
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this has not been reported.
+          required: true

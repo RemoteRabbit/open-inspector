@@ -1,0 +1,100 @@
+name: Bug report
+description: Report incorrect parsing, a wrong model, a panic, or other broken behavior.
+title: "bug: <short summary>"
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please fill in as much as you can.
+        A minimal Terraform/OpenTofu config that reproduces the issue is the single
+        most helpful thing you can provide.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear and concise description of the bug.
+      placeholder: open-inspector reported X, but I expected Y.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect the model/output/diagnostics to be?
+    validations:
+      required: true
+  - type: textarea
+    id: repro-config
+    attributes:
+      label: Minimal config to reproduce
+      description: >-
+        The smallest `.tf` / `.tf.json` / `.tofu` / `.tofu.json` snippet that
+        triggers the bug. This will be rendered as HCL.
+      render: hcl
+      placeholder: |
+        resource "aws_s3_bucket" "example" {
+          bucket = "my-bucket"
+        }
+    validations:
+      required: true
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Steps to reproduce
+      description: How you invoked open-inspector (CLI flags, or the library call).
+      placeholder: |
+        1. open-inspector inspect ./path
+        2. Observe the JSON output / diagnostics
+    validations:
+      required: true
+  - type: textarea
+    id: actual-output
+    attributes:
+      label: Actual output
+      description: Relevant CLI output, JSON, diagnostics, or a panic stack trace.
+      render: shell
+    validations:
+      required: false
+  - type: dropdown
+    id: usage
+    attributes:
+      label: How are you using open-inspector?
+      options:
+        - CLI (open-inspector binary)
+        - Go library (pkg/inspector, pkg/config, ...)
+        - Both
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: open-inspector version
+      description: Output of `open-inspector --version`, or the module version / commit SHA.
+      placeholder: v0.x.y or commit abc1234
+    validations:
+      required: true
+  - type: input
+    id: go-version
+    attributes:
+      label: Go version
+      description: Output of `go version` (only if using the library or building from source).
+      placeholder: go1.26.3
+    validations:
+      required: false
+  - type: input
+    id: os
+    attributes:
+      label: OS / arch
+      placeholder: linux/amd64, darwin/arm64, windows/amd64
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this has not been reported.
+          required: true
+        - label: I am on the latest release (or a recent commit) of open-inspector.
+          required: false
