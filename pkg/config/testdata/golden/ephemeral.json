@@ -9,7 +9,7 @@
       "version_constraints": [
         "~\u003e 3.6"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/ephemeral/main.tf",
         "start": {
           "line": 9,
@@ -29,7 +29,7 @@
       "name": "ephemeral_input",
       "type": "string",
       "ephemeral": true,
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/ephemeral/main.tf",
         "start": {
           "line": 16,
@@ -49,7 +49,7 @@
       "name": "ephemeral_token",
       "value": {
         "source": "ephemeral.random_password.db.result",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/ephemeral/main.tf",
           "start": {
             "line": 27,
@@ -65,7 +65,7 @@
       },
       "sensitive": true,
       "ephemeral": true,
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/ephemeral/main.tf",
         "start": {
           "line": 26,
@@ -88,7 +88,7 @@
         "length",
         "special"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/ephemeral/main.tf",
         "start": {
           "line": 21,

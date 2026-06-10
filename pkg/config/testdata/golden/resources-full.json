@@ -10,7 +10,7 @@
         "aws.east",
         "aws.west"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-full/main.tf",
         "start": {
           "line": 18,
@@ -48,7 +48,7 @@
           {
             "condition": {
               "source": "length(\"ami-12345\") \u003e 0",
-              "range": {
+              "position": {
                 "filename": "\u003cfixture\u003e/resources-full/main.tf",
                 "start": {
                   "line": 43,
@@ -64,7 +64,7 @@
             },
             "error_message": {
               "source": "\"ami must be set\"",
-              "range": {
+              "position": {
                 "filename": "\u003cfixture\u003e/resources-full/main.tf",
                 "start": {
                   "line": 44,
@@ -78,7 +78,7 @@
                 }
               }
             },
-            "range": {
+            "position": {
               "filename": "\u003cfixture\u003e/resources-full/main.tf",
               "start": {
                 "line": 42,
@@ -97,7 +97,7 @@
           {
             "condition": {
               "source": "self.id != \"\"",
-              "range": {
+              "position": {
                 "filename": "\u003cfixture\u003e/resources-full/main.tf",
                 "start": {
                   "line": 48,
@@ -113,7 +113,7 @@
             },
             "error_message": {
               "source": "\"instance must have an id\"",
-              "range": {
+              "position": {
                 "filename": "\u003cfixture\u003e/resources-full/main.tf",
                 "start": {
                   "line": 49,
@@ -127,7 +127,7 @@
                 }
               }
             },
-            "range": {
+            "position": {
               "filename": "\u003cfixture\u003e/resources-full/main.tf",
               "start": {
                 "line": 47,
@@ -143,7 +143,7 @@
           }
         ]
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-full/main.tf",
         "start": {
           "line": 31,
@@ -166,7 +166,7 @@
           "all"
         ]
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-full/main.tf",
         "start": {
           "line": 54,
@@ -191,7 +191,7 @@
       "providers": {
         "aws": "aws.east"
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-full/main.tf",
         "start": {
           "line": 60,
@@ -210,7 +210,7 @@
     {
       "name": "aws",
       "alias": "east",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-full/main.tf",
         "start": {
           "line": 26,

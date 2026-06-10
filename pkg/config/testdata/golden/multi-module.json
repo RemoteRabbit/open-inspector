@@ -6,7 +6,7 @@
       "type": "string",
       "default": {
         "source": "\"fixture\"",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/multi-module/main.tf",
           "start": {
             "line": 7,
@@ -20,7 +20,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",
         "start": {
           "line": 5,
@@ -40,7 +40,7 @@
       "name": "compute_id",
       "value": {
         "source": "module.compute.id",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/multi-module/main.tf",
           "start": {
             "line": 23,
@@ -54,7 +54,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",
         "start": {
           "line": 22,
@@ -73,7 +73,7 @@
     {
       "name": "network",
       "source": "./modules/network",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",
         "start": {
           "line": 10,
@@ -90,7 +90,7 @@
     {
       "name": "compute",
       "source": "./modules/compute",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",
         "start": {
           "line": 15,

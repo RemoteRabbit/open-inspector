@@ -34,7 +34,7 @@ func walk(dir string) (fileSet, model.Diagnostics) {
 			Severity: model.SeverityError,
 			Summary:  "cannot read module directory.",
 			Detail:   err.Error(),
-			Subject:  &model.Range{Filename: dir},
+			Subject:  &model.Position{Filename: dir},
 		}}
 	}
 

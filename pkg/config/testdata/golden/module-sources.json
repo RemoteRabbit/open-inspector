@@ -4,7 +4,7 @@
     {
       "name": "local_relative",
       "source": "../multi-module/modules/network",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {
           "line": 6,
@@ -22,7 +22,7 @@
       "name": "registry",
       "source": "terraform-aws-modules/vpc/aws",
       "version": "~\u003e 5.0",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {
           "line": 11,
@@ -39,7 +39,7 @@
     {
       "name": "git_https",
       "source": "git::https://example.com/example/network.git//modules/vpc?ref=v1.2.3",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {
           "line": 19,
@@ -56,7 +56,7 @@
     {
       "name": "git_ssh",
       "source": "git::ssh://git@example.com/example/network.git?ref=main",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {
           "line": 23,
@@ -73,7 +73,7 @@
     {
       "name": "github_shorthand",
       "source": "github.com/example/network//modules/vpc?ref=v1.2.3",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {
           "line": 27,
@@ -90,7 +90,7 @@
     {
       "name": "http_archive",
       "source": "https://example.com/modules/network-1.0.0.zip",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {
           "line": 31,

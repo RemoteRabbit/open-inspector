@@ -28,10 +28,10 @@ var resourceSchema = &hcl.BodySchema{
 // the lifecycle {} block.
 func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMode, module *model.Module) model.Diagnostics {
 	resource := model.Resource{
-		Mode:  mode,
-		Type:  block.Labels[0],
-		Name:  block.Labels[1],
-		Range: model.RangeFromHCL(block.DefRange),
+		Mode:     mode,
+		Type:     block.Labels[0],
+		Name:     block.Labels[1],
+		Position: model.PositionFromHCL(block.DefRange),
 	}
 
 	inner, remain, hdiag := block.Body.PartialContent(resourceSchema)
@@ -96,7 +96,7 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 				DependsOn: resource.DependsOn,
 				AttrNames: resource.AttrNames,
 				Lifecycle: resource.Lifecycle,
-				Range:     resource.Range,
+				Position:  resource.Position,
 			})
 	}
 	return diags
@@ -188,6 +188,6 @@ func decodeConditionBlock(block *hcl.Block, source []byte) (model.Validation, bo
 	return model.Validation{
 		Condition:    capture(condition.Expr, source),
 		ErrorMessage: capture(errorMessage.Expr, source),
-		Range:        model.RangeFromHCL(block.DefRange),
+		Position:     model.PositionFromHCL(block.DefRange),
 	}, true, diags
 }

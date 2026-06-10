@@ -18,11 +18,11 @@ const (
 // Diagnostic is a single problem reported by a loader, with optional
 // source location information.
 type Diagnostic struct {
-	Severity Severity `json:"severity"`          // error or warning
-	Summary  string   `json:"summary"`           // short problem description
-	Detail   string   `json:"detail,omitempty"`  // optional longer explanation
-	Subject  *Range   `json:"subject,omitempty"` // optional primary source location
-	Context  *Range   `json:"context,omitempty"` // optional surrounding source location
+	Severity Severity  `json:"severity"`          // error or warning
+	Summary  string    `json:"summary"`           // short problem description
+	Detail   string    `json:"detail,omitempty"`  // optional longer explanation
+	Subject  *Position `json:"subject,omitempty"` // optional primary source location
+	Context  *Position `json:"context,omitempty"` // optional surrounding source location
 }
 
 // Diagnostics is a collection of Diagnostic values.
@@ -50,11 +50,11 @@ func DiagnosticsFromHCL(hcld hcl.Diagnostics) Diagnostics {
 		}
 		newDiag := Diagnostic{Severity: sev, Summary: diag.Summary, Detail: diag.Detail}
 		if diag.Subject != nil {
-			rang := RangeFromHCL(*diag.Subject)
+			rang := PositionFromHCL(*diag.Subject)
 			newDiag.Subject = &rang
 		}
 		if diag.Context != nil {
-			rang := RangeFromHCL(*diag.Context)
+			rang := PositionFromHCL(*diag.Context)
 			newDiag.Context = &rang
 		}
 		output = append(output, newDiag)

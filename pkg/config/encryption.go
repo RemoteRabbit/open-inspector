@@ -37,16 +37,16 @@ func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module
 	inner, _, hdiag := block.Body.PartialContent(encryptionSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
-	encryption := &model.Encryption{Range: model.RangeFromHCL(block.DefRange)}
+	encryption := &model.Encryption{Position: model.PositionFromHCL(block.DefRange)}
 
 	for _, keyProvider := range inner.Blocks.OfType("key_provider") {
 		body, bdiag := captureAttributeMap(keyProvider.Body, source)
 		diags = append(diags, bdiag...)
 		encryption.KeyProviders = append(encryption.KeyProviders, model.EncryptionKeyProvider{
-			Type:  keyProvider.Labels[0],
-			Name:  keyProvider.Labels[1],
-			Body:  body,
-			Range: model.RangeFromHCL(keyProvider.DefRange),
+			Type:     keyProvider.Labels[0],
+			Name:     keyProvider.Labels[1],
+			Body:     body,
+			Position: model.PositionFromHCL(keyProvider.DefRange),
 		})
 	}
 
@@ -54,10 +54,10 @@ func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module
 		body, bdiag := captureAttributeMap(method.Body, source)
 		diags = append(diags, bdiag...)
 		encryption.Methods = append(encryption.Methods, model.EncryptionMethod{
-			Type:  method.Labels[0],
-			Name:  method.Labels[1],
-			Body:  body,
-			Range: model.RangeFromHCL(method.DefRange),
+			Type:     method.Labels[0],
+			Name:     method.Labels[1],
+			Body:     body,
+			Position: model.PositionFromHCL(method.DefRange),
 		})
 	}
 
@@ -77,8 +77,8 @@ func decodeEncryptionBlock(block *hcl.Block, source []byte, module *model.Module
 		body, bdiag := captureAttributeMap(remote.Body, source)
 		diags = append(diags, bdiag...)
 		encryption.RemoteStateSources = append(encryption.RemoteStateSources, model.EncryptionRemoteState{
-			Body:  body,
-			Range: model.RangeFromHCL(remote.DefRange),
+			Body:     body,
+			Position: model.PositionFromHCL(remote.DefRange),
 		})
 	}
 
@@ -93,7 +93,7 @@ func decodeEncryptionTarget(block *hcl.Block, source []byte) (*model.EncryptionT
 	content, _, hdiag := block.Body.PartialContent(encryptionTargetSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
-	target := &model.EncryptionTarget{Range: model.RangeFromHCL(block.DefRange)}
+	target := &model.EncryptionTarget{Position: model.PositionFromHCL(block.DefRange)}
 	if attribute, ok := content.Attributes["method"]; ok {
 		target.Method = capture(attribute.Expr, source)
 	}

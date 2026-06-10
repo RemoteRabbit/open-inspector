@@ -10,8 +10,8 @@ import (
 	"github.com/hashicorp/hcl/v2"
 )
 
-// Range identifies a contiguous span of source code.
-type Range struct {
+// Position identifies a contiguous span of source code.
+type Position struct {
 	Filename string `json:"filename"` // source file, with forward-slash separators
 	Start    Pos    `json:"start"`    // start position (inclusive)
 	End      Pos    `json:"end"`      // end position (exclusive)
@@ -24,14 +24,14 @@ type Pos struct {
 	Byte   int `json:"byte"`   // 0-based byte offset
 }
 
-// RangeFromHCL converts an hcl.Range into the model's wire-friendly Range.
+// PositionFromHCL converts an hcl.Range into the model's wire-friendly Range.
 //
 // Filename is normalized to forward slashes so JSON output is byte-identical
-// across Linux, macOS, and Windows. This is the sole chokepoint where
+// across Linux, macOS, and Windows. This is the sole choke point where
 // hcl.Range filenames enter the model, so every downstream Range field
 // gets the same canonical form for free.
-func RangeFromHCL(rang hcl.Range) Range {
-	return Range{
+func PositionFromHCL(rang hcl.Range) Position {
+	return Position{
 		Filename: filepath.ToSlash(rang.Filename),
 		Start:    Pos{Line: rang.Start.Line, Column: rang.Start.Column, Byte: rang.Start.Byte},
 		End:      Pos{Line: rang.End.Line, Column: rang.End.Column, Byte: rang.End.Byte},

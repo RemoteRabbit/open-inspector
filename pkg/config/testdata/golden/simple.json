@@ -9,7 +9,7 @@
       "version_constraints": [
         "~\u003e 3.2"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/simple/main.tf",
         "start": {
           "line": 7,
@@ -29,7 +29,7 @@
       "name": "name",
       "type": "string",
       "description": "Name applied as a trigger to the null resource.",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/simple/main.tf",
         "start": {
           "line": 14,
@@ -49,7 +49,7 @@
       "name": "id",
       "value": {
         "source": "null_resource.example.id",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/simple/main.tf",
           "start": {
             "line": 27,
@@ -64,7 +64,7 @@
         }
       },
       "description": "The id assigned to the null_resource.",
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/simple/main.tf",
         "start": {
           "line": 25,
@@ -87,7 +87,7 @@
       "attr_names": [
         "triggers"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/simple/main.tf",
         "start": {
           "line": 19,

@@ -17,9 +17,9 @@ func decodeLocalsBlock(block *hcl.Block, source []byte, module *model.Module) mo
 
 	for name, attribute := range attributes {
 		module.Locals = append(module.Locals, model.Local{
-			Name:  name,
-			Value: capture(attribute.Expr, source),
-			Range: model.RangeFromHCL(attribute.Range),
+			Name:     name,
+			Value:    capture(attribute.Expr, source),
+			Position: model.PositionFromHCL(attribute.Range),
 		})
 	}
 	return diags

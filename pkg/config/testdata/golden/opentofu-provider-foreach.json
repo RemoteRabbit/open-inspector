@@ -12,7 +12,7 @@
       "configuration_aliases": [
         "aws.by_region"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
         "start": {
           "line": 9,
@@ -33,7 +33,7 @@
       "type": "set(string)",
       "default": {
         "source": "[\"us-east-1\", \"us-west-2\", \"eu-west-1\"]",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
           "start": {
             "line": 19,
@@ -47,7 +47,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
         "start": {
           "line": 17,
@@ -69,7 +69,7 @@
       "name": "regional",
       "for_each": {
         "source": "var.regions",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
           "start": {
             "line": 29,
@@ -86,7 +86,7 @@
       "attr_names": [
         "bucket"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
         "start": {
           "line": 28,
@@ -107,7 +107,7 @@
       "alias": "by_region",
       "for_each": {
         "source": "var.regions",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
           "start": {
             "line": 24,
@@ -121,7 +121,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
         "start": {
           "line": 22,

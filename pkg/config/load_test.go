@@ -97,8 +97,8 @@ func TestLoad_Simple_RequiredProviders(t *testing.T) {
 	if len(null.ConfigurationAliases) != 0 {
 		t.Errorf("null.ConfigurationAliases = %v, want none", null.ConfigurationAliases)
 	}
-	if null.Range.Filename == "" {
-		t.Errorf("null.Range.Filename is empty")
+	if null.Position.Filename == "" {
+		t.Errorf("null.Position.Filename is empty")
 	}
 
 	if len(mod.Providers) != 0 {
@@ -176,8 +176,8 @@ func TestLoad_Providers_FullDecoding(t *testing.T) {
 	}
 
 	for i, p := range mod.Providers {
-		if p.Range.Filename == "" {
-			t.Errorf("Providers[%d].Range.Filename is empty", i)
+		if p.Position.Filename == "" {
+			t.Errorf("Providers[%d].Position.Filename is empty", i)
 		}
 	}
 }
@@ -341,13 +341,13 @@ func TestLoad_Snapshots(t *testing.T) {
 
 // normalizeForSnapshot rewrites machine-specific fields on a Module so
 // the resulting JSON snapshot is reproducible across machines and CI
-// runners. Only the absolute paths (Module.Path and every Range.Filename)
+// runners. Only the absolute paths (Module.Path and every Position.Filename)
 // vary between hosts; everything else is already derived from fixture
 // content.
 //
-// The Range rewrite is done by reflection it walks every field
-// reachable from *mod and updates each model.Range.Filename in place.
-// This means new model types with embedded Ranges are normalized for
+// The Position rewrite is done by reflection it walks every field
+// reachable from *mod and updates each model.Position.Filename in place.
+// This means new model types with embedded Positions are normalized for
 // free, without touching this function. The leak guard in
 // TestLoad_Snapshots verifies the walk actually caught everything.
 func normalizeForSnapshot(mod *model.Module, fixture string) {
@@ -355,11 +355,11 @@ func normalizeForSnapshot(mod *model.Module, fixture string) {
 	walkRewriteFilenames(reflect.ValueOf(mod))
 }
 
-// rangeType is the reflect.Type of model.Range, cached for the walker.
-var rangeType = reflect.TypeOf(model.Range{})
+// rangeType is the reflect.Type of model.Position, cached for the walker.
+var rangeType = reflect.TypeOf(model.Position{})
 
 // walkRewriteFilenames descends v and rewrites the Filename field of
-// every model.Range it finds. Unexported fields are skipped (Go's
+// every model.Position it finds. Unexported fields are skipped (Go's
 // reflection can't address them); the model package keeps all
 // snapshot-relevant fields exported, so this is safe today and any
 // future violation will surface via the leak guard.
@@ -372,7 +372,7 @@ func walkRewriteFilenames(v reflect.Value) {
 		walkRewriteFilenames(v.Elem())
 	case reflect.Struct:
 		if v.Type() == rangeType && v.CanAddr() {
-			rewriteFilename(v.Addr().Interface().(*model.Range))
+			rewriteFilename(v.Addr().Interface().(*model.Position))
 			return
 		}
 		for i := 0; i < v.NumField(); i++ {
@@ -408,7 +408,7 @@ func walkRewriteFilenames(v reflect.Value) {
 // Filenames are normalized to forward slashes before the prefix match
 // so Windows-style separators (D:\a\...\testdata\fixtures\...) collapse
 // to the same canonical form the golden files use.
-func rewriteFilename(r *model.Range) {
+func rewriteFilename(r *model.Position) {
 	if r == nil || r.Filename == "" {
 		return
 	}
@@ -424,7 +424,7 @@ func rewriteFilename(r *model.Range) {
 // "filename" line whose value is neither empty nor already rewritten
 // to the <fixture>/ form. Failing here means walkRewriteFilenames
 // missed a field usually a newly added model type that holds a
-// model.Range behind something reflection can't reach (an unexported
+// model.Position behind something reflection can't reach (an unexported
 // field, a custom MarshalJSON, etc.).
 func assertNoUnNormalizedFilenames(t *testing.T, fixture string, snapshot []byte) {
 	t.Helper()
@@ -447,7 +447,7 @@ func assertNoUnNormalizedFilenames(t *testing.T, fixture string, snapshot []byte
 		}
 		t.Fatalf("%s: un-normalized filename at line %d: %s\n"+
 			"normalizeForSnapshot/walkRewriteFilenames missed a field - "+
-			"check for a new model type with an unexported Range or a custom MarshalJSON.",
+			"check for a new model type with an unexported Position or a custom MarshalJSON.",
 			fixture, lineNo, strings.TrimSpace(line))
 	}
 	if err := scanner.Err(); err != nil {
@@ -790,10 +790,10 @@ func TestLoad_OverridesMerged(t *testing.T) {
 			region.Default, `"eu-central-1"`)
 	}
 	// The override resource matches null_resource.configured by Type+Name;
-	// the merge must preserve the resource (no duplicate, no loss of Range).
+	// the merge must preserve the resource (no duplicate, no loss of Position).
 	res := findResource(t, mod.ManagedResources, "null_resource", "configured")
-	if res.Range.Filename == "" {
-		t.Errorf("resource Range lost on merge")
+	if res.Position.Filename == "" {
+		t.Errorf("resource Position lost on merge")
 	}
 }
 
@@ -886,9 +886,9 @@ func keysOfProviders(m map[string]model.ProviderRequirement) []string {
 	return out
 }
 
-// TestLoad_ExpressionCapture expressions are captured as raw source bytes plus a source Range,
+// TestLoad_ExpressionCapture expressions are captured as raw source bytes plus a source Position,
 // never evaluated. The captured source must include the symbolic
-// reference verbatim (e.g. var.replica_count) and the Range must
+// reference verbatim (e.g. var.replica_count) and the Position must
 // point at the file/line where the expression appears.
 func TestLoad_ExpressionCapture(t *testing.T) {
 	t.Parallel()
@@ -908,8 +908,8 @@ func TestLoad_ExpressionCapture(t *testing.T) {
 	if !strings.Contains(r.Count.Source, "var.replica_count") {
 		t.Errorf("Count.Source does not contain var.replica_count: %q", r.Count.Source)
 	}
-	if r.Count.Range.Filename == "" || r.Count.Range.Start.Line == 0 {
-		t.Errorf("Count.Range is missing source location: %#v", r.Count.Range)
+	if r.Count.Position.Filename == "" || r.Count.Position.Start.Line == 0 {
+		t.Errorf("Count.Position is missing source location: %#v", r.Count.Position)
 	}
 
 	r = findResource(t, mod.ManagedResources, "null_resource", "by_for_each")
@@ -919,8 +919,8 @@ func TestLoad_ExpressionCapture(t *testing.T) {
 	if !strings.Contains(r.ForEach.Source, "var.names") {
 		t.Errorf("ForEach.Source does not contain var.names: %q", r.ForEach.Source)
 	}
-	if r.ForEach.Range.Start.Line == 0 {
-		t.Errorf("ForEach.Range missing line info: %#v", r.ForEach.Range)
+	if r.ForEach.Position.Start.Line == 0 {
+		t.Errorf("ForEach.Position missing line info: %#v", r.ForEach.Position)
 	}
 }
 

@@ -6,7 +6,7 @@
       "type": "set(string)",
       "default": {
         "source": "[\"alpha\", \"beta\", \"gamma\"]",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
           "start": {
             "line": 8,
@@ -20,7 +20,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
           "line": 6,
@@ -39,7 +39,7 @@
       "type": "number",
       "default": {
         "source": "3",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
           "start": {
             "line": 13,
@@ -53,7 +53,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
           "line": 11,
@@ -75,7 +75,7 @@
       "name": "by_count",
       "count": {
         "source": "var.replica_count",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
           "start": {
             "line": 17,
@@ -92,7 +92,7 @@
       "attr_names": [
         "triggers"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
           "line": 16,
@@ -112,7 +112,7 @@
       "name": "by_for_each",
       "for_each": {
         "source": "var.names",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
           "start": {
             "line": 25,
@@ -129,7 +129,7 @@
       "attr_names": [
         "triggers"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
           "line": 24,
@@ -151,7 +151,7 @@
       "name": "by_for_each",
       "for_each": {
         "source": "toset([\"one\", \"two\"])",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
           "start": {
             "line": 33,
@@ -168,7 +168,7 @@
       "attr_names": [
         "inputs"
       ],
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
           "line": 32,
@@ -189,7 +189,7 @@
       "source": "./child",
       "for_each": {
         "source": "var.names",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
           "start": {
             "line": 42,
@@ -203,7 +203,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
           "line": 40,
@@ -222,7 +222,7 @@
       "source": "./child",
       "count": {
         "source": "var.replica_count",
-        "range": {
+        "position": {
           "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
           "start": {
             "line": 48,
@@ -236,7 +236,7 @@
           }
         }
       },
-      "range": {
+      "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
           "line": 46,
