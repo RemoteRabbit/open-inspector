@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.6.0...v0.7.0) (2026-06-11)
+
+
+### Features
+
+* **pkg:** Parse and output variables with types ([#73](https://github.com/RemoteRabbit/open-inspector/issues/73)) ([425e005](https://github.com/RemoteRabbit/open-inspector/commit/425e005f87c61972f844f95f5be5075bba24c014))
+
 ## [0.6.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.5.0...v0.6.0) (2026-06-11)
 
 
