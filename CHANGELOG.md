@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.6.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.5.0...v0.6.0) (2026-06-11)
+
+
+### Features
+
+* Traverse references and append in output ([#71](https://github.com/RemoteRabbit/open-inspector/issues/71)) ([bcb3f95](https://github.com/RemoteRabbit/open-inspector/commit/bcb3f9554b8cc3e997d268ef2a87e91243654975))
+
 ## [0.5.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.4.1...v0.5.0) (2026-06-10)
 
 
