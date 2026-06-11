@@ -4,6 +4,9 @@
     {
       "name": "region",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "default": {
         "source": "\"us-east-1\"",
         "position": {
@@ -19,6 +22,10 @@
             "byte": 321
           }
         }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "us-east-1"
       },
       "comment": "The AWS region to deploy into.\nDefaults to us-east-1.",
       "position": {
@@ -38,6 +45,9 @@
     {
       "name": "no_comment",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "position": {
         "filename": "\u003cfixture\u003e/doc-comments/main.tf",
         "start": {
@@ -55,6 +65,9 @@
     {
       "name": "detached",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "position": {
         "filename": "\u003cfixture\u003e/doc-comments/main.tf",
         "start": {
@@ -72,6 +85,9 @@
     {
       "name": "instance_type",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "comment": "Multi-line block comment\nfor the instance type.",
       "position": {
         "filename": "\u003cfixture\u003e/doc-comments/main.tf",

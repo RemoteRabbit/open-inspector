@@ -103,6 +103,111 @@
           "byte": 739
         }
       }
+    },
+    {
+      "name": "version_from_local",
+      "source": "cloudposse/label/null",
+      "version_expression": {
+        "source": "local.modules.null",
+        "position": {
+          "filename": "\u003cfixture\u003e/module-sources/main.tf",
+          "start": {
+            "line": 39,
+            "column": 13,
+            "byte": 1018
+          },
+          "end": {
+            "line": 39,
+            "column": 31,
+            "byte": 1036
+          }
+        },
+        "references": [
+          {
+            "kind": "local",
+            "address": "local.modules",
+            "position": {
+              "filename": "\u003cfixture\u003e/module-sources/main.tf",
+              "start": {
+                "line": 39,
+                "column": 13,
+                "byte": 1018
+              },
+              "end": {
+                "line": 39,
+                "column": 31,
+                "byte": 1036
+              }
+            }
+          }
+        ]
+      },
+      "comment": "OpenTofu/Terraform early evaluation: source and version may reference\nvars/locals. These are captured as expressions, not rejected.",
+      "position": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 37,
+          "column": 1,
+          "byte": 940
+        },
+        "end": {
+          "line": 37,
+          "column": 28,
+          "byte": 967
+        }
+      }
+    },
+    {
+      "name": "source_from_var",
+      "source": "",
+      "source_expression": {
+        "source": "var.module_source",
+        "position": {
+          "filename": "\u003cfixture\u003e/module-sources/main.tf",
+          "start": {
+            "line": 43,
+            "column": 12,
+            "byte": 1078
+          },
+          "end": {
+            "line": 43,
+            "column": 29,
+            "byte": 1095
+          }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.module_source",
+            "position": {
+              "filename": "\u003cfixture\u003e/module-sources/main.tf",
+              "start": {
+                "line": 43,
+                "column": 12,
+                "byte": 1078
+              },
+              "end": {
+                "line": 43,
+                "column": 29,
+                "byte": 1095
+              }
+            }
+          }
+        ]
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/module-sources/main.tf",
+        "start": {
+          "line": 42,
+          "column": 1,
+          "byte": 1040
+        },
+        "end": {
+          "line": 42,
+          "column": 25,
+          "byte": 1064
+        }
+      }
     }
   ]
 }

@@ -4,6 +4,9 @@
     {
       "name": "region",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "default": {
         "source": "\"eu-central-1\"",
         "position": {
@@ -19,6 +22,10 @@
             "byte": 161
           }
         }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "eu-central-1"
       },
       "position": {
         "filename": "\u003cfixture\u003e/overrides/main.tf",

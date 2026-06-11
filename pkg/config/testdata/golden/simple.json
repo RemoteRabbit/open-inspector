@@ -28,6 +28,9 @@
     {
       "name": "name",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "description": "Name applied as a trigger to the null resource.",
       "position": {
         "filename": "\u003cfixture\u003e/simple/main.tf",

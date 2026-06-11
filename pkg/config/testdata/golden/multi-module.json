@@ -4,6 +4,9 @@
     {
       "name": "name_prefix",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "default": {
         "source": "\"fixture\"",
         "position": {
@@ -19,6 +22,10 @@
             "byte": 194
           }
         }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "fixture"
       },
       "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",

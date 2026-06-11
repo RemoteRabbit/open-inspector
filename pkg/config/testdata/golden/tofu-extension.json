@@ -7,6 +7,9 @@
     {
       "name": "from_json",
       "type": "\"string\"",
+      "type_spec": {
+        "kind": "string"
+      },
       "default": {
         "source": "\"hello from .tofu.json\"",
         "position": {
@@ -22,6 +25,10 @@
             "byte": 101
           }
         }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "hello from .tofu.json"
       },
       "position": {
         "filename": "\u003cfixture\u003e/tofu-extension/extras.tofu.json",
@@ -40,6 +47,9 @@
     {
       "name": "greeting",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "default": {
         "source": "\"hello from .tofu\"",
         "position": {
@@ -55,6 +65,10 @@
             "byte": 280
           }
         }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "hello from .tofu"
       },
       "position": {
         "filename": "\u003cfixture\u003e/tofu-extension/main.tofu",

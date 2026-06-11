@@ -44,9 +44,11 @@ func mergeVariables(base *model.Module, overrides []model.Variable) {
 			}
 			if override.Type != "" {
 				base.Variables[index].Type = override.Type
+				base.Variables[index].TypeSpec = override.TypeSpec // may be nil if override type was unparsable
 			}
 			if override.Default != nil {
 				base.Variables[index].Default = override.Default
+				base.Variables[index].DefaultValue = override.DefaultValue
 			}
 			if override.Description != "" {
 				base.Variables[index].Description = override.Description

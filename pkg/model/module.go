@@ -57,16 +57,18 @@ type ProviderRequirement struct {
 
 // Variable describes a single variable {} block declared by the module.
 type Variable struct {
-	Name        string       `json:"name"`                  // variable name
-	Type        string       `json:"type,omitempty"`        // typeexpr.TypeString
-	Default     *Expression  `json:"default,omitempty"`     // default value expression, if any
-	Description string       `json:"description,omitempty"` // human-readable description
-	Sensitive   bool         `json:"sensitive,omitempty"`   // whether the value is marked sensitive
-	Nullable    *bool        `json:"nullable,omitempty"`    // pointer: distinguish unset vs false
-	Ephemeral   bool         `json:"ephemeral,omitempty"`   // whether the variable is ephemeral (TF/OpenTofu 1.10+)
-	Validations []Validation `json:"validations,omitempty"` // validation blocks attached to the variable
-	Comment     string       `json:"comment,omitempty"`     // leading docstring comment above the block, if any.
-	Position    Position     `json:"position"`              // source position of the variable block
+	Name         string       `json:"name"`                // variable name
+	Type         string       `json:"type,omitempty"`      // typeexpr.TypeString
+	TypeSpec     *TypeSpec    `json:"type_spec,omitempty"` // structured form of Type, when parseable
+	Default      *Expression  `json:"default,omitempty"`   // default value expression, if any
+	DefaultValue *Value       `json:"default_value,omitempty"`
+	Description  string       `json:"description,omitempty"` // human-readable description
+	Sensitive    bool         `json:"sensitive,omitempty"`   // whether the value is marked sensitive
+	Nullable     *bool        `json:"nullable,omitempty"`    // pointer: distinguish unset vs false
+	Ephemeral    bool         `json:"ephemeral,omitempty"`   // whether the variable is ephemeral (TF/OpenTofu 1.10+)
+	Validations  []Validation `json:"validations,omitempty"` // validation blocks attached to the variable
+	Comment      string       `json:"comment,omitempty"`     // leading docstring comment above the block, if any.
+	Position     Position     `json:"position"`              // source position of the variable block
 }
 
 // Validation describes a validation {} block attached to a Variable or
@@ -145,15 +147,30 @@ type Lifecycle struct {
 
 // ModuleCall describes a module {} block invoking another module.
 type ModuleCall struct {
-	Name      string            `json:"name"`                 // module call name
-	Source    string            `json:"source"`               // raw source argument
-	Version   string            `json:"version,omitempty"`    // version constraint, for registry modules
-	Count     *Expression       `json:"count,omitempty"`      // count meta-argument expression, if set
-	ForEach   *Expression       `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
-	DependsOn []string          `json:"depends_on,omitempty"` // explicit dependency references
-	Providers map[string]string `json:"providers,omitempty"`  // local -> remote
-	Comment   string            `json:"comment,omitempty"`    // leading docstring comment above block, if any.
-	Position  Position          `json:"position"`             // source position of the module block
+	Name string `json:"name"` // module call name
+	// Source is the raw source argument when it is a constant string
+	// literal. It is empty when source is a non-literal expression
+	// (vars/locals via OpenTofu/Terraform early evaluation), in which
+	// case SourceExpression is set instead.
+	Source string `json:"source"`
+	// SourceExpression holds the captured source expression when source
+	// is not a constant literal (e.g. references vars or locals). Only
+	// one of Source or SourceExpression is populated.
+	SourceExpression *Expression `json:"source_expression,omitempty"`
+	// Version is the version constraint for registry modules when it is a
+	// constant string literal. It is empty when version is a non-literal
+	// expression, in which case VersionExpression is set instead.
+	Version string `json:"version,omitempty"`
+	// VersionExpression holds the captured version expression when
+	// version is not a constant literal (e.g. references vars or locals).
+	// Only one of Version or VersionExpression is populated.
+	VersionExpression *Expression       `json:"version_expression,omitempty"`
+	Count             *Expression       `json:"count,omitempty"`      // count meta-argument expression, if set
+	ForEach           *Expression       `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
+	DependsOn         []string          `json:"depends_on,omitempty"` // explicit dependency references
+	Providers         map[string]string `json:"providers,omitempty"`  // local -> remote
+	Comment           string            `json:"comment,omitempty"`    // leading docstring comment above block, if any.
+	Position          Position          `json:"position"`             // source position of the module block
 }
 
 // ProviderConfig describes a single provider {} configuration block.

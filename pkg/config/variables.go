@@ -48,14 +48,24 @@ func decodeVariableBlock(block *hcl.Block, source []byte, comments commentIndex,
 		// surface as errors). The serialized value is the verbatim source
 		// of the type expression so that `optional(T, default)` markers
 		// and any other user-authored detail survive a round-trip.
-		_, _, tdiag := typeexpr.TypeConstraintWithDefaults(attribute.Expr)
+		constraint, defaults, tdiag := typeexpr.TypeConstraintWithDefaults(attribute.Expr)
 		diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)
 		variable.Type = sliceSourceLF(source, attribute.Expr.Range())
+		if !tdiag.HasErrors() {
+			variable.TypeSpec = ctyTypeToSpec(constraint, defaults)
+		}
 	}
 
 	if attribute, ok := content.Attributes["default"]; ok {
 		expression := capture(attribute.Expr, source)
 		variable.Default = &expression
+
+		// A variable defulat must be a constant, so a nil eval context is sufficient. Ignore
+		// evaluation diagnostics: a non-constant default is a config error surfaced elsewhere,
+		// and we simply omit the decoded form rather than failing the load.
+		if value, vdiags := attribute.Expr.Value(nil); !vdiags.HasErrors() {
+			variable.DefaultValue = ctyValueToValue(value)
+		}
 	}
 
 	if attribute, ok := content.Attributes["description"]; ok {

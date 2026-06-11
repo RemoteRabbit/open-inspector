@@ -31,3 +31,14 @@ module "github_shorthand" {
 module "http_archive" {
   source = "https://example.com/modules/network-1.0.0.zip"
 }
+
+# OpenTofu/Terraform early evaluation: source and version may reference
+# vars/locals. These are captured as expressions, not rejected.
+module "version_from_local" {
+  source  = "cloudposse/label/null"
+  version = local.modules.null
+}
+
+module "source_from_var" {
+  source = var.module_source
+}
