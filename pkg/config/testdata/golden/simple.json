@@ -61,7 +61,26 @@
             "column": 41,
             "byte": 547
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "resource",
+            "address": "null_resource.example",
+            "position": {
+              "filename": "\u003cfixture\u003e/simple/main.tf",
+              "start": {
+                "line": 27,
+                "column": 17,
+                "byte": 523
+              },
+              "end": {
+                "line": 27,
+                "column": 41,
+                "byte": 547
+              }
+            }
+          }
+        ]
       },
       "description": "The id assigned to the null_resource.",
       "position": {

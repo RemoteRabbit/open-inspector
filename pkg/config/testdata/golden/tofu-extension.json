@@ -88,7 +88,26 @@
             "column": 34,
             "byte": 179
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.from_json",
+            "position": {
+              "filename": "\u003cfixture\u003e/tofu-extension/extras.tofu.json",
+              "start": {
+                "line": 10,
+                "column": 19,
+                "byte": 164
+              },
+              "end": {
+                "line": 10,
+                "column": 32,
+                "byte": 177
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/tofu-extension/extras.tofu.json",
@@ -120,7 +139,26 @@
             "column": 23,
             "byte": 326
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.greeting",
+            "position": {
+              "filename": "\u003cfixture\u003e/tofu-extension/main.tofu",
+              "start": {
+                "line": 15,
+                "column": 11,
+                "byte": 314
+              },
+              "end": {
+                "line": 15,
+                "column": 23,
+                "byte": 326
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/tofu-extension/main.tofu",
