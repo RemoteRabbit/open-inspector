@@ -4,6 +4,9 @@
     {
       "name": "region",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "default": {
         "source": "\"us-east-1\"",
         "position": {
@@ -19,6 +22,10 @@
             "byte": 280
           }
         }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "us-east-1"
       },
       "description": "AWS region.",
       "nullable": false,
@@ -107,6 +114,12 @@
     {
       "name": "tags",
       "type": "map(string)",
+      "type_spec": {
+        "kind": "map",
+        "element": {
+          "kind": "string"
+        }
+      },
       "default": {
         "source": "{}",
         "position": {
@@ -122,6 +135,9 @@
             "byte": 566
           }
         }
+      },
+      "default_value": {
+        "kind": "object"
       },
       "description": "Tags applied to every resource.",
       "position": {
@@ -141,6 +157,29 @@
     {
       "name": "instance_sizes",
       "type": "list(object({\n    name = string\n    cpu  = number\n    mem  = number\n  }))",
+      "type_spec": {
+        "kind": "list",
+        "element": {
+          "kind": "object",
+          "attributes": {
+            "cpu": {
+              "type": {
+                "kind": "number"
+              }
+            },
+            "mem": {
+              "type": {
+                "kind": "number"
+              }
+            },
+            "name": {
+              "type": {
+                "kind": "string"
+              }
+            }
+          }
+        }
+      },
       "default": {
         "source": "[]",
         "position": {
@@ -156,6 +195,9 @@
             "byte": 695
           }
         }
+      },
+      "default_value": {
+        "kind": "tuple"
       },
       "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
@@ -174,6 +216,9 @@
     {
       "name": "db_password",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "sensitive": true,
       "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
@@ -192,6 +237,30 @@
     {
       "name": "feature_flags",
       "type": "object({\n    enable_logging = optional(bool, true)\n    enable_metrics = optional(bool, false)\n  })",
+      "type_spec": {
+        "kind": "object",
+        "attributes": {
+          "enable_logging": {
+            "type": {
+              "kind": "bool"
+            },
+            "optional": true,
+            "default": {
+              "kind": "bool",
+              "bool": true
+            }
+          },
+          "enable_metrics": {
+            "type": {
+              "kind": "bool"
+            },
+            "optional": true,
+            "default": {
+              "kind": "bool"
+            }
+          }
+        }
+      },
       "default": {
         "source": "{}",
         "position": {
@@ -207,6 +276,9 @@
             "byte": 916
           }
         }
+      },
+      "default_value": {
+        "kind": "object"
       },
       "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",

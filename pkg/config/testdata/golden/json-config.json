@@ -25,6 +25,9 @@
     {
       "name": "name",
       "type": "\"string\"",
+      "type_spec": {
+        "kind": "string"
+      },
       "default": {
         "source": "\"json-fixture\"",
         "position": {
@@ -40,6 +43,10 @@
             "byte": 231
           }
         }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "json-fixture"
       },
       "position": {
         "filename": "\u003cfixture\u003e/json-config/main.tf.json",

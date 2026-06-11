@@ -1,0 +1,570 @@
+{
+  "path": "\u003cfixture\u003e/variable-types",
+  "variables": [
+    {
+      "name": "name",
+      "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 10,
+          "column": 1,
+          "byte": 413
+        },
+        "end": {
+          "line": 10,
+          "column": 16,
+          "byte": 428
+        }
+      }
+    },
+    {
+      "name": "count",
+      "type": "number",
+      "type_spec": {
+        "kind": "number"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 14,
+          "column": 1,
+          "byte": 450
+        },
+        "end": {
+          "line": 14,
+          "column": 17,
+          "byte": 466
+        }
+      }
+    },
+    {
+      "name": "enabled",
+      "type": "bool",
+      "type_spec": {
+        "kind": "bool"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 18,
+          "column": 1,
+          "byte": 488
+        },
+        "end": {
+          "line": 18,
+          "column": 19,
+          "byte": 506
+        }
+      }
+    },
+    {
+      "name": "tags",
+      "type": "map(string)",
+      "type_spec": {
+        "kind": "map",
+        "element": {
+          "kind": "string"
+        }
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 22,
+          "column": 1,
+          "byte": 526
+        },
+        "end": {
+          "line": 22,
+          "column": 16,
+          "byte": 541
+        }
+      }
+    },
+    {
+      "name": "subnets",
+      "type": "list(string)",
+      "type_spec": {
+        "kind": "list",
+        "element": {
+          "kind": "string"
+        }
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 26,
+          "column": 1,
+          "byte": 568
+        },
+        "end": {
+          "line": 26,
+          "column": 19,
+          "byte": 586
+        }
+      }
+    },
+    {
+      "name": "ids",
+      "type": "set(string)",
+      "type_spec": {
+        "kind": "set",
+        "element": {
+          "kind": "string"
+        }
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 30,
+          "column": 1,
+          "byte": 614
+        },
+        "end": {
+          "line": 30,
+          "column": 15,
+          "byte": 628
+        }
+      }
+    },
+    {
+      "name": "pair",
+      "type": "tuple([string, number])",
+      "type_spec": {
+        "kind": "tuple",
+        "elements": [
+          {
+            "kind": "string"
+          },
+          {
+            "kind": "number"
+          }
+        ]
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 34,
+          "column": 1,
+          "byte": 655
+        },
+        "end": {
+          "line": 34,
+          "column": 16,
+          "byte": 670
+        }
+      }
+    },
+    {
+      "name": "any_val",
+      "type": "any",
+      "type_spec": {
+        "kind": "dynamic"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 38,
+          "column": 1,
+          "byte": 709
+        },
+        "end": {
+          "line": 38,
+          "column": 19,
+          "byte": 727
+        }
+      }
+    },
+    {
+      "name": "config",
+      "type": "object({\n    name   = string\n    size   = optional(number, 10)\n    nested = optional(object({ a = string }))\n  })",
+      "type_spec": {
+        "kind": "object",
+        "attributes": {
+          "name": {
+            "type": {
+              "kind": "string"
+            }
+          },
+          "nested": {
+            "type": {
+              "kind": "object",
+              "attributes": {
+                "a": {
+                  "type": {
+                    "kind": "string"
+                  }
+                }
+              }
+            },
+            "optional": true
+          },
+          "size": {
+            "type": {
+              "kind": "number"
+            },
+            "optional": true,
+            "default": {
+              "kind": "number",
+              "number": "10"
+            }
+          }
+        }
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 42,
+          "column": 1,
+          "byte": 746
+        },
+        "end": {
+          "line": 42,
+          "column": 18,
+          "byte": 763
+        }
+      }
+    },
+    {
+      "name": "default_string",
+      "default": {
+        "source": "\"hello\"",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 53,
+            "column": 13,
+            "byte": 998
+          },
+          "end": {
+            "line": 53,
+            "column": 20,
+            "byte": 1005
+          }
+        }
+      },
+      "default_value": {
+        "kind": "string",
+        "string": "hello"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 52,
+          "column": 1,
+          "byte": 958
+        },
+        "end": {
+          "line": 52,
+          "column": 26,
+          "byte": 983
+        }
+      }
+    },
+    {
+      "name": "default_number",
+      "default": {
+        "source": "42",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 57,
+            "column": 13,
+            "byte": 1049
+          },
+          "end": {
+            "line": 57,
+            "column": 15,
+            "byte": 1051
+          }
+        }
+      },
+      "default_value": {
+        "kind": "number",
+        "number": "42"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 56,
+          "column": 1,
+          "byte": 1009
+        },
+        "end": {
+          "line": 56,
+          "column": 26,
+          "byte": 1034
+        }
+      }
+    },
+    {
+      "name": "default_big_number",
+      "default": {
+        "source": "1234567890123456789",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 62,
+            "column": 13,
+            "byte": 1161
+          },
+          "end": {
+            "line": 62,
+            "column": 32,
+            "byte": 1180
+          }
+        }
+      },
+      "default_value": {
+        "kind": "number",
+        "number": "1234567890123456789"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 60,
+          "column": 1,
+          "byte": 1055
+        },
+        "end": {
+          "line": 60,
+          "column": 30,
+          "byte": 1084
+        }
+      }
+    },
+    {
+      "name": "default_bool",
+      "default": {
+        "source": "true",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 66,
+            "column": 13,
+            "byte": 1222
+          },
+          "end": {
+            "line": 66,
+            "column": 17,
+            "byte": 1226
+          }
+        }
+      },
+      "default_value": {
+        "kind": "bool",
+        "bool": true
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 65,
+          "column": 1,
+          "byte": 1184
+        },
+        "end": {
+          "line": 65,
+          "column": 24,
+          "byte": 1207
+        }
+      }
+    },
+    {
+      "name": "default_list",
+      "default": {
+        "source": "[\"a\", \"b\"]",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 70,
+            "column": 13,
+            "byte": 1268
+          },
+          "end": {
+            "line": 70,
+            "column": 23,
+            "byte": 1278
+          }
+        }
+      },
+      "default_value": {
+        "kind": "tuple",
+        "tuple": [
+          {
+            "kind": "string",
+            "string": "a"
+          },
+          {
+            "kind": "string",
+            "string": "b"
+          }
+        ]
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 69,
+          "column": 1,
+          "byte": 1230
+        },
+        "end": {
+          "line": 69,
+          "column": 24,
+          "byte": 1253
+        }
+      }
+    },
+    {
+      "name": "default_map",
+      "default": {
+        "source": "{\n    env  = \"prod\"\n    tier = \"1\"\n  }",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 74,
+            "column": 13,
+            "byte": 1319
+          },
+          "end": {
+            "line": 77,
+            "column": 4,
+            "byte": 1357
+          }
+        }
+      },
+      "default_value": {
+        "kind": "object",
+        "object": {
+          "env": {
+            "kind": "string",
+            "string": "prod"
+          },
+          "tier": {
+            "kind": "string",
+            "string": "1"
+          }
+        }
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 73,
+          "column": 1,
+          "byte": 1282
+        },
+        "end": {
+          "line": 73,
+          "column": 23,
+          "byte": 1304
+        }
+      }
+    },
+    {
+      "name": "default_object",
+      "default": {
+        "source": "{\n    name = \"web\"\n    port = 8080\n  }",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 81,
+            "column": 13,
+            "byte": 1401
+          },
+          "end": {
+            "line": 84,
+            "column": 4,
+            "byte": 1439
+          }
+        }
+      },
+      "default_value": {
+        "kind": "object",
+        "object": {
+          "name": {
+            "kind": "string",
+            "string": "web"
+          },
+          "port": {
+            "kind": "number",
+            "number": "8080"
+          }
+        }
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 80,
+          "column": 1,
+          "byte": 1361
+        },
+        "end": {
+          "line": 80,
+          "column": 26,
+          "byte": 1386
+        }
+      }
+    },
+    {
+      "name": "default_null",
+      "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
+      "default": {
+        "source": "null",
+        "position": {
+          "filename": "\u003cfixture\u003e/variable-types/main.tf",
+          "start": {
+            "line": 89,
+            "column": 13,
+            "byte": 1500
+          },
+          "end": {
+            "line": 89,
+            "column": 17,
+            "byte": 1504
+          }
+        }
+      },
+      "default_value": {
+        "kind": "null"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 87,
+          "column": 1,
+          "byte": 1443
+        },
+        "end": {
+          "line": 87,
+          "column": 24,
+          "byte": 1466
+        }
+      }
+    },
+    {
+      "name": "no_default",
+      "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
+      "position": {
+        "filename": "\u003cfixture\u003e/variable-types/main.tf",
+        "start": {
+          "line": 92,
+          "column": 1,
+          "byte": 1508
+        },
+        "end": {
+          "line": 92,
+          "column": 22,
+          "byte": 1529
+        }
+      }
+    }
+  ]
+}

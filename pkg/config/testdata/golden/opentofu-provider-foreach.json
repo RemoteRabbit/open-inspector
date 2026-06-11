@@ -31,6 +31,12 @@
     {
       "name": "regions",
       "type": "set(string)",
+      "type_spec": {
+        "kind": "set",
+        "element": {
+          "kind": "string"
+        }
+      },
       "default": {
         "source": "[\"us-east-1\", \"us-west-2\", \"eu-west-1\"]",
         "position": {
@@ -46,6 +52,23 @@
             "byte": 574
           }
         }
+      },
+      "default_value": {
+        "kind": "tuple",
+        "tuple": [
+          {
+            "kind": "string",
+            "string": "us-east-1"
+          },
+          {
+            "kind": "string",
+            "string": "us-west-2"
+          },
+          {
+            "kind": "string",
+            "string": "eu-west-1"
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",

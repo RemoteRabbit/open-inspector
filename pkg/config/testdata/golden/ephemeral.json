@@ -28,6 +28,9 @@
     {
       "name": "ephemeral_input",
       "type": "string",
+      "type_spec": {
+        "kind": "string"
+      },
       "ephemeral": true,
       "position": {
         "filename": "\u003cfixture\u003e/ephemeral/main.tf",

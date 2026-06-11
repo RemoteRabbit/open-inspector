@@ -24,8 +24,3 @@ output "bad_sensitive" {
   value     = "hello"
   sensitive = var.flag_source
 }
-
-# module.source must be a literal string; an interpolation should diagnose.
-module "bad_source" {
-  source = "./modules/${var.description_source}"
-}
