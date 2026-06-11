@@ -8,6 +8,7 @@ just enough HCL to exercise one feature or combination.
 |---|---|---|
 | [`simple/`](./simple) | valid | minimal module: one resource, one variable, one output |
 | [`variables-and-outputs/`](./variables-and-outputs) | valid | every variable/output/local feature (types, defaults, validation, sensitive, nullable, descriptions) |
+| [`variable-types/`](./variable-types) | valid | structured variable types (`type_spec`) and decoded constant defaults (`default_value`): every type kind, optional object attributes, null and precision-sensitive literals |
 | [`providers/`](./providers) | valid | `required_providers` with `source`, `version`, `configuration_aliases`; multiple providers; provider aliases |
 | [`resources-count-foreach/`](./resources-count-foreach) | valid | `count` and `for_each` on resources, data sources, and module calls |
 | [`modern-blocks/`](./modern-blocks) | valid | `moved`, `import`, `removed`, `check` blocks |

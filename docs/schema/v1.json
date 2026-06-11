@@ -516,11 +516,19 @@
         },
         "source": {
           "type": "string",
-          "description": "raw source argument"
+          "description": "Source is the raw source argument when it is a constant string\nliteral. It is empty when source is a non-literal expression\n(vars/locals via OpenTofu/Terraform early evaluation), in which\ncase SourceExpression is set instead."
+        },
+        "source_expression": {
+          "$ref": "#/$defs/Expression",
+          "description": "SourceExpression holds the captured source expression when source\nis not a constant literal (e.g. references vars or locals). Only\none of Source or SourceExpression is populated."
         },
         "version": {
           "type": "string",
-          "description": "version constraint, for registry modules"
+          "description": "Version is the version constraint for registry modules when it is a\nconstant string literal. It is empty when version is a non-literal\nexpression, in which case VersionExpression is set instead."
+        },
+        "version_expression": {
+          "$ref": "#/$defs/Expression",
+          "description": "VersionExpression holds the captured version expression when\nversion is not a constant literal (e.g. references vars or locals).\nOnly one of Version or VersionExpression is populated."
         },
         "count": {
           "$ref": "#/$defs/Expression",
@@ -585,6 +593,28 @@
         "position"
       ],
       "description": "MovedBlock corresponds to `moved { from = X, to = Y }`"
+    },
+    "ObjectAttr": {
+      "properties": {
+        "type": {
+          "$ref": "#/$defs/TypeSpec",
+          "description": "the attribute's type"
+        },
+        "optional": {
+          "type": "boolean",
+          "description": "declared with optional(...)"
+        },
+        "default": {
+          "$ref": "#/$defs/Value",
+          "description": "default supplied to optional(T, default)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "description": "ObjectAttr describes one attribute of an object typed TypeSpec."
     },
     "Output": {
       "properties": {
@@ -912,6 +942,38 @@
       "type": "object",
       "description": "SchemaFindings groups the schema-derived annotations for a single resource, data source, or ephemeral resource."
     },
+    "TypeSpec": {
+      "properties": {
+        "kind": {
+          "type": "string",
+          "description": "category of this node"
+        },
+        "element": {
+          "$ref": "#/$defs/TypeSpec",
+          "description": "element type for list/se/map"
+        },
+        "elements": {
+          "items": {
+            "$ref": "#/$defs/TypeSpec"
+          },
+          "type": "array",
+          "description": "ordered element types for tuple"
+        },
+        "attributes": {
+          "additionalProperties": {
+            "$ref": "#/$defs/ObjectAttr"
+          },
+          "type": "object",
+          "description": "attributes for object"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "description": "TypeSpec is the structured form of a variable's type constraint."
+    },
     "Validation": {
       "properties": {
         "condition": {
@@ -936,6 +998,57 @@
       ],
       "description": "Validation describes a validation {} block attached to a Variable or to a resource lifecycle precondition/postcondition."
     },
+    "Value": {
+      "properties": {
+        "kind": {
+          "type": "string"
+        },
+        "string": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string",
+          "description": "canonical decimal text"
+        },
+        "bool": {
+          "type": "boolean"
+        },
+        "list": {
+          "items": {
+            "$ref": "#/$defs/Value"
+          },
+          "type": "array",
+          "description": "list/set elements"
+        },
+        "tuple": {
+          "items": {
+            "$ref": "#/$defs/Value"
+          },
+          "type": "array",
+          "description": "tuple elements"
+        },
+        "map": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Value"
+          },
+          "type": "object",
+          "description": "map entries"
+        },
+        "object": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Value"
+          },
+          "type": "object",
+          "description": "object attributes"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "kind"
+      ],
+      "description": "Value is a decoded constant value."
+    },
     "Variable": {
       "properties": {
         "name": {
@@ -946,9 +1059,16 @@
           "type": "string",
           "description": "typeexpr.TypeString"
         },
+        "type_spec": {
+          "$ref": "#/$defs/TypeSpec",
+          "description": "structured form of Type, when parseable"
+        },
         "default": {
           "$ref": "#/$defs/Expression",
           "description": "default value expression, if any"
+        },
+        "default_value": {
+          "$ref": "#/$defs/Value"
         },
         "description": {
           "type": "string",
