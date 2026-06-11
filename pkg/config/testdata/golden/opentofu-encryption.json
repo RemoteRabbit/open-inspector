@@ -80,7 +80,26 @@
                 "column": 40,
                 "byte": 474
               }
-            }
+            },
+            "references": [
+              {
+                "kind": "resource",
+                "address": "key_provider.pbkdf2",
+                "position": {
+                  "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+                  "start": {
+                    "line": 15,
+                    "column": 14,
+                    "byte": 448
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 40,
+                    "byte": 474
+                  }
+                }
+              }
+            ]
           }
         },
         "position": {
@@ -113,7 +132,26 @@
             "column": 41,
             "byte": 534
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "resource",
+            "address": "method.aes_gcm",
+            "position": {
+              "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+              "start": {
+                "line": 19,
+                "column": 16,
+                "byte": 509
+              },
+              "end": {
+                "line": 19,
+                "column": 41,
+                "byte": 534
+              }
+            }
+          }
+        ]
       },
       "fallback": {
         "source": "",
@@ -160,7 +198,26 @@
             "column": 41,
             "byte": 593
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "resource",
+            "address": "method.aes_gcm",
+            "position": {
+              "filename": "\u003cfixture\u003e/opentofu-encryption/main.tf",
+              "start": {
+                "line": 23,
+                "column": 16,
+                "byte": 568
+              },
+              "end": {
+                "line": 23,
+                "column": 41,
+                "byte": 593
+              }
+            }
+          }
+        ]
       },
       "fallback": {
         "source": "",

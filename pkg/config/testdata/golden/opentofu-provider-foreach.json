@@ -81,7 +81,26 @@
             "column": 25,
             "byte": 732
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.regions",
+            "position": {
+              "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+              "start": {
+                "line": 29,
+                "column": 14,
+                "byte": 721
+              },
+              "end": {
+                "line": 29,
+                "column": 25,
+                "byte": 732
+              }
+            }
+          }
+        ]
       },
       "attr_names": [
         "bucket"
@@ -119,7 +138,26 @@
             "column": 25,
             "byte": 644
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.regions",
+            "position": {
+              "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+              "start": {
+                "line": 24,
+                "column": 14,
+                "byte": 633
+              },
+              "end": {
+                "line": 24,
+                "column": 25,
+                "byte": 644
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",

@@ -38,7 +38,26 @@
                 "column": 71,
                 "byte": 389
               }
-            }
+            },
+            "references": [
+              {
+                "kind": "var",
+                "address": "var.region",
+                "position": {
+                  "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+                  "start": {
+                    "line": 12,
+                    "column": 59,
+                    "byte": 377
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 69,
+                    "byte": 387
+                  }
+                }
+              }
+            ]
           },
           "error_message": {
             "source": "\"Region must look like us-east-1.\"",
@@ -221,7 +240,26 @@
             "column": 27,
             "byte": 1133
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.region",
+            "position": {
+              "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+              "start": {
+                "line": 55,
+                "column": 17,
+                "byte": 1123
+              },
+              "end": {
+                "line": 55,
+                "column": 27,
+                "byte": 1133
+              }
+            }
+          }
+        ]
       },
       "description": "Echoed region.",
       "position": {
@@ -254,7 +292,26 @@
             "column": 32,
             "byte": 1242
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.db_password",
+            "position": {
+              "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+              "start": {
+                "line": 60,
+                "column": 17,
+                "byte": 1227
+              },
+              "end": {
+                "line": 60,
+                "column": 32,
+                "byte": 1242
+              }
+            }
+          }
+        ]
       },
       "description": "Re-emitted password (sensitive).",
       "sensitive": true,
@@ -288,7 +345,26 @@
             "column": 36,
             "byte": 1323
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "local",
+            "address": "local.common_tags",
+            "position": {
+              "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+              "start": {
+                "line": 65,
+                "column": 18,
+                "byte": 1305
+              },
+              "end": {
+                "line": 65,
+                "column": 35,
+                "byte": 1322
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
@@ -322,7 +398,26 @@
             "column": 5,
             "byte": 1009
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.tags",
+            "position": {
+              "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+              "start": {
+                "line": 46,
+                "column": 23,
+                "byte": 951
+              },
+              "end": {
+                "line": 46,
+                "column": 31,
+                "byte": 959
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
@@ -354,7 +449,26 @@
             "column": 42,
             "byte": 1052
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "var",
+            "address": "var.region",
+            "position": {
+              "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",
+              "start": {
+                "line": 50,
+                "column": 25,
+                "byte": 1035
+              },
+              "end": {
+                "line": 50,
+                "column": 35,
+                "byte": 1045
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/variables-and-outputs/main.tf",

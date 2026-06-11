@@ -109,7 +109,26 @@
                   "column": 36,
                   "byte": 1474
                 }
-              }
+              },
+              "references": [
+                {
+                  "kind": "other",
+                  "address": "self.id",
+                  "position": {
+                    "filename": "\u003cfixture\u003e/resources-full/main.tf",
+                    "start": {
+                      "line": 48,
+                      "column": 23,
+                      "byte": 1461
+                    },
+                    "end": {
+                      "line": 48,
+                      "column": 30,
+                      "byte": 1468
+                    }
+                  }
+                }
+              ]
             },
             "error_message": {
               "source": "\"instance must have an id\"",

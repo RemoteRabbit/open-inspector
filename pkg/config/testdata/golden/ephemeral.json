@@ -61,7 +61,26 @@
             "column": 50,
             "byte": 561
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "resource",
+            "address": "ephemeral.random_password",
+            "position": {
+              "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+              "start": {
+                "line": 27,
+                "column": 15,
+                "byte": 526
+              },
+              "end": {
+                "line": 27,
+                "column": 50,
+                "byte": 561
+              }
+            }
+          }
+        ]
       },
       "sensitive": true,
       "ephemeral": true,

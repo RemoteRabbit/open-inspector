@@ -52,7 +52,26 @@
             "column": 28,
             "byte": 509
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "module",
+            "address": "module.compute",
+            "position": {
+              "filename": "\u003cfixture\u003e/multi-module/main.tf",
+              "start": {
+                "line": 23,
+                "column": 11,
+                "byte": 492
+              },
+              "end": {
+                "line": 23,
+                "column": 28,
+                "byte": 509
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",

@@ -73,7 +73,26 @@
             "column": 45,
             "byte": 454
           }
-        }
+        },
+        "references": [
+          {
+            "kind": "resource",
+            "address": "null_resource.example",
+            "position": {
+              "filename": "\u003cfixture\u003e/json-config/main.tf.json",
+              "start": {
+                "line": 27,
+                "column": 19,
+                "byte": 428
+              },
+              "end": {
+                "line": 27,
+                "column": 43,
+                "byte": 452
+              }
+            }
+          }
+        ]
       },
       "position": {
         "filename": "\u003cfixture\u003e/json-config/main.tf.json",
