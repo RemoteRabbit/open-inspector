@@ -30,8 +30,9 @@ func sliceSourceLF(source []byte, rang hcl.Range) string {
 func capture(expression hcl.Expression, source []byte) model.Expression {
 	rang := expression.Range()
 	return model.Expression{
-		Source:   sliceSourceLF(source, rang),
-		Position: model.PositionFromHCL(rang),
+		Source:     sliceSourceLF(source, rang),
+		Position:   model.PositionFromHCL(rang),
+		References: extractReferences(expression),
 	}
 }
 
