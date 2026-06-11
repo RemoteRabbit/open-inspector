@@ -34,19 +34,25 @@ func decodeModuleCallBlock(block *hcl.Block, source []byte, comments commentInde
 	inner, _, hdiag := block.Body.PartialContent(moduleSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
+	// source and version accept either a constant string literal or, with
+	// OpenTofu/Terraform early evaluation, a reference to vars/locals.
+	// Capture the literal when present, otherwise store the expression
+	// verbatim; do not treat a reference as a "Variables not allowed" error.
 	if attribute, ok := inner.Attributes["source"]; ok {
-		str, ok, sdiag := literalString(attribute.Expr)
-		diags = append(diags, model.DiagnosticsFromHCL(sdiag)...)
-		if ok {
+		if str, ok, _ := literalString(attribute.Expr); ok {
 			moduleCall.Source = str
+		} else {
+			expression := capture(attribute.Expr, source)
+			moduleCall.SourceExpression = &expression
 		}
 	}
 
 	if attribute, ok := inner.Attributes["version"]; ok {
-		str, ok, sdiag := literalString(attribute.Expr)
-		diags = append(diags, model.DiagnosticsFromHCL(sdiag)...)
-		if ok {
+		if str, ok, _ := literalString(attribute.Expr); ok {
 			moduleCall.Version = str
+		} else {
+			expression := capture(attribute.Expr, source)
+			moduleCall.VersionExpression = &expression
 		}
 	}
 

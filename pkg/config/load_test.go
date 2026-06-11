@@ -215,7 +215,7 @@ func TestLoad_Fixtures(t *testing.T) {
 		{dir: "resources-count-foreach", wantManagedRes: 2, wantDataRes: 1, wantModuleCalls: 2, wantVars: 2},
 		{dir: "json-config", wantVars: 1, wantOutputs: 1, wantManagedRes: 1, wantRequiredProviders: 1},
 		{dir: "multi-module", wantModuleCalls: 2, wantOutputs: 1, wantVars: 1},
-		{dir: "module-sources", wantModuleCalls: 6},
+		{dir: "module-sources", wantModuleCalls: 8},
 		{dir: "resources-full", wantManagedRes: 2, wantModuleCalls: 1, wantRequiredProviders: 1, wantProviderConfigs: 1},
 		{dir: "tofu-extension", wantVars: 2, wantOutputs: 2},
 		{dir: "overrides", wantVars: 1, wantManagedRes: 1},
@@ -223,6 +223,7 @@ func TestLoad_Fixtures(t *testing.T) {
 		{dir: "invalid/malformed-validation", wantErrorDiagnostic: true},
 		{dir: "invalid/non-literal-attrs", wantErrorDiagnostic: true},
 		{dir: "doc-comments", wantVars: 4, wantManagedRes: 1},
+		{dir: "variable-types", wantVars: 18},
 	}
 	for _, tc := range cases {
 		t.Run(tc.dir, func(t *testing.T) {
@@ -290,6 +291,7 @@ var snapshotFixtures = []string{
 	"resources-full",
 	"simple",
 	"tofu-extension",
+	"variable-types",
 	"variables-and-outputs",
 }
 
@@ -538,9 +540,11 @@ func TestLoad_MalformedValidation(t *testing.T) {
 }
 
 // TestLoad_NonLiteralAttrs confirms that attributes the loader expects
-// to be literal (output.description, output.sensitive, module.source,
+// to be literal (output.description, output.sensitive,
 // variable.description, etc.) surface a diagnostic instead of silently
 // disappearing when a user writes an interpolation or reference.
+// (module.source/version are exempt: they accept vars/locals via
+// OpenTofu/Terraform early evaluation; see TestLoad_ModuleSourceVersionExpressions.)
 func TestLoad_NonLiteralAttrs(t *testing.T) {
 	t.Parallel()
 
@@ -558,7 +562,6 @@ func TestLoad_NonLiteralAttrs(t *testing.T) {
 	wantLines := map[int]string{
 		19: "output.bad_description.description",
 		25: "output.bad_sensitive.sensitive",
-		30: "module.bad_source.source",
 	}
 	gotLines := map[int]bool{}
 	for _, d := range mod.Diagnostics {
@@ -583,10 +586,57 @@ func TestLoad_NonLiteralAttrs(t *testing.T) {
 			t.Errorf("bad_sensitive.Sensitive = true, want false (literal extraction must have failed)")
 		}
 	}
-	for _, m := range mod.ModuleCalls {
-		if m.Name == "bad_source" && m.Source != "" {
-			t.Errorf("bad_source.Source = %q, want empty", m.Source)
-		}
+}
+
+// TestLoad_ModuleSourceVersionExpressions confirms that module source
+// and version accept non-literal expressions (vars/locals) via
+// OpenTofu/Terraform early evaluation: they are captured as expressions
+// rather than rejected with a "Variables not allowed" diagnostic.
+func TestLoad_ModuleSourceVersionExpressions(t *testing.T) {
+	t.Parallel()
+
+	mod, err := Load(fixturePath(t, "module-sources"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+	if mod.Diagnostics.HasErrors() {
+		t.Fatalf("unexpected error diagnostics: %#v", mod.Diagnostics)
+	}
+
+	calls := map[string]model.ModuleCall{}
+	for _, call := range mod.ModuleCalls {
+		calls[call.Name] = call
+	}
+
+	versionFromLocal, ok := calls["version_from_local"]
+	if !ok {
+		t.Fatal("module call version_from_local missing")
+	}
+	if versionFromLocal.Source != "cloudposse/label/null" {
+		t.Errorf("version_from_local.Source = %q, want literal", versionFromLocal.Source)
+	}
+	if versionFromLocal.Version != "" {
+		t.Errorf("version_from_local.Version = %q, want empty (expression form)", versionFromLocal.Version)
+	}
+	if versionFromLocal.VersionExpression == nil {
+		t.Fatal("version_from_local.VersionExpression is nil, want captured expression")
+	}
+	if got := versionFromLocal.VersionExpression.Source; got != "local.modules.null" {
+		t.Errorf("version_from_local.VersionExpression.Source = %q, want %q", got, "local.modules.null")
+	}
+
+	sourceFromVar, ok := calls["source_from_var"]
+	if !ok {
+		t.Fatal("module call source_from_var missing")
+	}
+	if sourceFromVar.Source != "" {
+		t.Errorf("source_from_var.Source = %q, want empty (expression form)", sourceFromVar.Source)
+	}
+	if sourceFromVar.SourceExpression == nil {
+		t.Fatal("source_from_var.SourceExpression is nil, want captured expression")
+	}
+	if got := sourceFromVar.SourceExpression.Source; got != "var.module_source" {
+		t.Errorf("source_from_var.SourceExpression.Source = %q, want %q", got, "var.module_source")
 	}
 }
 
