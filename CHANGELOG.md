@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.6.0...v0.7.0) (2026-06-14)
+
+
+### Features
+
+* **pkg:** Parse and output variables with types ([#73](https://github.com/RemoteRabbit/open-inspector/issues/73)) ([425e005](https://github.com/RemoteRabbit/open-inspector/commit/425e005f87c61972f844f95f5be5075bba24c014))
+* Update graphing and downstream wishlists ([#75](https://github.com/RemoteRabbit/open-inspector/issues/75)) ([e4a1513](https://github.com/RemoteRabbit/open-inspector/commit/e4a1513fa3cbf5353ac2a92bf1653dcbe72bd492))
+
 ## [0.6.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.5.0...v0.6.0) (2026-06-11)
 
 
