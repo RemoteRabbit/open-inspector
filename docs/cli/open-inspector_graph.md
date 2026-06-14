@@ -1,6 +1,21 @@
 ## open-inspector graph
 
-Render the module call graph rooted at <dir>.
+Render the dependency graph of a module directory
+
+### Synopsis
+
+graph builds the dependency graph of the module in <dir>: resources,
+data sources, locals, outputs, variables, and module calls, with edges
+derived from the references between them (including references inside
+nested blocks) plus depends_on and replace_triggered_by.
+
+It is a static analysis: no providers, no 'init', and (for local modules)
+no network are required. With --recursive, child module calls are resolved
+and each module's graph is rendered too, with cross-module edges drawn from
+module input arguments and from references to specific child module outputs.
+
+Use --kind to keep only certain node kinds; add --contract to collapse paths
+that run through filtered-out nodes instead of breaking them.
 
 ```
 open-inspector graph <dir> [flags]
@@ -9,9 +24,13 @@ open-inspector graph <dir> [flags]
 ### Options
 
 ```
+      --contract         with --kind, contract paths through removed nodes instead of breaking them
       --fail-on string   exit nonzero if a diagnostic with this severity is present: error|warning|never (default "error")
       --format string    output format: tree|dot|mermaid|json (default "tree")
   -h, --help             help for graph
+      --kind strings     keep only these node kinds (comma-separated): data|ephemeral|local|module|output|resource|variable; default all
+      --max-depth int    maximum child-module recursion depth (only with --recursive) (default 16)
+      --recursive        resolve child module calls and render each module's dependency graph
 ```
 
 ### Options inherited from parent commands

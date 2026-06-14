@@ -2,7 +2,7 @@
 .TH "OPEN-INSPECTOR" "1" "" "open-inspector dev" ""
 
 .SH NAME
-open-inspector-graph - Render the module call graph rooted at \&.
+open-inspector-graph - Render the dependency graph of a module directory
 
 
 .SH SYNOPSIS
@@ -10,10 +10,27 @@ open-inspector-graph - Render the module call graph rooted at \&.
 
 
 .SH DESCRIPTION
-Render the module call graph rooted at \&.
+graph builds the dependency graph of the module in : resources,
+data sources, locals, outputs, variables, and module calls, with edges
+derived from the references between them (including references inside
+nested blocks) plus depends_on and replace_triggered_by.
+
+.PP
+It is a static analysis: no providers, no 'init', and (for local modules)
+no network are required. With --recursive, child module calls are resolved
+and each module's graph is rendered too, with cross-module edges drawn from
+module input arguments and from references to specific child module outputs.
+
+.PP
+Use --kind to keep only certain node kinds; add --contract to collapse paths
+that run through filtered-out nodes instead of breaking them.
 
 
 .SH OPTIONS
+\fB--contract\fP[=false]
+	with --kind, contract paths through removed nodes instead of breaking them
+
+.PP
 \fB--fail-on\fP="error"
 	exit nonzero if a diagnostic with this severity is present: error|warning|never
 
@@ -24,6 +41,18 @@ Render the module call graph rooted at \&.
 .PP
 \fB-h\fP, \fB--help\fP[=false]
 	help for graph
+
+.PP
+\fB--kind\fP=[]
+	keep only these node kinds (comma-separated): data|ephemeral|local|module|output|resource|variable; default all
+
+.PP
+\fB--max-depth\fP=16
+	maximum child-module recursion depth (only with --recursive)
+
+.PP
+\fB--recursive\fP[=false]
+	resolve child module calls and render each module's dependency graph
 
 
 .SH OPTIONS INHERITED FROM PARENT COMMANDS

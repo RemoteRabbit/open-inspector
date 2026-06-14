@@ -5,8 +5,6 @@
 package config
 
 import (
-	"sort"
-
 	"github.com/hashicorp/hcl/v2"
 
 	"github.com/remoterabbit/open-inspector/pkg/model"
@@ -22,6 +20,15 @@ var resourceSchema = &hcl.BodySchema{
 	Blocks: []hcl.BlockHeaderSchema{{Type: "lifecycle"}},
 }
 
+// resourceMetaArgs and resourceMetaBlocks name the meta-arguments and the
+// lifecycle block that decodeResourceBlock models explicitly. The generic
+// body walk skips them at the top level so they are not duplicated inside
+// NestedBody.
+var resourceMetaArgs = map[string]struct{}{
+	"count": {}, "for_each": {}, "provider": {}, "depends_on": {},
+}
+var resourceMetaBlocks = map[string]struct{}{"lifecycle": {}}
+
 // decodeResourceBlock decodes a resource {} or data {} block into the
 // model, appending it to the managed or data slice according to mode. It
 // captures the meta-arguments (count, for_each, provider, depends_on) and
@@ -35,23 +42,15 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 		Position: model.PositionFromHCL(block.DefRange),
 	}
 
-	inner, remain, hdiag := block.Body.PartialContent(resourceSchema)
+	inner, _, hdiag := block.Body.PartialContent(resourceSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
 
-	// Capture the user-set attribute names (everything left after the
-	// meta-args and lifecycle block were consumed) for downstream schema
-	// enrichment. JustAttributes reports a diagnostic when the remainder
-	// still holds nested blocks (provisioner, dynamic, etc.); we ignore
-	// that and keep the attributes it does return. Nested-block contents
-	// are intentionally not captured here.
-	if attributes, _ := remain.JustAttributes(); len(attributes) > 0 {
-		names := make([]string, 0, len(attributes))
-		for name := range attributes {
-			names = append(names, name)
-		}
-		sort.Strings(names)
-		resource.AttrNames = names
-	}
+	// Capture the full schema-less body: every user-set attribute as an
+	// unevaluated expression and every nested block, recursively. The
+	// meta-arguments and the lifecycle block are modeled explicitly below,
+	// so they are skipped here (only at the top level). Native HCL only;
+	// JSON bodies leave NestedBody nil.
+	resource.NestedBody = decodeBodyFiltered(block.Body, source, resourceMetaArgs, resourceMetaBlocks)
 
 	if attribute, ok := inner.Attributes["count"]; ok {
 		expression := capture(attribute.Expr, source)
@@ -94,11 +93,11 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 				Type: resource.Type, Name: resource.Name,
 				Provider: resource.Provider,
 				Count:    resource.Count, ForEach: resource.ForEach,
-				DependsOn: resource.DependsOn,
-				AttrNames: resource.AttrNames,
-				Lifecycle: resource.Lifecycle,
-				Comment:   resource.Comment,
-				Position:  resource.Position,
+				DependsOn:  resource.DependsOn,
+				NestedBody: resource.NestedBody,
+				Lifecycle:  resource.Lifecycle,
+				Comment:    resource.Comment,
+				Position:   resource.Position,
 			})
 	}
 	return diags

@@ -46,6 +46,34 @@ func TestInspect_WithModuleGraph_Local(t *testing.T) {
 	}
 }
 
+func TestInspect_WithDependencyGraph(t *testing.T) {
+	t.Parallel()
+
+	module, err := inspector.Inspect("../../testdata/fixtures/simple",
+		inspector.WithDependencyGraph())
+	if err != nil {
+		t.Fatalf("inspect: %v", err)
+	}
+	if module.DependencyGraph == nil {
+		t.Fatal("DependencyGraph = nil, want a graph (opted in)")
+	}
+	if len(module.DependencyGraph.Nodes) == 0 {
+		t.Errorf("DependencyGraph has no nodes")
+	}
+}
+
+func TestInspect_WithoutDependencyGraph_LeavesNil(t *testing.T) {
+	t.Parallel()
+
+	module, err := inspector.Inspect("../../testdata/fixtures/simple")
+	if err != nil {
+		t.Fatalf("inspect: %v", err)
+	}
+	if module.DependencyGraph != nil {
+		t.Errorf("DependencyGraph = %v, want nil when not opted in", module.DependencyGraph)
+	}
+}
+
 // findManaged returns the named managed resource from the module or fails.
 func findManaged(t *testing.T, module *model.Module, typ, name string) model.Resource {
 	t.Helper()

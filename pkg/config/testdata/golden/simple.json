@@ -106,9 +106,45 @@
       "mode": "managed",
       "type": "null_resource",
       "name": "example",
-      "attr_names": [
-        "triggers"
-      ],
+      "nested_body": {
+        "attributes": {
+          "triggers": {
+            "source": "{\n    name = var.name\n  }",
+            "position": {
+              "filename": "\u003cfixture\u003e/simple/main.tf",
+              "start": {
+                "line": 20,
+                "column": 14,
+                "byte": 408
+              },
+              "end": {
+                "line": 22,
+                "column": 4,
+                "byte": 433
+              }
+            },
+            "references": [
+              {
+                "kind": "var",
+                "address": "var.name",
+                "position": {
+                  "filename": "\u003cfixture\u003e/simple/main.tf",
+                  "start": {
+                    "line": 21,
+                    "column": 12,
+                    "byte": 421
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 20,
+                    "byte": 429
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/simple/main.tf",
         "start": {

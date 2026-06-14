@@ -4,6 +4,24 @@
     {
       "name": "local_relative",
       "source": "../multi-module/modules/network",
+      "inputs": {
+        "name": {
+          "source": "\"from-local\"",
+          "position": {
+            "filename": "\u003cfixture\u003e/module-sources/main.tf",
+            "start": {
+              "line": 8,
+              "column": 12,
+              "byte": 264
+            },
+            "end": {
+              "line": 8,
+              "column": 24,
+              "byte": 276
+            }
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {
@@ -22,6 +40,40 @@
       "name": "registry",
       "source": "terraform-aws-modules/vpc/aws",
       "version": "~\u003e 5.0",
+      "inputs": {
+        "cidr": {
+          "source": "\"10.0.0.0/16\"",
+          "position": {
+            "filename": "\u003cfixture\u003e/module-sources/main.tf",
+            "start": {
+              "line": 16,
+              "column": 10,
+              "byte": 409
+            },
+            "end": {
+              "line": 16,
+              "column": 23,
+              "byte": 422
+            }
+          }
+        },
+        "name": {
+          "source": "\"open-inspector-fixture\"",
+          "position": {
+            "filename": "\u003cfixture\u003e/module-sources/main.tf",
+            "start": {
+              "line": 15,
+              "column": 10,
+              "byte": 375
+            },
+            "end": {
+              "line": 15,
+              "column": 34,
+              "byte": 399
+            }
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/module-sources/main.tf",
         "start": {

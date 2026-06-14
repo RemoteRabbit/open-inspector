@@ -19,8 +19,9 @@ import (
 //
 //   - It sees attribute names the user wrote, not their values; an
 //     attribute set to null is treated as set.
-//   - Nested blocks (for example aws_s3_bucket's versioning {}) are not in
-//     AttrNames, so their attributes are not checked.
+//   - Only the top-level attributes of NestedBody are checked; attributes
+//     inside nested blocks (for example aws_s3_bucket's versioning {}) are
+//     not.
 //   - dynamic {} blocks are not expanded; only the static declaration is
 //     visible.
 //   - count = 0 and for_each = {} resources are still annotated; the
@@ -38,18 +39,34 @@ func Enrich(module *model.Module, s *Schema) {
 	for index := range module.ManagedResources {
 		resource := &module.ManagedResources[index]
 		block, _ := s.LookupResource(providerSource(sources, resource.Provider, resource.Type), resource.Type)
-		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Position)
+		resource.SchemaFindings = findingsFor(block, topLevelAttrNames(resource.NestedBody), resource.Position)
 	}
 	for index := range module.DataResources {
 		resource := &module.DataResources[index]
 		block, _ := s.LookupDataSource(providerSource(sources, resource.Provider, resource.Type), resource.Type)
-		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Position)
+		resource.SchemaFindings = findingsFor(block, topLevelAttrNames(resource.NestedBody), resource.Position)
 	}
 	for index := range module.EphemeralResources {
 		resource := &module.EphemeralResources[index]
 		block, _ := s.LookupEphemeralResource(providerSource(sources, resource.Provider, resource.Type), resource.Type)
-		resource.SchemaFindings = findingsFor(block, resource.AttrNames, resource.Position)
+		resource.SchemaFindings = findingsFor(block, topLevelAttrNames(resource.NestedBody), resource.Position)
 	}
+}
+
+// topLevelAttrNames returns the sorted top-level attribute names of a
+// captured resource body, or nil when the body is absent. Nested-block
+// attributes are intentionally excluded: schema enrichment only checks the
+// resource's own top-level attributes.
+func topLevelAttrNames(body *model.Body) []string {
+	if body == nil || len(body.Attributes) == 0 {
+		return nil
+	}
+	names := make([]string, 0, len(body.Attributes))
+	for name := range body.Attributes {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	return names
 }
 
 // findingsFor compares the user-set attribute names against the schema

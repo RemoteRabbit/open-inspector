@@ -19,8 +19,10 @@ func TestExtractReferences(t *testing.T) {
 	}{
 		{`var.region`, []model.Reference{{Kind: model.ReferenceVar, Address: "var.region"}}},
 		{`local.name`, []model.Reference{{Kind: model.ReferenceLocal, Address: "local.name"}}},
-		{`module.net.vpc_id`, []model.Reference{{Kind: model.ReferenceModule, Address: "module.net"}}},
+		{`module.net.vpc_id`, []model.Reference{{Kind: model.ReferenceModule, Address: "module.net", Attribute: "vpc_id"}}},
+		{`module.net`, []model.Reference{{Kind: model.ReferenceModule, Address: "module.net"}}}, // bare: no attribute
 		{`data.aws_ami.a.id`, []model.Reference{{Kind: model.ReferenceData, Address: "data.aws_ami.a"}}},
+		{`ephemeral.random_password.db.result`, []model.Reference{{Kind: model.ReferenceEphemeral, Address: "ephemeral.random_password.db"}}},
 		{`aws_s3_bucket.b.arn`, []model.Reference{{Kind: model.ReferenceResource, Address: "aws_s3_bucket.b"}}},
 		{`each.key`, []model.Reference{{Kind: model.ReferenceOther, Address: "each.key"}}},
 		{`"${var.x}-${var.x}"`, []model.Reference{{Kind: model.ReferenceVar, Address: "var.x"}}}, // dedup
@@ -38,9 +40,11 @@ func TestExtractReferences(t *testing.T) {
 			continue
 		}
 		for i := range tc.want {
-			if got[i].Kind != tc.want[i].Kind || got[i].Address != tc.want[i].Address {
-				t.Errorf("extractReferences(%q)[%d]: got {Kind:%q Address:%q}, want {Kind:%q Address:%q}",
-					tc.src, i, got[i].Kind, got[i].Address, tc.want[i].Kind, tc.want[i].Address)
+			if got[i].Kind != tc.want[i].Kind || got[i].Address != tc.want[i].Address ||
+				got[i].Attribute != tc.want[i].Attribute {
+				t.Errorf("extractReferences(%q)[%d]: got {Kind:%q Address:%q Attribute:%q}, want {Kind:%q Address:%q Attribute:%q}",
+					tc.src, i, got[i].Kind, got[i].Address, got[i].Attribute,
+					tc.want[i].Kind, tc.want[i].Address, tc.want[i].Attribute)
 			}
 		}
 	}

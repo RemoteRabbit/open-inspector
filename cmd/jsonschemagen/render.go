@@ -38,7 +38,11 @@ func renderMarkdown(schema *jsonschema.Schema) string {
 		renderObject(&b, schema.Definitions[name])
 	}
 
-	return b.String()
+	// renderObject ends every property table with a blank line as a
+	// separator before the next heading; on the final type that leaves a
+	// trailing blank line. Collapse it so the file ends with exactly one
+	// newline and stays clean under the end-of-file pre-commit hook.
+	return strings.TrimRight(b.String(), "\n") + "\n"
 }
 
 // renderObject writes the description and a property table for a single

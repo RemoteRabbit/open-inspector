@@ -59,10 +59,14 @@ func referenceFromTraversal(traversal hcl.Traversal) (model.Reference, bool) {
 		reference.Address = address(traversal, 2) // local.NAME
 	case "module":
 		reference.Kind = model.ReferenceModule
-		reference.Address = address(traversal, 2) // module.NAME
+		reference.Address = address(traversal, 2)         // module.NAME
+		reference.Attribute = attributeStep(traversal, 2) // the OUTPUT in module.NAME.OUTPUT
 	case "data":
 		reference.Kind = model.ReferenceData
 		reference.Address = address(traversal, 3) // data.TYPE.NAME
+	case "ephemeral":
+		reference.Kind = model.ReferenceEphemeral
+		reference.Address = address(traversal, 3) // ephemeral.TYPE.NAME
 	case "each", "self", "count", "path", "terraform":
 		reference.Kind = model.ReferenceOther
 		reference.Address = address(traversal, 2)
@@ -87,4 +91,17 @@ func address(traversal hcl.Traversal, n int) string {
 		n = len(traversal)
 	}
 	return traversalString(traversal[:n])
+}
+
+// attributeStep returns the name of the attribute step at index n in
+// traversal (0-based), or "" if there is none. It is used to read the output
+// name that follows a "module.NAME" prefix.
+func attributeStep(traversal hcl.Traversal, n int) string {
+	if n >= len(traversal) {
+		return ""
+	}
+	if step, ok := traversal[n].(hcl.TraverseAttr); ok {
+		return step.Name
+	}
+	return ""
 }

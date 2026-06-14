@@ -38,7 +38,7 @@ func fixturePath(t *testing.T, name string) string {
 	return p
 }
 
-func TestLoad_CapturesAttrNames(t *testing.T) {
+func TestLoad_CapturesNestedBodyAttributes(t *testing.T) {
 	t.Parallel()
 
 	mod, err := Load(fixturePath(t, "simple"))
@@ -46,12 +46,15 @@ func TestLoad_CapturesAttrNames(t *testing.T) {
 		t.Fatalf("Load: %v", err)
 	}
 	example := findResource(t, mod.ManagedResources, "null_resource", "example")
-	if want := []string{"triggers"}; !reflect.DeepEqual(example.AttrNames, want) {
-		t.Errorf("AttrNames = %v, want %v", example.AttrNames, want)
+	if example.NestedBody == nil {
+		t.Fatalf("NestedBody = nil, want a captured body")
+	}
+	if want := []string{"triggers"}; !reflect.DeepEqual(attrNames(example.NestedBody), want) {
+		t.Errorf("NestedBody attributes = %v, want %v", attrNames(example.NestedBody), want)
 	}
 }
 
-func TestLoad_AttrNamesExcludeMetaArgs(t *testing.T) {
+func TestLoad_NestedBodyExcludesMetaArgs(t *testing.T) {
 	t.Parallel()
 
 	mod, err := Load(fixturePath(t, "resources-full"))
@@ -59,11 +62,24 @@ func TestLoad_AttrNamesExcludeMetaArgs(t *testing.T) {
 		t.Fatalf("Load: %v", err)
 	}
 	// aws_instance.primary sets only meta-args (provider, depends_on) and
-	// a lifecycle block; none should leak into AttrNames.
+	// a lifecycle block; none should leak into NestedBody.
 	primary := findResource(t, mod.ManagedResources, "aws_instance", "primary")
-	if len(primary.AttrNames) != 0 {
-		t.Errorf("AttrNames = %v, want empty (only meta-args set)", primary.AttrNames)
+	if names := attrNames(primary.NestedBody); len(names) != 0 {
+		t.Errorf("NestedBody attributes = %v, want empty (only meta-args set)", names)
 	}
+}
+
+// attrNames returns the sorted attribute names of a captured body, or nil.
+func attrNames(body *model.Body) []string {
+	if body == nil || len(body.Attributes) == 0 {
+		return nil
+	}
+	names := make([]string, 0, len(body.Attributes))
+	for name := range body.Attributes {
+		names = append(names, name)
+	}
+	sort.Strings(names)
+	return names
 }
 
 func TestLoad_Simple_RequiredProviders(t *testing.T) {
@@ -282,6 +298,7 @@ var snapshotFixtures = []string{
 	"json-config",
 	"module-sources",
 	"multi-module",
+	"nested-blocks",
 	"doc-comments",
 	"opentofu-encryption",
 	"opentofu-provider-foreach",
@@ -585,6 +602,45 @@ func TestLoad_NonLiteralAttrs(t *testing.T) {
 		if o.Name == "bad_sensitive" && o.Sensitive {
 			t.Errorf("bad_sensitive.Sensitive = true, want false (literal extraction must have failed)")
 		}
+	}
+}
+
+func TestLoad_CapturesModuleInputs(t *testing.T) {
+	t.Parallel()
+
+	mod, err := Load(fixturePath(t, "multi-module"))
+	if err != nil {
+		t.Fatalf("Load: %v", err)
+	}
+
+	var network model.ModuleCall
+	for _, call := range mod.ModuleCalls {
+		if call.Name == "network" {
+			network = call
+		}
+	}
+	if network.Name == "" {
+		t.Fatal("module call network not found")
+	}
+
+	input, ok := network.Inputs["name"]
+	if !ok {
+		t.Fatalf("network module call missing captured input 'name'; inputs = %v", network.Inputs)
+	}
+	// The input value references var.name_prefix; that reference is what
+	// the dependency graph uses to bridge across the module boundary.
+	found := false
+	for _, reference := range input.References {
+		if reference.Kind == model.ReferenceVar && reference.Address == "var.name_prefix" {
+			found = true
+		}
+	}
+	if !found {
+		t.Errorf("input 'name' did not capture var.name_prefix reference; got %v", input.References)
+	}
+	// The source meta-argument must NOT be captured as an input.
+	if _, ok := network.Inputs["source"]; ok {
+		t.Errorf("source meta-arg leaked into Inputs: %v", network.Inputs)
 	}
 }
 

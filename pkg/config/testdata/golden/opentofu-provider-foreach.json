@@ -125,9 +125,45 @@
           }
         ]
       },
-      "attr_names": [
-        "bucket"
-      ],
+      "nested_body": {
+        "attributes": {
+          "bucket": {
+            "source": "\"open-inspector-fixture-${each.key}\"",
+            "position": {
+              "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+              "start": {
+                "line": 31,
+                "column": 14,
+                "byte": 783
+              },
+              "end": {
+                "line": 31,
+                "column": 50,
+                "byte": 819
+              }
+            },
+            "references": [
+              {
+                "kind": "other",
+                "address": "each.key",
+                "position": {
+                  "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
+                  "start": {
+                    "line": 31,
+                    "column": 40,
+                    "byte": 809
+                  },
+                  "end": {
+                    "line": 31,
+                    "column": 48,
+                    "byte": 817
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/opentofu-provider-foreach/main.tf",
         "start": {

@@ -45,6 +45,27 @@
       ],
       "description": "AttrFinding names a single attribute and points at the block that set it."
     },
+    "Body": {
+      "properties": {
+        "attributes": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Expression"
+          },
+          "type": "object",
+          "description": "attribute name -\u003e value expression"
+        },
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/NestedBlock"
+          },
+          "type": "array",
+          "description": "nested blocks, in source order"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Body is a generic, schema-less capture of an HCL block body: its attributes (as unevaluated expressions) and its nested blocks."
+    },
     "CheckBlock": {
       "properties": {
         "name": {
@@ -109,6 +130,69 @@
         "source"
       ],
       "description": "ChildModule represents one resolved (or attempted) module call."
+    },
+    "DependencyEdge": {
+      "properties": {
+        "from": {
+          "type": "string",
+          "description": "address of the dependent declaration"
+        },
+        "to": {
+          "type": "string",
+          "description": "address of the declaration it depends on"
+        },
+        "to_attribute": {
+          "type": "string",
+          "description": "ToAttribute records which member of To the dependency is on, when that\nis known and useful. It is set only when To is a module call and the\nreference reads a specific output (the OUTPUT in \"module.NAME.OUTPUT\");\nTo stays \"module.NAME\" so the edge still points at a real node. Empty\notherwise."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "description": "DependencyEdge is a directed \"From depends on To\" relationship between two declarations, identified by their canonical addresses."
+    },
+    "DependencyGraph": {
+      "properties": {
+        "nodes": {
+          "items": {
+            "$ref": "#/$defs/DependencyNode"
+          },
+          "type": "array",
+          "description": "declarations, sorted by address"
+        },
+        "edges": {
+          "items": {
+            "$ref": "#/$defs/DependencyEdge"
+          },
+          "type": "array",
+          "description": "dependencies, sorted by (from, to)"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "DependencyGraph is a directed, intra-module dependency graph of the declarations within a single module."
+    },
+    "DependencyNode": {
+      "properties": {
+        "address": {
+          "type": "string",
+          "description": "canonical address, e.g. \"aws_s3_bucket.b\" or \"var.region\""
+        },
+        "kind": {
+          "type": "string",
+          "description": "kind of declaration"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "address",
+        "kind"
+      ],
+      "description": "DependencyNode is one declaration in a DependencyGraph."
     },
     "DeprecatedAttr": {
       "properties": {
@@ -354,12 +438,9 @@
           "type": "array",
           "description": "explicit dependency references"
         },
-        "attr_names": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "AttrNames lists the user-set top-level attribute names that are not\nmeta-arguments, captured at load time and sorted. See\nResource.AttrNames for the exact semantics and caveats."
+        "nested_body": {
+          "$ref": "#/$defs/Body",
+          "description": "NestedBody is the full schema-less capture of the ephemeral\nresource body. See Resource.NestedBody for the exact semantics and\ncaveats."
         },
         "schema_findings": {
           "$ref": "#/$defs/SchemaFindings",
@@ -552,6 +633,13 @@
           "type": "object",
           "description": "local -\u003e remote"
         },
+        "inputs": {
+          "additionalProperties": {
+            "$ref": "#/$defs/Expression"
+          },
+          "type": "object",
+          "description": "Inputs holds the module's input arguments (everything that is not a\nmeta-argument) as unevaluated expressions keyed by input name. Their\ncaptured references are what connect a parent module's values to a\nchild module across the call boundary."
+        },
         "comment": {
           "type": "string",
           "description": "leading docstring comment above block, if any."
@@ -593,6 +681,37 @@
         "position"
       ],
       "description": "MovedBlock corresponds to `moved { from = X, to = Y }`"
+    },
+    "NestedBlock": {
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "block type keyword, e.g. \"versioning\" or \"dynamic\""
+        },
+        "labels": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "description": "block labels, e.g. [\"lifecycle_rule\"] for a dynamic block"
+        },
+        "body": {
+          "$ref": "#/$defs/Body",
+          "description": "the block's own body, recursively"
+        },
+        "position": {
+          "$ref": "#/$defs/Position",
+          "description": "source position of the block header"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "required": [
+        "type",
+        "body",
+        "position"
+      ],
+      "description": "NestedBlock is one nested block within a Body, such as a resource's versioning {} block or a dynamic \"x\" {} block."
     },
     "ObjectAttr": {
       "properties": {
@@ -780,6 +899,10 @@
           "type": "string",
           "description": "canonical address, e.g. \"var.region\" or \"aws_s3_bucket.b\""
         },
+        "attribute": {
+          "type": "string",
+          "description": "Attribute is the member accessed on the referenced object, when it is\nmeaningful for resolving the reference more precisely. It is currently\ncaptured only for module references: the output name in\n\"module.NAME.OUTPUT\" (so Address \"module.net\" gains Attribute\n\"subnet_id\"). Empty for every other kind and for bare \"module.NAME\"."
+        },
         "position": {
           "$ref": "#/$defs/Position",
           "description": "source range of this traversal, if available"
@@ -880,12 +1003,9 @@
           "type": "array",
           "description": "explicit dependency references"
         },
-        "attr_names": {
-          "items": {
-            "type": "string"
-          },
-          "type": "array",
-          "description": "AttrNames lists the user-set top-level attribute names that are not\nmeta-arguments, captured at load time and sorted. It excludes\ncount, for_each, provider, depends_on, and the lifecycle block. It\nis best-effort: nested blocks (for example a versioning {} block)\ndo not appear here."
+        "nested_body": {
+          "$ref": "#/$defs/Body",
+          "description": "NestedBody is the full schema-less capture of the resource body:\nevery user-set attribute as an unevaluated expression and every\nnested block (versioning {}, dynamic {}, provisioner {}, ...),\nrecursively. It excludes the meta-arguments (count, for_each,\nprovider, depends_on) and the lifecycle block, which are modeled\nexplicitly above. It is populated only for native HCL; JSON bodies\nare not walked and leave this nil."
         },
         "schema_findings": {
           "$ref": "#/$defs/SchemaFindings",
@@ -1224,6 +1344,10 @@
       },
       "type": "object",
       "description": "resolved child modules keyed by call name; populated only with WithModuleGraph"
+    },
+    "dependency_graph": {
+      "$ref": "#/$defs/DependencyGraph",
+      "description": "intra-module resource dependency graph; populated only with WithDependencyGraph"
     },
     "diagnostics": {
       "$ref": "#/$defs/Diagnostics",
