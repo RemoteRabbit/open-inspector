@@ -31,8 +31,20 @@ func decodeModuleCallBlock(block *hcl.Block, source []byte, comments commentInde
 		Position: model.PositionFromHCL(block.DefRange),
 	}
 
-	inner, _, hdiag := block.Body.PartialContent(moduleSchema)
+	inner, remain, hdiag := block.Body.PartialContent(moduleSchema)
 	diags := model.DiagnosticsFromHCL(hdiag)
+
+	// Capture every remaining attribute (the module's input arguments) as
+	// an unevaluated expression. JustAttributes excludes the meta-args
+	// already consumed above; its diagnostic (raised only when the body
+	// holds nested blocks, which module calls do not validly use) is
+	// ignored, matching the loader's best-effort stance.
+	if inputs, _ := remain.JustAttributes(); len(inputs) > 0 {
+		moduleCall.Inputs = make(map[string]model.Expression, len(inputs))
+		for name, attribute := range inputs {
+			moduleCall.Inputs[name] = capture(attribute.Expr, source)
+		}
+	}
 
 	// source and version accept either a constant string literal or, with
 	// OpenTofu/Terraform early evaluation, a reference to vars/locals.

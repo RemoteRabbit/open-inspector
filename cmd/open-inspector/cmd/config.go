@@ -17,6 +17,7 @@ var (
 	configJSON   bool
 	configFailOn string
 	configSchema string
+	configDeps   bool
 )
 
 // configCmd inspects a single module directory.
@@ -38,6 +39,8 @@ func init() {
 		"exit nonzero if a diagnostic with this severity is present: error|warning|never")
 	configCmd.Flags().StringVar(&configSchema, "schema", "",
 		"enrich resources with findings from a tofu/terraform 'providers schema -json' document; pass a file path or 'auto' to shell out")
+	configCmd.Flags().BoolVar(&configDeps, "deps", false,
+		"derive the intra-module dependency graph (resources, locals, outputs, ... and their references)")
 	rootCmd.AddCommand(configCmd)
 }
 
@@ -53,6 +56,10 @@ func runConfig(cmd *cobra.Command, args []string) error {
 		return err
 	}
 	defer cleanup()
+
+	if configDeps {
+		opts = append(opts, inspector.WithDependencyGraph())
+	}
 
 	mod, err := inspector.Inspect(args[0], opts...)
 	if err != nil {

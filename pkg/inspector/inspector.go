@@ -25,7 +25,8 @@ var Version = "0.6.0" // x-release-please-version
 
 // Inspect loads the Terraform/OpenTofu module rooted at dir and returns the
 // resulting model. It always parses the module's configuration; passing
-// WithModuleGraph also resolves child module calls, and WithSchema or
+// WithModuleGraph also resolves child module calls, WithDependencyGraph
+// derives the intra-module dependency graph, and WithSchema or
 // WithSchemaAuto enriches the model with provider-schema findings.
 func Inspect(dir string, opts ...Option) (*model.Module, error) {
 	defaults := defaultOptions()
@@ -45,6 +46,9 @@ func Inspect(dir string, opts ...Option) (*model.Module, error) {
 
 	if defaults.moduleGraph {
 		graph.Build(module, defaults.toGraphOptions())
+	}
+	if defaults.dependencyGraph {
+		graph.BuildDependencies(module)
 	}
 	return module, nil
 }

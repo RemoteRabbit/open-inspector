@@ -17,9 +17,10 @@ import (
 type Option func(*options)
 
 type options struct {
-	moduleGraph bool
-	maxDepth    int
-	cacheDir    string
+	moduleGraph     bool
+	dependencyGraph bool
+	maxDepth        int
+	cacheDir        string
 
 	schema     *schema.Schema
 	schemaAuto bool
@@ -30,6 +31,17 @@ type options struct {
 func WithModuleGraph() Option {
 	return func(opts *options) {
 		opts.moduleGraph = true
+	}
+}
+
+// WithDependencyGraph derives the intra-module dependency graph (resources,
+// data sources, locals, outputs, variables, and module calls, with edges
+// from their references and depends_on) into Module.DependencyGraph. When
+// combined with WithModuleGraph, every resolved child module gets its own
+// graph too.
+func WithDependencyGraph() Option {
+	return func(opts *options) {
+		opts.dependencyGraph = true
 	}
 }
 

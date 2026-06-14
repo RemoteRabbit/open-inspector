@@ -143,6 +143,9 @@ func mergeResources(base *[]model.Resource, overrides []model.Resource) {
 			if override.Lifecycle != nil {
 				(*base)[index].Lifecycle = override.Lifecycle
 			}
+			if override.NestedBody != nil {
+				(*base)[index].NestedBody = override.NestedBody
+			}
 			goto next
 		}
 	next:
@@ -172,6 +175,9 @@ func mergeEphemeralResources(base *[]model.EphemeralResource, overrides []model.
 			}
 			if override.Lifecycle != nil {
 				(*base)[index].Lifecycle = override.Lifecycle
+			}
+			if override.NestedBody != nil {
+				(*base)[index].NestedBody = override.NestedBody
 			}
 			goto next
 		}
@@ -204,6 +210,14 @@ func mergeModuleCalls(base *model.Module, overrides []model.ModuleCall) {
 			}
 			if len(override.Providers) > 0 {
 				base.ModuleCalls[index].Providers = override.Providers
+			}
+			if len(override.Inputs) > 0 {
+				if base.ModuleCalls[index].Inputs == nil {
+					base.ModuleCalls[index].Inputs = make(map[string]model.Expression, len(override.Inputs))
+				}
+				for name, expression := range override.Inputs {
+					base.ModuleCalls[index].Inputs[name] = expression
+				}
 			}
 			goto next
 		}

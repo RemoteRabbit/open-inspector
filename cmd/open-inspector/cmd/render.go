@@ -82,6 +82,7 @@ func renderTable(cmd *cobra.Command, mod *model.Module) error {
 	renderRemoved(ew, mod.Removed)
 	renderChecks(ew, mod.Checks)
 	renderEncryption(ew, mod.Encryption)
+	renderDependencyGraph(ew, mod.DependencyGraph)
 	renderDiagnostics(ew, mod.Diagnostics)
 	ew.printf("(full detail available with --json)\n")
 	if ew.err != nil {
@@ -253,6 +254,21 @@ func renderEncryption(ew *errWriter, enc *model.Encryption) {
 		{"STATE", yesNo(enc.State != nil)},
 		{"PLAN", yesNo(enc.Plan != nil)},
 		{"REMOTE STATE SOURCES", count(len(enc.RemoteStateSources))},
+	}
+	ew.table(rows)
+}
+
+// renderDependencyGraph prints the intra-module dependency graph as a
+// "FROM -> TO" edge list. Omitted when the graph was not requested or has no
+// edges; the full node list is available via --json.
+func renderDependencyGraph(ew *errWriter, dg *model.DependencyGraph) {
+	if dg == nil || len(dg.Edges) == 0 {
+		return
+	}
+	ew.printf("## Dependencies (%d)\n", len(dg.Edges))
+	rows := [][]string{{"FROM", "DEPENDS ON"}}
+	for _, edge := range dg.Edges {
+		rows = append(rows, []string{edge.From, edge.To})
 	}
 	ew.table(rows)
 }

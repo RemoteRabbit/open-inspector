@@ -31,6 +31,23 @@ func nodeID(name, parentPath string) string {
 	return "n" + hex.EncodeToString(sum[:4])
 }
 
+// childSourceSuffix renders the parenthetical annotation after a child call
+// name in the tree view: its resolved kind (when known) and the raw source
+// argument, e.g. "  (local: ./modules/net)" or "  (registry: foo/bar/aws)".
+// It returns "" when there is nothing to show.
+func childSourceSuffix(child *model.ChildModule) string {
+	switch {
+	case child.Resolved != nil && child.Source != "":
+		return "  (" + child.Resolved.Kind + ": " + child.Source + ")"
+	case child.Resolved != nil:
+		return "  (" + child.Resolved.Kind + ")"
+	case child.Source != "":
+		return "  (" + child.Source + ")"
+	default:
+		return ""
+	}
+}
+
 // RenderTree writes an indented, ASCII tree view of the module graph to w.
 func RenderTree(w io.Writer, mod *model.Module) error {
 	var walk func(*model.Module, string) error
@@ -47,10 +64,7 @@ func RenderTree(w io.Writer, mod *model.Module) error {
 				connector = "└── "
 				nextPrefix = prefix + "    "
 			}
-			label := name
-			if child.Resolved != nil {
-				label += "  (" + child.Resolved.Kind + ")"
-			}
+			label := name + childSourceSuffix(child)
 			if _, err := fmt.Fprintf(w, "%s%s%s\n", prefix, connector, label); err != nil {
 				return err
 			}
