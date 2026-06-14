@@ -21,7 +21,7 @@ import (
 // it via -ldflags "-X github.com/remoterabbit/open-inspector/pkg/inspector.Version=...".
 // release-please rewrites the literal below on each release PR; the
 // trailing marker comment is required - do not remove it.
-var Version = "0.6.0" // x-release-please-version
+var Version = "0.7.0" // x-release-please-version
 
 // Inspect loads the Terraform/OpenTofu module rooted at dir and returns the
 // resulting model. It always parses the module's configuration; passing
