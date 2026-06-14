@@ -12,6 +12,7 @@ import (
 
 	"github.com/remoterabbit/open-inspector/pkg/graph"
 	"github.com/remoterabbit/open-inspector/pkg/inspector"
+	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
 func TestRenderTree_MultiModule(t *testing.T) {
@@ -21,10 +22,54 @@ func TestRenderTree_MultiModule(t *testing.T) {
 	if err := graph.RenderTree(&buf, module); err != nil {
 		t.Fatalf("RenderTree: %v", err)
 	}
-	for _, want := range []string{"network", "compute"} {
+	for _, want := range []string{
+		"network", "compute",
+		"compute  (local: ./modules/compute)",
+		"network  (local: ./modules/network)",
+	} {
 		if !strings.Contains(buf.String(), want) {
 			t.Errorf("tree output missing %q:\n%s", want, buf.String())
 		}
+	}
+}
+
+// TestRenderTree_SourceVariants covers the source-suffix branches: a resolved
+// call shows "kind: source", an unresolved call shows just its raw source, and
+// a call with neither shows no annotation at all.
+func TestRenderTree_SourceVariants(t *testing.T) {
+	root := &model.Module{
+		Path: "root",
+		Children: map[string]*model.ChildModule{
+			"resolved": {
+				CallName: "resolved",
+				Source:   "./modules/net",
+				Resolved: &model.ResolvedSource{Kind: "local"},
+			},
+			"unresolved": {
+				CallName: "unresolved",
+				Source:   "git::https://example.com/x.git",
+			},
+			"bare": {CallName: "bare"},
+		},
+	}
+
+	var buf bytes.Buffer
+	if err := graph.RenderTree(&buf, root); err != nil {
+		t.Fatalf("RenderTree: %v", err)
+	}
+	out := buf.String()
+
+	for _, want := range []string{
+		"resolved  (local: ./modules/net)",
+		"unresolved  (git::https://example.com/x.git)",
+	} {
+		if !strings.Contains(out, want) {
+			t.Errorf("tree output missing %q:\n%s", want, out)
+		}
+	}
+	// A call with no resolution and no source gets no parenthetical.
+	if strings.Contains(out, "bare  (") {
+		t.Errorf("bare call should have no source suffix:\n%s", out)
 	}
 }
 

@@ -64,6 +64,7 @@
           {
             "kind": "module",
             "address": "module.compute",
+            "attribute": "id",
             "position": {
               "filename": "\u003cfixture\u003e/multi-module/main.tf",
               "start": {
@@ -99,6 +100,43 @@
     {
       "name": "network",
       "source": "./modules/network",
+      "inputs": {
+        "name": {
+          "source": "\"${var.name_prefix}-net\"",
+          "position": {
+            "filename": "\u003cfixture\u003e/multi-module/main.tf",
+            "start": {
+              "line": 12,
+              "column": 12,
+              "byte": 259
+            },
+            "end": {
+              "line": 12,
+              "column": 36,
+              "byte": 283
+            }
+          },
+          "references": [
+            {
+              "kind": "var",
+              "address": "var.name_prefix",
+              "position": {
+                "filename": "\u003cfixture\u003e/multi-module/main.tf",
+                "start": {
+                  "line": 12,
+                  "column": 15,
+                  "byte": 262
+                },
+                "end": {
+                  "line": 12,
+                  "column": 30,
+                  "byte": 277
+                }
+              }
+            }
+          ]
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",
         "start": {
@@ -116,6 +154,115 @@
     {
       "name": "compute",
       "source": "./modules/compute",
+      "inputs": {
+        "name": {
+          "source": "\"${var.name_prefix}-app\"",
+          "position": {
+            "filename": "\u003cfixture\u003e/multi-module/main.tf",
+            "start": {
+              "line": 17,
+              "column": 18,
+              "byte": 360
+            },
+            "end": {
+              "line": 17,
+              "column": 42,
+              "byte": 384
+            }
+          },
+          "references": [
+            {
+              "kind": "var",
+              "address": "var.name_prefix",
+              "position": {
+                "filename": "\u003cfixture\u003e/multi-module/main.tf",
+                "start": {
+                  "line": 17,
+                  "column": 21,
+                  "byte": 363
+                },
+                "end": {
+                  "line": 17,
+                  "column": 36,
+                  "byte": 378
+                }
+              }
+            }
+          ]
+        },
+        "network_cidr": {
+          "source": "module.network.cidr",
+          "position": {
+            "filename": "\u003cfixture\u003e/multi-module/main.tf",
+            "start": {
+              "line": 19,
+              "column": 18,
+              "byte": 437
+            },
+            "end": {
+              "line": 19,
+              "column": 37,
+              "byte": 456
+            }
+          },
+          "references": [
+            {
+              "kind": "module",
+              "address": "module.network",
+              "attribute": "cidr",
+              "position": {
+                "filename": "\u003cfixture\u003e/multi-module/main.tf",
+                "start": {
+                  "line": 19,
+                  "column": 18,
+                  "byte": 437
+                },
+                "end": {
+                  "line": 19,
+                  "column": 37,
+                  "byte": 456
+                }
+              }
+            }
+          ]
+        },
+        "network_id": {
+          "source": "module.network.id",
+          "position": {
+            "filename": "\u003cfixture\u003e/multi-module/main.tf",
+            "start": {
+              "line": 18,
+              "column": 18,
+              "byte": 402
+            },
+            "end": {
+              "line": 18,
+              "column": 35,
+              "byte": 419
+            }
+          },
+          "references": [
+            {
+              "kind": "module",
+              "address": "module.network",
+              "attribute": "id",
+              "position": {
+                "filename": "\u003cfixture\u003e/multi-module/main.tf",
+                "start": {
+                  "line": 18,
+                  "column": 18,
+                  "byte": 402
+                },
+                "end": {
+                  "line": 18,
+                  "column": 35,
+                  "byte": 419
+                }
+              }
+            }
+          ]
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/multi-module/main.tf",
         "start": {

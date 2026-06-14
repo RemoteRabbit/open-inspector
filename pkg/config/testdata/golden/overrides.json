@@ -47,9 +47,26 @@
       "mode": "managed",
       "type": "null_resource",
       "name": "configured",
-      "attr_names": [
-        "triggers"
-      ],
+      "nested_body": {
+        "attributes": {
+          "triggers": {
+            "source": "{\n    owner = \"override\"\n  }",
+            "position": {
+              "filename": "\u003cfixture\u003e/overrides/main_override.tf",
+              "start": {
+                "line": 5,
+                "column": 14,
+                "byte": 167
+              },
+              "end": {
+                "line": 7,
+                "column": 4,
+                "byte": 195
+              }
+            }
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/overrides/main.tf",
         "start": {

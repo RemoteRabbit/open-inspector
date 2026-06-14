@@ -121,9 +121,6 @@
       "mode": "managed",
       "type": "null_resource",
       "name": "example",
-      "attr_names": [
-        "triggers"
-      ],
       "position": {
         "filename": "\u003cfixture\u003e/json-config/main.tf.json",
         "start": {

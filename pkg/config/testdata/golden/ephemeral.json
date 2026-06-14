@@ -67,8 +67,8 @@
         },
         "references": [
           {
-            "kind": "resource",
-            "address": "ephemeral.random_password",
+            "kind": "ephemeral",
+            "address": "ephemeral.random_password.db",
             "position": {
               "filename": "\u003cfixture\u003e/ephemeral/main.tf",
               "start": {
@@ -106,10 +106,42 @@
     {
       "type": "random_password",
       "name": "db",
-      "attr_names": [
-        "length",
-        "special"
-      ],
+      "nested_body": {
+        "attributes": {
+          "length": {
+            "source": "24",
+            "position": {
+              "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+              "start": {
+                "line": 22,
+                "column": 13,
+                "byte": 462
+              },
+              "end": {
+                "line": 22,
+                "column": 15,
+                "byte": 464
+              }
+            }
+          },
+          "special": {
+            "source": "true",
+            "position": {
+              "filename": "\u003cfixture\u003e/ephemeral/main.tf",
+              "start": {
+                "line": 23,
+                "column": 13,
+                "byte": 477
+              },
+              "end": {
+                "line": 23,
+                "column": 17,
+                "byte": 481
+              }
+            }
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/ephemeral/main.tf",
         "start": {

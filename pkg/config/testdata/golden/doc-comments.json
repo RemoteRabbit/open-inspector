@@ -109,9 +109,26 @@
       "mode": "managed",
       "type": "aws_s3_bucket",
       "name": "logs",
-      "attr_names": [
-        "bucket"
-      ],
+      "nested_body": {
+        "attributes": {
+          "bucket": {
+            "source": "\"my-logs\"",
+            "position": {
+              "filename": "\u003cfixture\u003e/doc-comments/main.tf",
+              "start": {
+                "line": 14,
+                "column": 12,
+                "byte": 402
+              },
+              "end": {
+                "line": 14,
+                "column": 21,
+                "byte": 411
+              }
+            }
+          }
+        }
+      },
       "comment": "Bucket for application logs.",
       "position": {
         "filename": "\u003cfixture\u003e/doc-comments/main.tf",

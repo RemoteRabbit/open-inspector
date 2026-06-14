@@ -138,9 +138,45 @@
           }
         ]
       },
-      "attr_names": [
-        "triggers"
-      ],
+      "nested_body": {
+        "attributes": {
+          "triggers": {
+            "source": "{\n    index = tostring(count.index)\n  }",
+            "position": {
+              "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+              "start": {
+                "line": 19,
+                "column": 14,
+                "byte": 447
+              },
+              "end": {
+                "line": 21,
+                "column": 4,
+                "byte": 486
+              }
+            },
+            "references": [
+              {
+                "kind": "other",
+                "address": "count.index",
+                "position": {
+                  "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+                  "start": {
+                    "line": 20,
+                    "column": 22,
+                    "byte": 470
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 33,
+                    "byte": 481
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
@@ -194,9 +230,45 @@
           }
         ]
       },
-      "attr_names": [
-        "triggers"
-      ],
+      "nested_body": {
+        "attributes": {
+          "triggers": {
+            "source": "{\n    name = each.value\n  }",
+            "position": {
+              "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+              "start": {
+                "line": 27,
+                "column": 14,
+                "byte": 568
+              },
+              "end": {
+                "line": 29,
+                "column": 4,
+                "byte": 595
+              }
+            },
+            "references": [
+              {
+                "kind": "other",
+                "address": "each.value",
+                "position": {
+                  "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+                  "start": {
+                    "line": 28,
+                    "column": 12,
+                    "byte": 581
+                  },
+                  "end": {
+                    "line": 28,
+                    "column": 22,
+                    "byte": 591
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
@@ -233,9 +305,45 @@
           }
         }
       },
-      "attr_names": [
-        "inputs"
-      ],
+      "nested_body": {
+        "attributes": {
+          "inputs": {
+            "source": "{\n    key = each.key\n  }",
+            "position": {
+              "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+              "start": {
+                "line": 35,
+                "column": 12,
+                "byte": 686
+              },
+              "end": {
+                "line": 37,
+                "column": 4,
+                "byte": 710
+              }
+            },
+            "references": [
+              {
+                "kind": "other",
+                "address": "each.key",
+                "position": {
+                  "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+                  "start": {
+                    "line": 36,
+                    "column": 11,
+                    "byte": 698
+                  },
+                  "end": {
+                    "line": 36,
+                    "column": 19,
+                    "byte": 706
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
@@ -290,6 +398,43 @@
           }
         ]
       },
+      "inputs": {
+        "name": {
+          "source": "each.value",
+          "position": {
+            "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+            "start": {
+              "line": 43,
+              "column": 14,
+              "byte": 792
+            },
+            "end": {
+              "line": 43,
+              "column": 24,
+              "byte": 802
+            }
+          },
+          "references": [
+            {
+              "kind": "other",
+              "address": "each.value",
+              "position": {
+                "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+                "start": {
+                  "line": 43,
+                  "column": 14,
+                  "byte": 792
+                },
+                "end": {
+                  "line": 43,
+                  "column": 24,
+                  "byte": 802
+                }
+              }
+            }
+          ]
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
         "start": {
@@ -341,6 +486,43 @@
             }
           }
         ]
+      },
+      "inputs": {
+        "name": {
+          "source": "\"replica-${count.index}\"",
+          "position": {
+            "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+            "start": {
+              "line": 49,
+              "column": 12,
+              "byte": 887
+            },
+            "end": {
+              "line": 49,
+              "column": 36,
+              "byte": 911
+            }
+          },
+          "references": [
+            {
+              "kind": "other",
+              "address": "count.index",
+              "position": {
+                "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",
+                "start": {
+                  "line": 49,
+                  "column": 23,
+                  "byte": 898
+                },
+                "end": {
+                  "line": 49,
+                  "column": 34,
+                  "byte": 909
+                }
+              }
+            }
+          ]
+        }
       },
       "position": {
         "filename": "\u003cfixture\u003e/resources-count-foreach/main.tf",

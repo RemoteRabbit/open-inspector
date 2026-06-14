@@ -71,9 +71,26 @@
       "mode": "managed",
       "type": "random_id",
       "name": "example",
-      "attr_names": [
-        "byte_length"
-      ],
+      "nested_body": {
+        "attributes": {
+          "byte_length": {
+            "source": "8",
+            "position": {
+              "filename": "\u003cfixture\u003e/providers/main.tf",
+              "start": {
+                "line": 42,
+                "column": 17,
+                "byte": 839
+              },
+              "end": {
+                "line": 42,
+                "column": 18,
+                "byte": 840
+              }
+            }
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {
@@ -94,9 +111,26 @@
       "mode": "data",
       "type": "http",
       "name": "example",
-      "attr_names": [
-        "url"
-      ],
+      "nested_body": {
+        "attributes": {
+          "url": {
+            "source": "\"https://example.com\"",
+            "position": {
+              "filename": "\u003cfixture\u003e/providers/main.tf",
+              "start": {
+                "line": 38,
+                "column": 9,
+                "byte": 765
+              },
+              "end": {
+                "line": 38,
+                "column": 30,
+                "byte": 786
+              }
+            }
+          }
+        }
+      },
       "position": {
         "filename": "\u003cfixture\u003e/providers/main.tf",
         "start": {

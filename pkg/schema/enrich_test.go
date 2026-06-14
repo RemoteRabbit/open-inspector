@@ -14,6 +14,20 @@ import (
 	"github.com/remoterabbit/open-inspector/pkg/model"
 )
 
+// nestedBody builds a model.Body whose top-level attributes are the given
+// names, mirroring what the loader captures for a resource body. Used to
+// drive schema enrichment, which inspects only attribute names.
+func nestedBody(names ...string) *model.Body {
+	if len(names) == 0 {
+		return nil
+	}
+	body := &model.Body{Attributes: make(map[string]model.Expression, len(names))}
+	for _, name := range names {
+		body.Attributes[name] = model.Expression{}
+	}
+	return body
+}
+
 // findResource returns the named managed resource from rs or fails.
 func findResource(t *testing.T, rs []model.Resource, typ, name string) model.Resource {
 	t.Helper()
@@ -88,10 +102,10 @@ func TestEnrich_DeprecatedAttr(t *testing.T) {
 			"null": {Source: "hashicorp/null"},
 		},
 		DataResources: []model.Resource{{
-			Mode:      model.DataResourceMode,
-			Type:      "null_data_source",
-			Name:      "example",
-			AttrNames: []string{"id"}, // deprecated in the null schema
+			Mode:       model.DataResourceMode,
+			Type:       "null_data_source",
+			Name:       "example",
+			NestedBody: nestedBody("id"), // deprecated in the null schema
 		}},
 	}
 
@@ -144,10 +158,10 @@ func TestEnrich_MissingRequired(t *testing.T) {
 			"example": {Source: "hashicorp/example"},
 		},
 		ManagedResources: []model.Resource{{
-			Mode:      model.ManagedResourceMode,
-			Type:      "example_thing",
-			Name:      "thing",
-			AttrNames: []string{"size"}, // sets the optional attr, omits required `name`
+			Mode:       model.ManagedResourceMode,
+			Type:       "example_thing",
+			Name:       "thing",
+			NestedBody: nestedBody("size"), // sets the optional attr, omits required `name`
 		}},
 	}
 
@@ -197,9 +211,9 @@ func TestEnrich_EphemeralResource(t *testing.T) {
 			"example": {Source: "hashicorp/example"},
 		},
 		EphemeralResources: []model.EphemeralResource{{
-			Type:      "example_secret",
-			Name:      "token",
-			AttrNames: []string{"bogus"}, // unknown; also omits required `name`
+			Type:       "example_secret",
+			Name:       "token",
+			NestedBody: nestedBody("bogus"), // unknown; also omits required `name`
 		}},
 	}
 
