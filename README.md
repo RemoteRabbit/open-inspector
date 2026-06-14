@@ -3,17 +3,22 @@
 A modern, OpenTofu-aware inspector for Terraform / OpenTofu configurations,
 usable both as a Go library and a CLI.
 
-> **Status:** the config loader, the cobra CLI (`config` and `graph`
-> subcommands), module-graph resolution (local, registry, git, and http
-> sources), and optional provider-schema enrichment are all in place. Work
-> now focuses on enriching the model itself; see "Coming next" below.
+> **Status:** the config loader, the cobra CLI (`config`, `graph`, and
+> `modules` subcommands), module-call resolution (local, registry, git, and
+> http sources), the intra-module dependency graph, and optional
+> provider-schema enrichment are all in place. See "Coming next" below.
 
 ## Goals
 
 - **Config inspection** - parse `.tf`, `.tf.json`, `.tofu`, `.tofu.json`
-  (plus `_override` files) into a stable, source-range-accurate model.
+  (plus `_override` files) into a stable, source-range-accurate model,
+  capturing nested resource blocks and module inputs verbatim.
+- **Dependency graph** - derive the resource dependency graph of a module
+  (resources, data sources, locals, outputs, variables, module calls) from
+  captured references; emit JSON, DOT, Mermaid, or a tree view, optionally
+  recursing into child modules with cross-module edges.
 - **Module graph** - recursively resolve local, registry, git, and http
-  module sources; emit JSON, DOT, Mermaid, or a tree view.
+  module sources into a tree; emit JSON, DOT, Mermaid, or a tree view.
 - **Provider schema introspection (optional)** - enrich the model with
   attribute validity and deprecation findings from
   `terraform providers schema -json` or its `tofu` equivalent.
@@ -56,7 +61,9 @@ model looks the way it does and what the project deliberately refuses to do.
 - **The schema is a versioned contract.** `model.SchemaVersion` and the
   generated JSON Schema (`docs/schema/`) define the wire format. Changes are
   additive (new `omitempty` fields) unless a deliberate, breaking version
-  bump is made.
+  bump is made. While the project is pre-1.0 with no downstream consumers,
+  breaking model changes may still ship without a bump; this tightens once
+  the wire format has consumers.
 
 ### Hard decisions and trade-offs
 
@@ -66,10 +73,10 @@ model looks the way it does and what the project deliberately refuses to do.
 - **HCL2 floor (Terraform 0.12+).** The pre-0.12 untyped-attribute syntax is
   unsupported. The legacy `required_providers { aws = "~> 4.0" }` shorthand
   is still accepted.
-- **Best-effort over strict.** `AttrNames` captures top-level attribute
-  names only, and override merging silently ignores override blocks with no
-  matching target (tracked as a TODO). Loading something useful beats
-  rejecting the input.
+- **Best-effort over strict.** `NestedBody` captures resource attributes
+  and nested blocks for native HCL only (JSON bodies are left unwalked), and
+  override merging silently ignores override blocks with no matching target
+  (tracked as a TODO). Loading something useful beats rejecting the input.
 - **Out-of-process, optional schema enrichment.** Provider details come from
   `terraform`/`tofu providers schema -json`; the project never executes
   providers itself, and enrichment failures degrade to warnings rather than
@@ -103,19 +110,16 @@ supported.
 
 ## Coming next
 
-The loader, CLI, module graph, and schema enrichment are in place; the focus
-now is making the model richer for downstream consumers. Each item below is
-additive to both the model and the JSON schema:
+The loader, CLI, both graphs, and schema enrichment are in place, along with
+reference extraction, doc-comment capture, structured variable types, nested
+resource bodies, and module-input capture. Remaining work is mostly about
+closing known gaps:
 
-- **Reference extraction:** expose the `var` / `local` / `module` / `data` /
-  resource references each expression makes as structured data, not just
-  verbatim source. Unblocks used-by cross-references and unused-variable /
-  unreferenced-output detection.
-- **Doc-comment capture:** attach the leading comment above a block so it can
-  serve as a description when no `description` argument is set.
-- **Structured variable types and decoded defaults:** surface the parsed
-  type as a tree and constant defaults as typed values, alongside the
-  verbatim source kept today.
+- **JSON-body nested capture:** `NestedBody` walks native HCL only; nested
+  blocks in `.tf.json` / `.tofu.json` resources are not yet captured.
+- **Static policy / lint surface:** the dependency graph plus nested bodies
+  are the building blocks for static checks (unused variables, unreferenced
+  outputs, "what touches what" impact analysis) without evaluating config.
 
 ## Usage
 
@@ -127,17 +131,24 @@ make build
 ./bin/open-inspector config --json ./path/to/module
 ./bin/open-inspector config --schema schema.json ./path/to/module
 
-# Render the module call graph.
+# Render the dependency graph (resources, locals, outputs, ...).
 ./bin/open-inspector graph ./path/to/module                  # tree (default)
-./bin/open-inspector graph --format mermaid ./path/to/module
-./bin/open-inspector graph --format dot ./path/to/module
-./bin/open-inspector graph --format json ./path/to/module
+./bin/open-inspector graph --format dot ./path/to/module     # also mermaid|json
+./bin/open-inspector graph --recursive ./path/to/module      # include child modules
+./bin/open-inspector graph --kind resource,module ./path/to/module
+./bin/open-inspector graph --kind resource --contract ./path/to/module  # collapse paths through filtered-out nodes
+
+# Render the module call graph (which module calls which).
+./bin/open-inspector modules ./path/to/module                # tree (default)
+./bin/open-inspector modules --format mermaid ./path/to/module
 
 ./bin/open-inspector --version
 ```
 
-Both subcommands accept `--fail-on=error|warning|never` to control the exit
-code. See [docs/cli](./docs/cli) for the generated command reference and
+The dependency graph (`graph`) is a static analysis: no providers, no
+`init`, and (for local modules) no network are required. All subcommands
+accept `--fail-on=error|warning|never` to control the exit code. See
+[docs/cli](./docs/cli) for the generated command reference and
 [docs/man](./docs/man) for man pages.
 
 ## Library
@@ -145,14 +156,23 @@ code. See [docs/cli](./docs/cli) for the generated command reference and
 ```go
 import "github.com/remoterabbit/open-inspector/pkg/inspector"
 
+// Parse the module into a stable model.Module.
 mod, err := inspector.Inspect("./path/to/module")
+
+// Opt into extras: the dependency graph, recursive module resolution, and
+// provider-schema enrichment.
+mod, err = inspector.Inspect("./path/to/module",
+    inspector.WithDependencyGraph(),
+    inspector.WithModuleGraph(),
+    inspector.WithSchemaAuto(),
+)
 ```
 
 ## Development
 
 ```sh
 make pre-commit-install                  # one-time: wire git hooks (commit + push)
-make all                                 # fmt + lint + license-check + test + build
+make all                                 # fmt + lint + spell + license-fix + test + build + docs-cli + jsonschema
 make license                             # add the MPL header to new source files
 make pre-commit                          # run every pre-commit hook against all files
 ```

@@ -15,6 +15,7 @@ open-inspector config <dir> [flags]
 ### Options
 
 ```
+      --deps             derive the intra-module dependency graph (resources, locals, outputs, ... and their references)
       --fail-on string   exit nonzero if a diagnostic with this severity is present: error|warning|never (default "error")
   -h, --help             help for config
       --json             emit machine-readable JSON instead of a human table
