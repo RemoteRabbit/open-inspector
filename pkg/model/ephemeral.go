@@ -14,10 +14,10 @@ type EphemeralResource struct {
 	ForEach   *Expression `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
 	DependsOn []string    `json:"depends_on,omitempty"` // explicit dependency references
 
-	// AttrNames lists the user-set top-level attribute names that are not
-	// meta-arguments, captured at load time and sorted. See
-	// Resource.AttrNames for the exact semantics and caveats.
-	AttrNames []string `json:"attr_names,omitempty"`
+	// NestedBody is the full schema-less capture of the ephemeral
+	// resource body. See Resource.NestedBody for the exact semantics and
+	// caveats.
+	NestedBody *Body `json:"nested_body,omitempty"`
 
 	// SchemaFindings holds schema-derived annotations, populated only when
 	// inspection runs with a provider schema. See Resource.SchemaFindings.

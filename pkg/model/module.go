@@ -24,6 +24,7 @@ type Module struct {
 	EphemeralResources []EphemeralResource            `json:"ephemeral_resources,omitempty"` // ephemeral blocks (ephemeral resources)
 	Encryption         *Encryption                    `json:"encryption,omitempty"`          // OpenTofu encryption block; nil for Terraform modules
 	Children           map[string]*ChildModule        `json:"children,omitempty"`            // resolved child modules keyed by call name; populated only with WithModuleGraph
+	DependencyGraph    *DependencyGraph               `json:"dependency_graph,omitempty"`    // intra-module resource dependency graph; populated only with WithDependencyGraph
 	Diagnostics        Diagnostics                    `json:"diagnostics,omitempty"`         // problems found while loading the module
 }
 
@@ -118,12 +119,14 @@ type Resource struct {
 	ForEach   *Expression  `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
 	DependsOn []string     `json:"depends_on,omitempty"` // explicit dependency references
 
-	// AttrNames lists the user-set top-level attribute names that are not
-	// meta-arguments, captured at load time and sorted. It excludes
-	// count, for_each, provider, depends_on, and the lifecycle block. It
-	// is best-effort: nested blocks (for example a versioning {} block)
-	// do not appear here.
-	AttrNames []string `json:"attr_names,omitempty"`
+	// NestedBody is the full schema-less capture of the resource body:
+	// every user-set attribute as an unevaluated expression and every
+	// nested block (versioning {}, dynamic {}, provisioner {}, ...),
+	// recursively. It excludes the meta-arguments (count, for_each,
+	// provider, depends_on) and the lifecycle block, which are modeled
+	// explicitly above. It is populated only for native HCL; JSON bodies
+	// are not walked and leave this nil.
+	NestedBody *Body `json:"nested_body,omitempty"`
 
 	// SchemaFindings holds schema-derived annotations. It is populated
 	// only when inspection runs with a provider schema (WithSchema or
@@ -169,8 +172,13 @@ type ModuleCall struct {
 	ForEach           *Expression       `json:"for_each,omitempty"`   // for_each meta-argument expression, if set
 	DependsOn         []string          `json:"depends_on,omitempty"` // explicit dependency references
 	Providers         map[string]string `json:"providers,omitempty"`  // local -> remote
-	Comment           string            `json:"comment,omitempty"`    // leading docstring comment above block, if any.
-	Position          Position          `json:"position"`             // source position of the module block
+	// Inputs holds the module's input arguments (everything that is not a
+	// meta-argument) as unevaluated expressions keyed by input name. Their
+	// captured references are what connect a parent module's values to a
+	// child module across the call boundary.
+	Inputs   map[string]Expression `json:"inputs,omitempty"`
+	Comment  string                `json:"comment,omitempty"` // leading docstring comment above block, if any.
+	Position Position              `json:"position"`          // source position of the module block
 }
 
 // ProviderConfig describes a single provider {} configuration block.
