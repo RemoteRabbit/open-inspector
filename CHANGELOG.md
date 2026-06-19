@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.7.0...v0.7.1) (2026-06-19)
+
+
+### Bug Fixes
+
+* Make errorMessage error_message instead of confusing expression ([#77](https://github.com/RemoteRabbit/open-inspector/issues/77)) ([36d1787](https://github.com/RemoteRabbit/open-inspector/commit/36d1787cb335614d3024544efa1ee607e92a032e))
+
 ## [0.7.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.6.0...v0.7.0) (2026-06-14)
 
 
