@@ -1,4 +1,4 @@
-.PHONY: all build test test-update cover docs-cli bench lint spell fmt tidy clean run license license-check license-fix pre-commit-install pre-commit fuzz-config-hcl fuzz-config-json jsonschema
+.PHONY: all build test test-update cover docs-cli docs-build docs-serve bench lint spell fmt tidy clean run license license-check license-fix pre-commit-install pre-commit fuzz-config-hcl fuzz-config-json jsonschema
 
 BIN            := bin/open-inspector
 PKG            := ./...
@@ -81,6 +81,16 @@ docs-cli:
 	mkdir -p docs/cli docs/man
 	go run ./cmd/docgen
 
+# Build the documentation site (docs/ -> site/) with Zensical. Requires
+# `pip install zensical`. CI builds and deploys it in
+# .github/workflows/docs.yml.
+docs-build:
+	zensical build --clean
+
+# Serve the documentation site locally with live reload (http://localhost:8000).
+docs-serve:
+	zensical serve
+
 # Fuzz the config loader for a short, local-friendly burst. CI runs these
 # longer on a weekly cron (.github/workflows/fuzz.yml).
 fuzz-config-hcl:
@@ -102,6 +112,7 @@ run: build
 
 clean:
 	rm -rf bin
+	rm -rf site
 	rm -f $(COVERAGE_OUT)
 
 # Add the MPL-2.0 header to any source file that is missing it.

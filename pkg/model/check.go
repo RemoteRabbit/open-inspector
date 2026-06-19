@@ -14,7 +14,7 @@ type CheckBlock struct {
 
 // Assertion is one `assert { condition, error_message }` inside a check block.
 type Assertion struct {
-	Condition    Expression `json:"condition"`  // boolean condition expression
-	ErrorMessage Expression `json:"expression"` // message shown when the condition fails
-	Position     Position   `json:"position"`   // source position of the assert block
+	Condition    Expression `json:"condition"`     // boolean condition expression
+	ErrorMessage Expression `json:"error_message"` // message shown when the condition fails
+	Position     Position   `json:"position"`      // source position of the assert block
 }

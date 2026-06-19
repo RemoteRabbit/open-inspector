@@ -120,6 +120,9 @@ closing known gaps:
 - **Static policy / lint surface:** the dependency graph plus nested bodies
   are the building blocks for static checks (unused variables, unreferenced
   outputs, "what touches what" impact analysis) without evaluating config.
+- **Homebrew distribution:** ship a Homebrew formula/tap so macOS and Linux
+  users can `brew install` open-inspector alongside the existing prebuilt
+  archives and `go install`.
 
 ## Usage
 
@@ -148,7 +151,8 @@ make build
 The dependency graph (`graph`) is a static analysis: no providers, no
 `init`, and (for local modules) no network are required. All subcommands
 accept `--fail-on=error|warning|never` to control the exit code. See
-[docs/cli](./docs/cli) for the generated command reference and
+[docs/getting-started.md](./docs/getting-started.md) for an install-and-use
+guide, [docs/cli](./docs/cli) for the generated command reference, and
 [docs/man](./docs/man) for man pages.
 
 ## Library

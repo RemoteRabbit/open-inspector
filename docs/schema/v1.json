@@ -8,7 +8,7 @@
           "$ref": "#/$defs/Expression",
           "description": "boolean condition expression"
         },
-        "expression": {
+        "error_message": {
           "$ref": "#/$defs/Expression",
           "description": "message shown when the condition fails"
         },
@@ -21,7 +21,7 @@
       "type": "object",
       "required": [
         "condition",
-        "expression",
+        "error_message",
         "position"
       ],
       "description": "Assertion is one `assert { condition, error_message }` inside a check block."
