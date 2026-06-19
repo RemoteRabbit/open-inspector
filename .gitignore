@@ -27,6 +27,9 @@ profile.cov
 # Generated coverage report (run `make cover` locally to regenerate)
 docs/test-coverage.md
 
+# Zensical docs build output
+/site/
+
 # env file
 .env
 

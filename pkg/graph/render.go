@@ -34,15 +34,15 @@ func nodeID(name, parentPath string) string {
 // childSourceSuffix renders the parenthetical annotation after a child call
 // name in the tree view: its resolved kind (when known) and the raw source
 // argument, e.g. "  (local: ./modules/net)" or "  (registry: foo/bar/aws)".
-// It returns "" when there is nothing to show.
+// It returns an empty string when there is nothing to show.
 func childSourceSuffix(child *model.ChildModule) string {
 	switch {
 	case child.Resolved != nil && child.Source != "":
-		return "  (" + child.Resolved.Kind + ": " + child.Source + ")"
+		return fmt.Sprintf("  (%s: %s)", child.Resolved.Kind, child.Source)
 	case child.Resolved != nil:
-		return "  (" + child.Resolved.Kind + ")"
+		return fmt.Sprintf("  (%s)", child.Resolved.Kind)
 	case child.Source != "":
-		return "  (" + child.Source + ")"
+		return fmt.Sprintf("  (%s)", child.Source)
 	default:
 		return ""
 	}
@@ -51,13 +51,13 @@ func childSourceSuffix(child *model.ChildModule) string {
 // RenderTree writes an indented, ASCII tree view of the module graph to w.
 func RenderTree(w io.Writer, mod *model.Module) error {
 	var walk func(*model.Module, string) error
-	walk = func(m *model.Module, prefix string) error {
-		if _, err := fmt.Fprintf(w, "%s%s\n", prefix, m.Path); err != nil {
+	walk = func(module *model.Module, prefix string) error {
+		if _, err := fmt.Fprintf(w, "%s%s\n", prefix, module.Path); err != nil {
 			return err
 		}
-		names := sortedKeys(m.Children)
+		names := sortedKeys(module.Children)
 		for i, name := range names {
-			child := m.Children[name]
+			child := module.Children[name]
 			connector := "├── "
 			nextPrefix := prefix + "│   "
 			if i == len(names)-1 {
@@ -85,10 +85,10 @@ func RenderDot(w io.Writer, mod *model.Module) error {
 		return err
 	}
 	var walk func(*model.Module) error
-	walk = func(m *model.Module) error {
-		for _, name := range sortedKeys(m.Children) {
-			child := m.Children[name]
-			if _, err := fmt.Fprintf(w, "  %q -> %q;\n", m.Path, name); err != nil {
+	walk = func(module *model.Module) error {
+		for _, name := range sortedKeys(module.Children) {
+			child := module.Children[name]
+			if _, err := fmt.Fprintf(w, "  %q -> %q;\n", module.Path, name); err != nil {
 				return err
 			}
 			if child.Module != nil {
@@ -112,10 +112,10 @@ func RenderMermaid(w io.Writer, mod *model.Module) error {
 		return err
 	}
 	var walk func(string, *model.Module) error
-	walk = func(parentID string, m *model.Module) error {
-		for _, name := range sortedKeys(m.Children) {
-			child := m.Children[name]
-			childID := nodeID(name, m.Path)
+	walk = func(parentID string, module *model.Module) error {
+		for _, name := range sortedKeys(module.Children) {
+			child := module.Children[name]
+			childID := nodeID(name, module.Path)
 			if _, err := fmt.Fprintf(w, "  %s --> %s[%s]\n", parentID, childID, name); err != nil {
 				return err
 			}
