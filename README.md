@@ -1,25 +1,25 @@
-# open-inspector
+# Open Inspector
 
 A modern, OpenTofu-aware inspector for Terraform / OpenTofu configurations,
 usable both as a Go library and a CLI.
 
-> **Status:** the config loader, the cobra CLI (`config`, `graph`, and
+> **Status:** The config loader, the cobra CLI (`config`, `graph`, and
 > `modules` subcommands), module-call resolution (local, registry, git, and
 > http sources), the intra-module dependency graph, and optional
 > provider-schema enrichment are all in place. See "Coming next" below.
 
 ## Goals
 
-- **Config inspection** - parse `.tf`, `.tf.json`, `.tofu`, `.tofu.json`
+- **Config inspection** - Parse `.tf`, `.tf.json`, `.tofu`, `.tofu.json`
   (plus `_override` files) into a stable, source-range-accurate model,
   capturing nested resource blocks and module inputs verbatim.
-- **Dependency graph** - derive the resource dependency graph of a module
+- **Dependency graph** - Derive the resource dependency graph of a module
   (resources, data sources, locals, outputs, variables, module calls) from
   captured references; emit JSON, DOT, Mermaid, or a tree view, optionally
   recursing into child modules with cross-module edges.
-- **Module graph** - recursively resolve local, registry, git, and http
+- **Module graph** - Recursively resolve local, registry, git, and http
   module sources into a tree; emit JSON, DOT, Mermaid, or a tree view.
-- **Provider schema introspection (optional)** - enrich the model with
+- **Provider schema introspection (optional)** - Enrich the model with
   attribute validity and deprecation findings from
   `terraform providers schema -json` or its `tofu` equivalent.
 - **Modern block coverage** - `moved`, `import`, `removed`, `check`,
@@ -27,7 +27,7 @@ usable both as a Go library and a CLI.
   `configuration_aliases`, and other features the original
   `terraform-config-inspect` never learned.
 
-## Design thesis
+## Design Thesis
 
 A few principles drive every decision in this codebase. They explain why the
 model looks the way it does and what the project deliberately refuses to do.
@@ -65,7 +65,7 @@ model looks the way it does and what the project deliberately refuses to do.
   breaking model changes may still ship without a bump; this tightens once
   the wire format has consumers.
 
-### Hard decisions and trade-offs
+### Hard Decisions and Trade-offs
 
 - **Verbatim over typed (for now).** Variable types and defaults are kept as
   source strings, not decoded trees. This chose round-trip fidelity over
@@ -108,7 +108,7 @@ The legacy pre-0.13 shorthand `required_providers { aws = "~> 4.0" }`
 is still accepted. Pre-0.12 HCL (the untyped-attribute syntax) is not
 supported.
 
-## Coming next
+## Coming Next
 
 The loader, CLI, both graphs, and schema enrichment are in place, along with
 reference extraction, doc-comment capture, structured variable types, nested
@@ -190,7 +190,7 @@ via `go run`; no local install needed.
 can run `asdf install` / `mise install` to pick up the versions pinned
 in [`.tool-versions`](./.tool-versions).
 
-### Pre-commit hooks
+### Pre-commit Hooks
 
 `.pre-commit-config.yaml` runs on every commit:
 
