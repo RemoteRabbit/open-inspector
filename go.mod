@@ -9,12 +9,13 @@ require (
 	github.com/hashicorp/terraform-json v0.27.2
 	github.com/invopop/jsonschema v0.14.0
 	github.com/spf13/cobra v1.10.2
-	github.com/zclconf/go-cty v1.18.1
+	github.com/zclconf/go-cty v1.19.0
 )
 
 require (
 	github.com/agext/levenshtein v1.2.1 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
+	github.com/apparentlymart/go-textseg/v17 v17.0.1 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
 	github.com/buger/jsonparser v1.1.2 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.6 // indirect
