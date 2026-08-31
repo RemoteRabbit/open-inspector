@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.2](https://github.com/RemoteRabbit/open-inspector/compare/v0.7.1...v0.7.2) (2026-08-31)
+
+
+### Documentation
+
+* Attempt to build out docs ([#85](https://github.com/RemoteRabbit/open-inspector/issues/85)) ([bb4807c](https://github.com/RemoteRabbit/open-inspector/commit/bb4807c5c04c76f330eadadfc83b9e4bbb618d4e))
+
 ## [0.7.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.7.0...v0.7.1) (2026-06-19)
 
 
