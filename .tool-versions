@@ -5,4 +5,4 @@
 # Bump deliberately and update go.mod in the same change.
 golang 1.27.1
 golangci-lint 2.13.2
-pre-commit 4.6.2
+prek 0.5.3

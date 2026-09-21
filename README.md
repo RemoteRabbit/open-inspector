@@ -181,7 +181,7 @@ make license                             # add the MPL header to new source file
 make pre-commit                          # run every pre-commit hook against all files
 ```
 
-Requires Go (matching `go.mod`), `golangci-lint`, and `pre-commit`. A
+Requires Go (matching `go.mod`), `golangci-lint`, and `prek`. A
 [`devenv`](https://devenv.sh) shell is provided. License header
 enforcement uses [`addlicense`](https://github.com/google/addlicense)
 via `go run`; no local install needed.
@@ -192,7 +192,7 @@ in [`.tool-versions`](./.tool-versions).
 
 ### Pre-commit Hooks
 
-`.pre-commit-config.yaml` runs on every commit:
+`prek.toml` runs on every commit:
 
 - File hygiene: trailing whitespace, EOF newlines, LF endings, merge
   conflicts, large-file guard, case conflicts, YAML/JSON validity,

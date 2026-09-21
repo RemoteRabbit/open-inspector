@@ -133,12 +133,11 @@ license-fix:
 		$(ADDLICENSE) -check -f $(LICENSE_HEADER) $(LICENSE_PATHS); \
 	}
 
-# Install pre-commit + pre-push hooks defined in .pre-commit-config.yaml.
+# Install the Git hooks defined in prek.toml and prepare their environments.
 pre-commit-install:
-	pre-commit install --install-hooks
-	pre-commit install --hook-type pre-push
+	prek install --prepare-hooks
 
 # Run every hook against every tracked file (useful in CI and after big
 # edits).
 pre-commit:
-	pre-commit run --all-files
+	prek run --all-files
