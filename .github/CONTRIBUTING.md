@@ -10,14 +10,14 @@ make pre-commit-install   # one-time: wire git hooks (commit-msg, pre-commit, pr
 make all                  # fmt + lint + license-check + test + build
 ```
 
-Requires Go (matching `go.mod`), `golangci-lint`, and `pre-commit`. A
+Requires Go (matching `go.mod`), `golangci-lint`, and `prek`. A
 [`devenv`](https://devenv.sh) shell, plus `.tool-versions` for
 [`asdf`](https://asdf-vm.com) / [`mise`](https://mise.jdx.dev), are
 provided so versions match CI.
 
 ## Pre-commit hooks
 
-`.pre-commit-config.yaml` runs three sets of checks:
+`prek.toml` runs three sets of checks:
 
 - **commit-msg**: Conventional Commit format (see below).
 - **pre-commit**: file hygiene, `gofmt -s`, `go vet`,

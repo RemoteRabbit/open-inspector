@@ -15,6 +15,7 @@
     pkgs.git
     pkgs.golangci-lint
     pkgs.gnumake
+    pkgs.prek
   ];
 
   # https://devenv.sh/languages/

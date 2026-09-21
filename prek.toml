@@ -1,0 +1,127 @@
+# Configuration file for `prek`, a git hook framework written in Rust.
+# See https://prek.j178.dev for more information.
+#:schema https://www.schemastore.org/prek.json
+
+default_install_hook_types = ["pre-commit", "pre-push", "commit-msg"]
+default_stages = ["pre-commit"]
+
+# Conventional Commits enforcement (pure-Python, no Node required).
+# Matches the types listed in .github/release-please-config.json so commit
+# messages land in the right CHANGELOG section.
+[[repos]]
+repo = "https://github.com/compilerla/conventional-pre-commit"
+rev = "v4.0.0"
+hooks = [
+  {
+    id = "conventional-pre-commit",
+    stages = ["commit-msg"],
+    args = [
+      "--strict",
+      "feat",
+      "fix",
+      "perf",
+      "revert",
+      "deps",
+      "docs",
+      "refactor",
+      "test",
+      "build",
+      "ci",
+      "chore",
+      "style"
+    ]
+  }
+]
+
+# Generic file hygiene from the official pre-commit collection.
+[[repos]]
+repo = "https://github.com/pre-commit/pre-commit-hooks"
+rev = "v5.0.0"
+hooks = [
+  {
+    id = "trailing-whitespace",
+    exclude = "^(LICENSE|testdata/)"
+  },
+  {
+    id = "end-of-file-fixer",
+    exclude = "^(LICENSE|testdata/)"
+  },
+  {
+    id = "mixed-line-ending",
+    args = ["--fix=lf"]
+  },
+  { id = "check-merge-conflict" },
+  {
+    id = "check-added-large-files",
+    args = ["--maxkb=500"]
+  },
+  { id = "check-case-conflict" },
+  { id = "check-yaml" },
+  { id = "check-json" },
+  { id = "check-symlinks" },
+  { id = "detect-private-key" }
+]
+
+# Spell-checking for code, comments, and docs.
+[[repos]]
+repo = "https://github.com/codespell-project/codespell"
+rev = "v2.3.0"
+hooks = [
+  { id = "codespell" }
+]
+
+# Project-local hooks keep tool invocation in sync with the Makefile.
+[[repos]]
+repo = "local"
+hooks = [
+  {
+    id = "gofmt",
+    name = "gofmt",
+    entry = "gofmt -s -l -w",
+    language = "system",
+    types = ["go"],
+    pass_filenames = true
+  },
+  {
+    id = "go-vet",
+    name = "go vet",
+    entry = "go vet ./...",
+    language = "system",
+    types = ["go"],
+    pass_filenames = false
+  },
+  {
+    id = "golangci-lint",
+    name = "golangci-lint",
+    entry = "golangci-lint run --fix",
+    language = "system",
+    types = ["go"],
+    pass_filenames = false
+  },
+  {
+    id = "license-check",
+    name = "license header check (MPL-2.0)",
+    entry = "make license-check",
+    language = "system",
+    types = ["go"],
+    pass_filenames = false
+  },
+  # Tests are too slow for every commit; run them on push instead.
+  {
+    id = "go-test",
+    name = "go test -race",
+    entry = "go test -race -count=1 ./...",
+    language = "system",
+    types = ["go"],
+    pass_filenames = false,
+    stages = ["pre-push"]
+  },
+  {
+    id = "go-mod-tidy",
+    name = "go mod tidy",
+    entry = "go mod tidy",
+    language = "system",
+    files = '^(go\.mod|go\.sum)$',
+    pass_filenames = false
+  }
+]
