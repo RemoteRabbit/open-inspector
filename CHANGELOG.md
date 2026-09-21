@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.8.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.7.1...v0.8.0) (2026-09-21)
+
+
+### Features
+
+* migrate to prek from pre-commit for speed ([#102](https://github.com/RemoteRabbit/open-inspector/issues/102)) ([0afab50](https://github.com/RemoteRabbit/open-inspector/commit/0afab50d7b48c2a1f99d5a8437152280fc729a04))
+
+
+### Documentation
+
+* Attempt to build out docs ([#85](https://github.com/RemoteRabbit/open-inspector/issues/85)) ([bb4807c](https://github.com/RemoteRabbit/open-inspector/commit/bb4807c5c04c76f330eadadfc83b9e4bbb618d4e))
+
 ## [0.7.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.7.0...v0.7.1) (2026-06-19)
 
 
