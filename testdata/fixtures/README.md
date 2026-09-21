@@ -20,7 +20,7 @@ just enough HCL to exercise one feature or combination.
 | [`json-config/`](./json-config) | valid | `.tf.json` configuration variant |
 | [`multi-module/`](./multi-module) | valid | root module calling two local child modules (graph test) |
 | [`module-sources/`](./module-sources) | valid (declarations only) | registry, git, http module source declarations - not actually fetched in unit tests |
-| [`invalid/syntax-error/`](./invalid/syntax-error) | invalid | unparseable HCL - diagnostic surface test |
+| [`invalid/syntax-error/`](./invalid/syntax-error) | invalid | unparsable HCL - diagnostic surface test |
 | [`invalid/missing-required/`](./invalid/missing-required) | invalid | resource missing required arguments - diagnostic test (only meaningful with provider schema) |
 
 ## Conventions
