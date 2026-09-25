@@ -9,6 +9,7 @@
     ":prConcurrentLimit10",
     "helpers:pinGitHubActionDigests"
   ],
+  "assigneesFromCodeOwners": true,
   "timezone": "America/Chicago",
   "ignorePaths": [
     "**/examples/**",
