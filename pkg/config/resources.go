@@ -63,11 +63,9 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 	}
 
 	if attribute, ok := inner.Attributes["provider"]; ok {
-		if traversal, tdiag := hcl.AbsTraversalForExpr(attribute.Expr); !tdiag.HasErrors() {
-			resource.Provider = traversalString(traversal)
-		} else {
-			diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)
-		}
+		provider, pdiag := traversalStringFromAttr(attribute)
+		diags = append(diags, pdiag...)
+		resource.Provider = provider
 	}
 
 	if attribute, ok := inner.Attributes["depends_on"]; ok {

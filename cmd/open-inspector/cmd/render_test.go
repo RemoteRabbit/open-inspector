@@ -64,8 +64,8 @@ func TestRenderTable_ModernBlocksSections(t *testing.T) {
 	}
 	out := buf.String()
 	for _, want := range []string{
-		"## Moved (1)",
-		"## Imports (1)",
+		"## Moved (2)",
+		"## Imports (2)",
 		"## Removed (1)",
 		"## Checks (1)",
 	} {

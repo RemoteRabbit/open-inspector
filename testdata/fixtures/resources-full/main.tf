@@ -11,6 +11,7 @@
 #   - lifecycle.replace_triggered_by         (traversal list)
 #   - lifecycle.precondition / postcondition (validation blocks)
 #   - module providers = { aws = aws.east }  (provider map)
+#   - module providers = { aws.west = ... }  (aliased provider map key)
 #   - module depends_on = [...]              (traversal list)
 
 terraform {
@@ -62,6 +63,7 @@ module "infra" {
   depends_on = [aws_security_group.web]
 
   providers = {
-    aws = aws.east
+    aws      = aws.east
+    aws.west = aws.west
   }
 }
