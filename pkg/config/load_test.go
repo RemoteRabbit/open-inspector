@@ -802,7 +802,7 @@ func TestLoad_LifecycleAndMeta(t *testing.T) {
 	if want := []string{"aws_security_group.web"}; !reflect.DeepEqual(mc.DependsOn, want) {
 		t.Errorf("ModuleCalls[0].DependsOn = %v, want %v", mc.DependsOn, want)
 	}
-	wantProviders := map[string]string{"aws": "aws.east"}
+	wantProviders := map[string]string{"aws": "aws.east", "aws.west": "aws.west"}
 	if !reflect.DeepEqual(mc.Providers, wantProviders) {
 		t.Errorf("ModuleCalls[0].Providers = %v, want %v", mc.Providers, wantProviders)
 	}
@@ -1062,11 +1062,17 @@ func TestLoad_RefactorBlocks(t *testing.T) {
 	if mod.Diagnostics.HasErrors() {
 		t.Fatalf("unexpected diagnostics: %#v", mod.Diagnostics)
 	}
-	if len(mod.Moved) != 1 || mod.Moved[0].From != "null_resource.old" {
-		t.Errorf("Moved = %#v", mod.Moved)
+	if len(mod.Moved) != 2 || mod.Moved[0].From != "null_resource.old" {
+		t.Fatalf("Moved = %#v", mod.Moved)
 	}
-	if len(mod.Imports) != 1 || mod.Imports[0].To != "null_resource.imported" {
-		t.Errorf("Imports = %#v", mod.Imports)
+	if mod.Moved[1].From != "null_resource.keyed[0]" || mod.Moved[1].To != `null_resource.keyed["first"]` {
+		t.Errorf("Moved[1] = %q -> %q, want index keys kept", mod.Moved[1].From, mod.Moved[1].To)
+	}
+	if len(mod.Imports) != 2 || mod.Imports[0].To != "null_resource.imported" {
+		t.Fatalf("Imports = %#v", mod.Imports)
+	}
+	if mod.Imports[1].To != "null_resource.imported_each[each.key]" {
+		t.Errorf("Imports[1].To = %q, want for_each target", mod.Imports[1].To)
 	}
 	if len(mod.Removed) != 1 || mod.Removed[0].From != "null_resource.gone" {
 		t.Errorf("Removed = %#v", mod.Removed)

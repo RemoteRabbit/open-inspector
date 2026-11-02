@@ -7,7 +7,6 @@ package config
 import (
 	"github.com/hashicorp/hcl/v2"
 	"github.com/remoterabbit/open-inspector/pkg/model"
-	"github.com/zclconf/go-cty/cty"
 )
 
 var moduleSchema = &hcl.BodySchema{
@@ -94,26 +93,22 @@ func decodeModuleCallBlock(block *hcl.Block, source []byte, comments commentInde
 	return diags
 }
 
-// decodeProviderMap handles `providers = { aws = aws.east }`. Keys are bare
-// identifiers (decode as literal strings); values are traversals (use AbsTraversalForExpr,
-// not Value()).
+// decodeProviderMap handles `providers = { aws = aws.east, aws.replica = aws.west }`.
+// Both keys and values are provider references, so both decode as traversals
+// (not Value(), which would try to evaluate aws.replica).
 func decodeProviderMap(expression hcl.Expression) (map[string]string, model.Diagnostics) {
 	pairs, hdiag := hcl.ExprMap(expression)
 	diags := model.DiagnosticsFromHCL(hdiag)
 	output := map[string]string{}
 
 	for _, pair := range pairs {
-		key, kdiag := pair.Key.Value(nil)
-		diags = append(diags, model.DiagnosticsFromHCL(kdiag)...)
-		if key.IsNull() || !key.IsKnown() || key.Type() != cty.String {
+		key, kdiag := addressString(pair.Key)
+		value, vdiag := addressString(pair.Value)
+		if kdiag.HasErrors() || vdiag.HasErrors() {
+			diags = append(diags, model.DiagnosticsFromHCL(append(kdiag, vdiag...))...)
 			continue
 		}
-		traversal, tdiag := hcl.AbsTraversalForExpr(pair.Value)
-		if tdiag.HasErrors() {
-			diags = append(diags, model.DiagnosticsFromHCL(tdiag)...)
-			continue
-		}
-		output[key.AsString()] = traversalString(traversal)
+		output[key] = value
 	}
 	return output, diags
 }
