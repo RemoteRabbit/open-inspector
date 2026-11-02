@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.8.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.8.0...v0.8.1) (2026-11-02)
+
+
+### Bug Fixes
+
+* correct output for providers that may use mappings ([#109](https://github.com/RemoteRabbit/open-inspector/issues/109)) ([85eaace](https://github.com/RemoteRabbit/open-inspector/commit/85eaaceab6d02cf58794a447746929f57f36d339))
+
+
+### Dependencies
+
+* **github.com/hashicorp/hcl/v2:** update module github.com/hashicorp/hcl/v2 to v2.25.0 ([#104](https://github.com/RemoteRabbit/open-inspector/issues/104)) ([ab30384](https://github.com/RemoteRabbit/open-inspector/commit/ab30384249cac84355bdd7402ae38ebcef52be31))
+* **github.com/hashicorp/terraform-json:** update module github.com/hashicorp/terraform-json to v0.29.0 ([#108](https://github.com/RemoteRabbit/open-inspector/issues/108)) ([c27df4c](https://github.com/RemoteRabbit/open-inspector/commit/c27df4c332173c615c90b9b37343a2653a0614b9))
+
 ## [0.8.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.7.1...v0.8.0) (2026-09-21)
 
 
