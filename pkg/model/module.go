@@ -21,7 +21,7 @@ type Module struct {
 	Imports            []ImportBlock                  `json:"imports,omitempty"`             // import blocks
 	Removed            []RemovedBlock                 `json:"removed,omitempty"`             // removed blocks
 	Checks             []CheckBlock                   `json:"checks,omitempty"`              // check blocks
-	EphemeralResources []EphemeralResource            `json:"ephemeral_resources,omitempty"` // ephemeral blocks (ephemeral resources)
+	EphemeralResources []Resource                     `json:"ephemeral_resources,omitempty"` // ephemeral blocks (ephemeral resources)
 	Encryption         *Encryption                    `json:"encryption,omitempty"`          // OpenTofu encryption block; nil for Terraform modules
 	Children           map[string]*ChildModule        `json:"children,omitempty"`            // resolved child modules keyed by call name; populated only with WithModuleGraph
 	DependencyGraph    *DependencyGraph               `json:"dependency_graph,omitempty"`    // intra-module resource dependency graph; populated only with WithDependencyGraph

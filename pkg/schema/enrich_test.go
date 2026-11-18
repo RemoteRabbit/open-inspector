@@ -210,7 +210,7 @@ func TestEnrich_EphemeralResource(t *testing.T) {
 		RequiredProviders: map[string]model.ProviderRequirement{
 			"example": {Source: "hashicorp/example"},
 		},
-		EphemeralResources: []model.EphemeralResource{{
+		EphemeralResources: []model.Resource{{
 			Type:       "example_secret",
 			Name:       "token",
 			NestedBody: nestedBody("bogus"), // unknown; also omits required `name`

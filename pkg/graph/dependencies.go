@@ -75,7 +75,7 @@ func buildDependencyGraph(module *model.Module) *model.DependencyGraph {
 	}
 	for _, resource := range module.EphemeralResources {
 		from := ephemeralAddress(resource.Type, resource.Name)
-		for _, to := range dependenciesOfEphemeral(&resource) {
+		for _, to := range dependenciesOfResource(&resource) {
 			addEdge(from, to)
 		}
 	}
@@ -156,18 +156,6 @@ type dep struct {
 // depends on: meta-argument and nested-body references, explicit depends_on,
 // and lifecycle references.
 func dependenciesOfResource(resource *model.Resource) []dep {
-	var deps []dep
-	deps = appendExprRefs(deps, resource.Count)
-	deps = appendExprRefs(deps, resource.ForEach)
-	deps = appendStringDeps(deps, resource.DependsOn)
-	deps = appendBodyRefs(deps, resource.NestedBody)
-	deps = appendLifecycleRefs(deps, resource.Lifecycle)
-	return deps
-}
-
-// dependenciesOfEphemeral mirrors dependenciesOfResource for the
-// EphemeralResource shape.
-func dependenciesOfEphemeral(resource *model.EphemeralResource) []dep {
 	var deps []dep
 	deps = appendExprRefs(deps, resource.Count)
 	deps = appendExprRefs(deps, resource.ForEach)

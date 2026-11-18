@@ -104,6 +104,7 @@
   ],
   "ephemeral_resources": [
     {
+      "mode": "ephemeral",
       "type": "random_password",
       "name": "db",
       "nested_body": {
