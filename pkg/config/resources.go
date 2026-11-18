@@ -86,17 +86,7 @@ func decodeResourceBlock(block *hcl.Block, source []byte, mode model.ResourceMod
 	case model.DataResourceMode:
 		module.DataResources = append(module.DataResources, resource)
 	case model.EphemeralResourceMode:
-		module.EphemeralResources = append(module.EphemeralResources,
-			model.EphemeralResource{
-				Type: resource.Type, Name: resource.Name,
-				Provider: resource.Provider,
-				Count:    resource.Count, ForEach: resource.ForEach,
-				DependsOn:  resource.DependsOn,
-				NestedBody: resource.NestedBody,
-				Lifecycle:  resource.Lifecycle,
-				Comment:    resource.Comment,
-				Position:   resource.Position,
-			})
+		module.EphemeralResources = append(module.EphemeralResources, resource)
 	}
 	return diags
 }

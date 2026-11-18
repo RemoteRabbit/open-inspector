@@ -72,9 +72,9 @@ func renderTable(cmd *cobra.Command, mod *model.Module) error {
 	renderVariables(ew, mod.Variables)
 	renderOutputs(ew, mod.Outputs)
 	renderLocals(ew, mod.Locals)
-	renderResources(ew, "Managed resources", mod.ManagedResources)
-	renderResources(ew, "Data resources", mod.DataResources)
-	renderEphemeralResources(ew, mod.EphemeralResources)
+	renderResources(ew, "Managed Resources", mod.ManagedResources)
+	renderResources(ew, "Data Resources", mod.DataResources)
+	renderResources(ew, "Ephemeral Resources", mod.EphemeralResources)
 	renderModuleCalls(ew, mod.ModuleCalls)
 	renderProviders(ew, mod.Providers)
 	renderMoved(ew, mod.Moved)
@@ -157,23 +157,6 @@ func renderResources(ew *errWriter, heading string, res []model.Resource) {
 		return
 	}
 	ew.printf("## %s (%d)\n", heading, len(res))
-	rows := [][]string{{"TYPE", "NAME", "PROVIDER", "COUNT/FOR_EACH", "LIFECYCLE", "FINDINGS"}}
-	for _, r := range res {
-		rows = append(rows, []string{
-			r.Type, r.Name, orNone(r.Provider), repetition(r.Count, r.ForEach),
-			lifecycleSummary(r.Lifecycle), findingsSummary(r.SchemaFindings),
-		})
-	}
-	ew.table(rows)
-}
-
-// renderEphemeralResources prints the ephemeral resource blocks
-// (OpenTofu/Terraform 1.10+). Omitted when none exist.
-func renderEphemeralResources(ew *errWriter, res []model.EphemeralResource) {
-	if len(res) == 0 {
-		return
-	}
-	ew.printf("## Ephemeral resources (%d)\n", len(res))
 	rows := [][]string{{"TYPE", "NAME", "PROVIDER", "COUNT/FOR_EACH", "LIFECYCLE", "FINDINGS"}}
 	for _, r := range res {
 		rows = append(rows, []string{
