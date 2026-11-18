@@ -26,7 +26,7 @@ func mergeOverrides(base *model.Module, overrides []*model.Module) {
 		mergeLocals(base, override.Locals)
 		mergeResources(&base.ManagedResources, override.ManagedResources)
 		mergeResources(&base.DataResources, override.DataResources)
-		mergeEphemeralResources(&base.EphemeralResources, override.EphemeralResources)
+		mergeResources(&base.EphemeralResources, override.EphemeralResources)
 		mergeModuleCalls(base, override.ModuleCalls)
 		mergeProviderConfig(base, override.Providers)
 		// RequiredProviders and RequiredCore: append; overrides can refine but Terraform doesn't define a strict
@@ -123,39 +123,6 @@ func mergeLocals(base *model.Module, overrides []model.Local) {
 // mergeResources applies override resources onto base, matched by type and
 // name. Each meta-argument the override set wins; depends_on replaces.
 func mergeResources(base *[]model.Resource, overrides []model.Resource) {
-	for _, override := range overrides {
-		for index := range *base {
-			if (*base)[index].Type != override.Type || (*base)[index].Name != override.Name {
-				continue
-			}
-			if override.Provider != "" {
-				(*base)[index].Provider = override.Provider
-			}
-			if override.Count != nil {
-				(*base)[index].Count = override.Count
-			}
-			if override.ForEach != nil {
-				(*base)[index].ForEach = override.ForEach
-			}
-			if len(override.DependsOn) > 0 {
-				(*base)[index].DependsOn = override.DependsOn
-			}
-			if override.Lifecycle != nil {
-				(*base)[index].Lifecycle = override.Lifecycle
-			}
-			if override.NestedBody != nil {
-				(*base)[index].NestedBody = override.NestedBody
-			}
-			goto next
-		}
-	next:
-	}
-}
-
-// mergeEphemeralResources applies override ephemeral resources onto base,
-// matched by type and name, with the same field-replacement rules as
-// mergeResources.
-func mergeEphemeralResources(base *[]model.EphemeralResource, overrides []model.EphemeralResource) {
 	for _, override := range overrides {
 		for index := range *base {
 			if (*base)[index].Type != override.Type || (*base)[index].Name != override.Name {
