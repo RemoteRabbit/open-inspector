@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.9.0](https://github.com/RemoteRabbit/open-inspector/compare/v0.8.1...v0.9.0) (2026-11-18)
+
+
+### Features
+
+* make ephemeral resources the same as other resource structs ([#113](https://github.com/RemoteRabbit/open-inspector/issues/113)) ([ac19676](https://github.com/RemoteRabbit/open-inspector/commit/ac1967631f5a20b26fd352b27d78c2b33161ca01))
+
 ## [0.8.1](https://github.com/RemoteRabbit/open-inspector/compare/v0.8.0...v0.8.1) (2026-11-02)
 
 
